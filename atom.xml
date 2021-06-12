@@ -6,7 +6,7 @@
   <link href="https://24kcsplus.github.io/atom.xml" rel="self"/>
   
   <link href="https://24kcsplus.github.io/"/>
-  <updated>2021-06-12T05:53:03.266Z</updated>
+  <updated>2021-06-12T14:48:16.985Z</updated>
   <id>https://24kcsplus.github.io/</id>
   
   <author>
@@ -17,22 +17,25 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="https://24kcsplus.github.io/2021/06/12/hello-world/"/>
-    <id>https://24kcsplus.github.io/2021/06/12/hello-world/</id>
-    <published>2021-06-12T05:53:03.266Z</published>
-    <updated>2021-06-12T05:53:03.266Z</updated>
+    <title>我的第一篇文章</title>
+    <link href="https://24kcsplus.github.io/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/"/>
+    <id>https://24kcsplus.github.io/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</id>
+    <published>2021-06-12T14:39:59.000Z</published>
+    <updated>2021-06-12T14:48:16.985Z</updated>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="我是24k-你好啊"><a href="#我是24k-你好啊" class="headerlink" title="我是24k,你好啊"></a>我是24k,你好啊</h1><p><strong>距离中考仅剩 13 天</strong></p><h3 id="海口市天气"><a href="#海口市天气" class="headerlink" title="海口市天气"></a>海口市天气</h3><ul><li>雷阵雨</li><li>温度:28°C(27~31°C)</li><li>风级:东南风3~4级</li><li>空气质量:14 优</li></ul><h3 id="节日"><a href="#节日" class="headerlink" title="节日"></a>节日</h3><ul><li>端午节: 2天</li><li>父亲节: 8天</li><li>夏至日: 9天</li><li><strong>建党节、香港回归日</strong>: 19天</li></ul><p>以上<br>2021.06.12</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for</summary>
+    <summary type="html">&lt;h1 id=&quot;我是24k-你好啊&quot;&gt;&lt;a href=&quot;#我是24k-你好啊&quot; class=&quot;headerlink&quot; title=&quot;我是24k,你好啊&quot;&gt;&lt;/a&gt;我是24k,你好啊&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;距离中考仅剩 13 天&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&quot;海</summary>
       
     
     
     
+    
+    <category term="初见" scheme="https://24kcsplus.github.io/tags/%E5%88%9D%E8%A7%81/"/>
     
   </entry>
   
