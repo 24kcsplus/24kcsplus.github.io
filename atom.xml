@@ -3,11 +3,11 @@
   <title>24k的小站</title>
   
   
-  <link href="https://24kcsplus.github.io/atom.xml" rel="self"/>
+  <link href="https://24kblog.tk/atom.xml" rel="self"/>
   
-  <link href="https://24kcsplus.github.io/"/>
+  <link href="https://24kblog.tk/"/>
   <updated>2021-06-13T02:32:50.535Z</updated>
-  <id>https://24kcsplus.github.io/</id>
+  <id>https://24kblog.tk/</id>
   
   <author>
     <name>24kcsplus</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>每日播报（2021.06.13）</title>
-    <link href="https://24kcsplus.github.io/2021/06/13/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-13%EF%BC%89/"/>
-    <id>https://24kcsplus.github.io/2021/06/13/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-13%EF%BC%89/</id>
+    <link href="https://24kblog.tk/2021/06/13/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-13%EF%BC%89/"/>
+    <id>https://24kblog.tk/2021/06/13/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-13%EF%BC%89/</id>
     <published>2021-06-13T02:31:00.000Z</published>
     <updated>2021-06-13T02:32:50.535Z</updated>
     
@@ -37,14 +37,14 @@
     
     
     
-    <category term="每日播报" scheme="https://24kcsplus.github.io/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/"/>
+    <category term="每日播报" scheme="https://24kblog.tk/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/"/>
     
   </entry>
   
   <entry>
     <title>我的第一篇文章</title>
-    <link href="https://24kcsplus.github.io/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/"/>
-    <id>https://24kcsplus.github.io/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</id>
+    <link href="https://24kblog.tk/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/"/>
+    <id>https://24kblog.tk/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</id>
     <published>2021-06-12T14:39:59.000Z</published>
     <updated>2021-06-12T14:48:16.985Z</updated>
     
@@ -60,7 +60,7 @@
     
     
     
-    <category term="初见" scheme="https://24kcsplus.github.io/tags/%E5%88%9D%E8%A7%81/"/>
+    <category term="初见" scheme="https://24kblog.tk/tags/%E5%88%9D%E8%A7%81/"/>
     
   </entry>
   
