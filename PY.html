@@ -27,11 +27,11 @@
 <meta property="article:author" content="24kcsplus">
 <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/hexo-theme-nexmoe@latest/source/lib/mdui_043tiny/css/mdui.css,npm/hexo-theme-nexmoe@latest/source/lib/iconfont/iconfont.css?v=233" crossorigin>
-  <link rel="stylesheet" href="/css/style.css?v=1623596769293">
+  <link rel="stylesheet" href="/css/style.css?v=1623645593640">
   
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
   
-  <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1623596769293">
+  <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1623645593640">
 <meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
 </head>
 
@@ -56,7 +56,7 @@
         </a>
     </div>
     <div class="nexmoe-count">
-        <div><span>文章</span>2</div>
+        <div><span>文章</span>3</div>
         <div><span>标签</span>2</div>
         <div><span>分类</span>0</div>
     </div>
@@ -93,13 +93,28 @@
     </div>
     <aside id="nexmoe-sidebar">
   
-  <div class="nexmoe-widget-wrap">
-    <div class="nexmoe-widget nexmoe-search">
-        <form id="search_form" action_e="[object Object]" onsubmit="return search();">
-            <label><input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/></label>
-        </form>
+  <form>
+    <div class="tipue_search_group">
+      <input type="text" name="q" id="tipue_search_input" pattern=".{1,}" title="At least 3 characters" autofocus="autofocus" required><button type="submit" class="tipue_search_button"><div class="tipue_search_icon">&#9906;</div></button>
     </div>
-</div>
+  </form>
+  
+  <div id="tipue_search_content"></div>
+  
+  <script>
+    $(document).ready(function() {
+        $('#tipue_search_input').tipuesearch({
+        'show': 10,              // 每页显示的最大搜索记录数，默认值：10
+        'showURL': false,        // 是否将URL显示在每个搜索结果中，默认值：true
+        'newWindow': true,       // 点击搜索结果时是否在新的浏览器选项卡中打开页面，默认值：false
+        'footerPages': 10,       // 页脚中显示的最大页面选择数，默认值：3
+        'minimumLength': 1,      // 搜索关键字中最小的字符长度，默认值：3
+        'wholeWords': false,     // 是否不使用英语以外的其他语言，默认值：true
+        'showTitleCount': false  // 是否将搜索结果的数量显示在浏览器选项卡的标题中，默认值：true
+   });
+    });
+  </script>
+  
   
   <div class="nexmoe-widget-wrap">
     <div class="nexmoe-widget nexmoe-social">
@@ -119,7 +134,7 @@
   
   <div class="nexmoe-widget-wrap">
     <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
-      <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 10px;">每日播报</a>
+      <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 20px;">每日播报</a>
     </div>
     
   </div>
@@ -133,6 +148,13 @@
         
     </div>
 </div><!-- .nexmoe-drawer -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+<script src="tipuesearch/tipuesearch_content.js"></script>
+<link rel="stylesheet" href="tipuesearch/tipuesearch.css">
+<script src="tipuesearch/tipuesearch_set.js"></script>
+<script src="tipuesearch/tipuesearch.min.js"></script>
   </div>
   <div id="nexmoe-content">
     <div class="nexmoe-primary">
@@ -185,26 +207,17 @@
         </div>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,gh/highlightjs/cdn-release@9.15.8/build/highlight.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 
 
 <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
-
- 
-
-	<script type="text/javascript">      
-	  var search_path = "search.xml";
-	  if (search_path.length == 0) {
-		  search_path = "search.xml";
-	  }
-	  var path = "/" + search_path;
-	  searchFunc(path, 'local-search-input', 'local-search-result');
-	</script>
- 
-
-<script async src="/js/app.js?v=1623596769293"></script>
+ <script async src="/js/app.js?v=1623645593641"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
 <script>
@@ -213,7 +226,6 @@
 		margins: 10,
 	});
 </script>
-
   
 
 
