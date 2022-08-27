@@ -4,29 +4,46 @@
   <url>
     <loc>https://24kblog.tk/2021/10/07/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</loc>
     
-    <lastmod>2021-10-07</lastmod>
+    <lastmod>2022-08-27</lastmod>
     
-  </url>
-  
-  <url>
-    <loc>https://24kblog.tk/2021/08/13/%E6%B5%B7%E4%B8%AD%E4%BF%A1%E6%81%AF%E5%AD%A6%E5%A4%8F%E4%BB%A4%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2021-08-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://24kblog.tk/2021/07/15/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8%E8%A7%A3%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8/</loc>
-    
-    <lastmod>2021-07-15</lastmod>
-    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://24kblog.tk/about.html</loc>
     
-    <lastmod>2021-07-15</lastmod>
+    <lastmod>2022-08-27</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://24kblog.tk/2021/08/13/%E6%B5%B7%E4%B8%AD%E4%BF%A1%E6%81%AF%E5%AD%A6%E5%A4%8F%E4%BB%A4%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2022-08-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://24kblog.tk/2021/07/15/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8%E8%A7%A3%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8/</loc>
+    
+    <lastmod>2022-08-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://24kblog.tk/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</loc>
+    
+    <lastmod>2021-07-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -34,6 +51,8 @@
     
     <lastmod>2021-06-19</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -41,6 +60,8 @@
     
     <lastmod>2021-06-14</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -48,6 +69,8 @@
     
     <lastmod>2021-06-13</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -55,13 +78,8 @@
     
     <lastmod>2021-06-13</lastmod>
     
-  </url>
-  
-  <url>
-    <loc>https://24kblog.tk/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</loc>
-    
-    <lastmod>2021-06-12</lastmod>
-    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -69,6 +87,8 @@
     
     <lastmod>2021-06-12</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -76,50 +96,52 @@
     
     <lastmod>2021-06-12</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
 
   <url>
     <loc>https://24kblog.tk/</loc>
-    <lastmod>2021-10-07</lastmod>
+    <lastmod>2022-08-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://24kblog.tk/tags/%E5%88%9D%E8%A7%81/</loc>
-    <lastmod>2021-10-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://24kblog.tk/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/</loc>
-    <lastmod>2021-10-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://24kblog.tk/tags/%E8%80%83%E8%AF%95/</loc>
-    <lastmod>2021-10-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
+    <loc>https://24kblog.tk/tags/CSP/</loc>
+    <lastmod>2022-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://24kblog.tk/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/</loc>
-    <lastmod>2021-10-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
+    <lastmod>2022-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://24kblog.tk/tags/CSP/</loc>
-    <lastmod>2021-10-07</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
+    <loc>https://24kblog.tk/tags/%E5%88%9D%E8%A7%81/</loc>
+    <lastmod>2022-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://24kblog.tk/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/</loc>
+    <lastmod>2022-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://24kblog.tk/tags/%E8%80%83%E8%AF%95/</loc>
+    <lastmod>2022-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
   </url>
   
 
