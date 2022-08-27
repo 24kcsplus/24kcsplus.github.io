@@ -166,7 +166,7 @@ article code::-webkit-scrollbar-thumb {
 }
 .highlight {
   padding: 0 0.5em;
-  background: #282c34;
+  background: #1e1e1e;
   color: #abb2bf;
   margin: 25px 0;
   border-radius: var(--radius);
@@ -183,11 +183,11 @@ article pre {
   margin: 0;
   padding: 15px 6px 15px 0;
   position: relative;
-  background: #282c34;
+  background: #1e1e1e;
   line-height: 1.3em;
 }
 article pre::before {
-  background: #282c34;
+  background: #1e1e1e;
   height: 32px;
   margin-bottom: 0;
   display: block;
@@ -223,7 +223,7 @@ article pre code:after {
   overflow: hidden;
   padding: 1px 0;
   padding-left: 12px;
-  background: #282c34;
+  background: #1e1e1e;
 }
 article a {
   -webkit-transition: color 0.35s ease-out;
