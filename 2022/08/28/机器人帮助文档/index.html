@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/vs2015.min.css">
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+    </script>
+    
+    <title>机器人帮助文档 - 24k的小站</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="欢迎来到海中bot帮助文档在这里,你可以获得各个指令的用法至于为什么是在我的博客,原因还是我懒得再建一个文档网站 (虽然不要钱就是了) 签到用法:@海中bot &#x2F;签到描述:签到,获得随机数量的一堂二堂三堂饭券效果图片:注:后续可能会增加抽卡功能,所以建议每天都来签签到\  顺便征集一二三堂菜名或其他内容作为抽卡项目 查询用法:@海中bot &#x2F;查询描述:查询你所持有的一二三堂饭券效果图片:注:后续若">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器人帮助文档">
+<meta property="og:url" content="https://24kblog.tk/2022/08/28/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3/index.html">
+<meta property="og:site_name" content="24k的小站">
+<meta property="og:description" content="欢迎来到海中bot帮助文档在这里,你可以获得各个指令的用法至于为什么是在我的博客,原因还是我懒得再建一个文档网站 (虽然不要钱就是了) 签到用法:@海中bot &#x2F;签到描述:签到,获得随机数量的一堂二堂三堂饭券效果图片:注:后续可能会增加抽卡功能,所以建议每天都来签签到\  顺便征集一二三堂菜名或其他内容作为抽卡项目 查询用法:@海中bot &#x2F;查询描述:查询你所持有的一二三堂饭券效果图片:注:后续若">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/1.jpg?40">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/2.jpg?40">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/3.jpg?40">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/3_1.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/4.jpg?40">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/4_2.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/4_1.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/5.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/5_1.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/6.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/6_1.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/7.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/8.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/9.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/10.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/11.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/12.jpg">
+<meta property="og:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/13.jpg">
+<meta property="article:published_time" content="2022-08-28T04:05:04.000Z">
+<meta property="article:modified_time" content="2022-08-28T07:16:23.778Z">
+<meta property="article:author" content="24kcsplus">
+<meta property="article:tag" content="QQ频道 QQ机器人">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/1.jpg?40">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1661671024036">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1661671024036">
+    
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+</head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="24kcsplus" class="mdui-btn mdui-btn-icon"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="24kcsplus">
+            <img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus" alt="24kcsplus">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>7</div>
+        <div><span>标签</span>5</div>
+        <div><span>分类</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://pd.qq.com/s/bo1vmn" target="_blank" mdui-tooltip="{content: 'QQ频道（学校）'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/225319411" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/24kcsplus/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a><a class="mdui-ripple" href="https://twitter.com/24k_ghost_acc" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(59, 151, 239);background-color: rgba(59, 151, 239, .1);">
+            <i class="nexmoefont icon-twitter"></i>
+        </a>
+    </div>
+</div>
+    
+    
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/QQ%E9%A2%91%E9%81%93-QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ频道 QQ机器人</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 20px;">每日播报</a> <a href="/tags/%E8%80%83%E8%AF%95/" style="font-size: 10px;">考试</a>
+    </div>
+    
+  </div>
+
+    
+    <!-- 一言 -->
+
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">
+      一言
+    </h3>
+    <div class="nexmoe-widget">
+      <ul class="hitokoto-box">
+        <li id="hitokoto_text_parent" class="hitokoto-text" hitokotoCategory="">
+          <a href="#" id="hitokoto_text">
+            
+          </a>
+          <a href="#" id="hitokoto_error_text" style="display: none;">
+            
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let hitokotoText = document.getElementById('hitokoto_text')
+    let hitokotoErroText = document.getElementById('hitokoto_error_text')
+    let hitokotoCategory = document.getElementById('hitokoto_text_parent').getAttribute('hitokotoCategory')
+    window.onload = function () {
+      let url = 'https://v1.hitokoto.cn'
+      if (hitokotoCategory) {
+        url += '?c=' + hitokotoCategory
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          hitokotoText.innerText = "「 " + data.hitokoto + " 」 from " + data.from
+          hitokotoText.href = 'https://hitokoto.cn/?uuid=' + data.uuid
+        })
+        .catch((reason) => {
+          console.error(11, reason)
+          hitokotoText.style.display = 'none'
+          hitokotoErroText.style.display = 'block'
+        })
+    }
+  </script>
+  
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2022 24kcsplus
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="机器人帮助文档" loading="lazy">
+              <h1>机器人帮助文档</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年08月28日</a>
+</div>
+
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约1k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要3分钟</a>
+    
+</div>
+
+      <h1 id="欢迎来到海中bot帮助文档"><a href="#欢迎来到海中bot帮助文档" class="headerlink" title="欢迎来到海中bot帮助文档"></a>欢迎来到海中bot帮助文档</h1><p>在这里,你可以获得各个指令的用法<br>至于为什么是在我的博客,原因还是我懒得再建一个文档网站 <del>(虽然不要钱就是了)</del></p>
+<h2 id="签到"><a href="#签到" class="headerlink" title="签到"></a>签到</h2><p>用法:<code>@海中bot /签到</code><br>描述:签到,获得随机数量的一堂二堂三堂饭券<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/1.jpg?40" alt="签到" data-caption="签到" loading="lazy"><br>注:后续可能会增加抽卡功能,所以建议每天都来签签到<br>\  顺便征集一二三堂菜名或其他内容作为抽卡项目</p>
+<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><p>用法:<code>@海中bot /查询</code><br>描述:查询你所持有的一二三堂饭券<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/2.jpg?40" alt="签到" data-caption="签到" loading="lazy"><br>注:后续若添加了抽卡功能,还可查询所抽到的内容</p>
+<h2 id="天气"><a href="#天气" class="headerlink" title="天气"></a>天气</h2><p>用法:<code>@海中bot /天气 [城市名]</code>(请注意指令后的空格,不可删除,否则会报错)<br>使用效果:获取天气<br>参数:<br>城市名:选填,留空默认查询海口天气<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/3.jpg?40" alt="签到" data-caption="签到" loading="lazy"> <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/3_1.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h2 id="每日一图"><a href="#每日一图" class="headerlink" title="每日一图"></a>每日一图</h2><p>用法:<code>@海中bot /每日一图 [图片类型]</code>(请注意指令后的空格,不可删除,否则会报错)<br>使用效果:获取随机图片<br>参数:<br>图片类型:选填,可选二次元,留空默认获取美景图片<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/4.jpg?40" alt="签到" data-caption="签到" loading="lazy"> <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/4_2.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<p>注:有时候带二次元参数返回会比较慢,请耐心等待,或再试一遍,如下图:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/4_1.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h2 id="土味骚话"><a href="#土味骚话" class="headerlink" title="土味骚话"></a>土味骚话</h2><p>用法:<code>@海中bot /土味骚话</code><br>使用效果:获得随机土味情话或骚话<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/5.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”} <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/5_1.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h2 id="查词"><a href="#查词" class="headerlink" title="查词"></a>查词</h2><p>用法:<code>@海中bot /查词 [待查询词]</code><br>使用效果:获取单词释义或语言<br>参数:<br>待查单词:必填,当语言为英语时,返回单词释义及有道词典链接,当语言为其他时,返回语言代码及有道词典链接<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/6.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”} <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/6_1.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h2 id="视频解析"><a href="#视频解析" class="headerlink" title="视频解析"></a>视频解析</h2><p>用法:<code>@海中bot /视频解析 [AV/BV号]</code><br>使用效果:获取哔哩哔哩视频封面、下载链接<br>参数:<br>AV&#x2F;BV号:必填,哔哩哔哩视频AV&#x2F;BV号<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/7.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h2 id="视频封面"><a href="#视频封面" class="headerlink" title="视频封面"></a>视频封面</h2><p>用法:<code>@海中bot /视频封面 [AV/BV号]</code><br>使用效果:获取哔哩哔哩视频封面<br>参数:<br>AV&#x2F;BV号:必填,哔哩哔哩视频AV&#x2F;BV号<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/8.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h2 id="音乐下载"><a href="#音乐下载" class="headerlink" title="音乐下载"></a>音乐下载</h2><p>用法:<code>@海中bot /音乐下载 [网易云音乐id]</code><br>使用效果:获取网易云音乐音频下载链接(注意:黑胶歌曲下载只有前30秒,无版权歌曲或其他歌曲自行测试)<br>参数:<br>网易云音乐id:必填,网易云音乐id,可在音乐分享链接里获取<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/9.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h1 id="管理员选项"><a href="#管理员选项" class="headerlink" title="管理员选项"></a>管理员选项</h1><p>以下条目仅管理员可用,请注意自身权限</p>
+<h2 id="禁言"><a href="#禁言" class="headerlink" title="禁言"></a>禁言</h2><p>用法:<code>@海中bot /禁言 @禁言对象 [时间]</code><br>使用效果:快速禁言某个成员,范围为整个频道<br>参数:<br>时间:选填,单位为秒,留空默认7200(两小时)(注意:此处填纯数字即可,不要带单位,否则会报错)<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/10.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h2 id="解禁"><a href="#解禁" class="headerlink" title="解禁"></a>解禁</h2><p>用法:<code>@海中bot /解禁 @解禁对象</code><br>使用效果:快速解禁某个成员,范围为整个频道<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/11.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h2 id="全员禁言"><a href="#全员禁言" class="headerlink" title="全员禁言"></a>全员禁言</h2><p>用法:<code>@海中bot /全员禁言</code><br>使用效果:快速全员禁言(注意:由于范围为整个频道而非子频道,所以非特殊情况请不要使用)<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/12.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h2 id="全员解禁"><a href="#全员解禁" class="headerlink" title="全员解禁"></a>全员解禁</h2><p>用法:<code>@海中bot /全员解禁</code><br>使用效果:快速全员解禁<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/13.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p>
+<h1 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h1><p>目前就写了这些功能,如果你有什么想添加的功能,可以在底下留言,或者通过QQ向我反馈<br>感谢:@Developing. @怎么能有这么难学的东西 协助测试</p>
+<p><del>突发奇想就写了这个机器人,也不知道会有多少人用(悲)</del></p>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>24kcsplus<br>
+        <strong>本文链接：</strong><a href="https://24kblog.tk/2022/08/28/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3/" title="https:&#x2F;&#x2F;24kblog.tk&#x2F;2022&#x2F;08&#x2F;28&#x2F;%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.tk&#x2F;2022&#x2F;08&#x2F;28&#x2F;%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/QQ%E9%A2%91%E9%81%93-QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" rel="tag">QQ频道 QQ机器人</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+<div id="gitalk"></div>
+<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'e33bbc7053e81da42425',
+        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
+        id: md5(window.location.pathname),
+        repo: 'home_gitalk',
+        owner: '24kcsplus',
+        admin: '24kcsplus'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0%E6%B5%B7%E4%B8%ADbot%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3"><span class="toc-number">1.</span> <span class="toc-text">欢迎来到海中bot帮助文档</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%BE%E5%88%B0"><span class="toc-number">1.1.</span> <span class="toc-text">签到</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.2.</span> <span class="toc-text">查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A9%E6%B0%94"><span class="toc-number">1.3.</span> <span class="toc-text">天气</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%8F%E6%97%A5%E4%B8%80%E5%9B%BE"><span class="toc-number">1.4.</span> <span class="toc-text">每日一图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%9F%E5%91%B3%E9%AA%9A%E8%AF%9D"><span class="toc-number">1.5.</span> <span class="toc-text">土味骚话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E8%AF%8D"><span class="toc-number">1.6.</span> <span class="toc-text">查词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E8%A7%A3%E6%9E%90"><span class="toc-number">1.7.</span> <span class="toc-text">视频解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2"><span class="toc-number">1.8.</span> <span class="toc-text">视频封面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9F%B3%E4%B9%90%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.9.</span> <span class="toc-text">音乐下载</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E5%91%98%E9%80%89%E9%A1%B9"><span class="toc-number">2.</span> <span class="toc-text">管理员选项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%81%E8%A8%80"><span class="toc-number">2.1.</span> <span class="toc-text">禁言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E7%A6%81"><span class="toc-number">2.2.</span> <span class="toc-text">解禁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E5%91%98%E7%A6%81%E8%A8%80"><span class="toc-number">2.3.</span> <span class="toc-text">全员禁言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E5%91%98%E8%A7%A3%E7%A6%81"><span class="toc-number">2.4.</span> <span class="toc-text">全员解禁</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-number">3.</span> <span class="toc-text">写在最后</span></a></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    
+<script src="/lib/mdui_043tiny/mdui.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/justifiedGallery/jquery.justifiedGallery.min.js"></script>
+<script src="/lib/fancybox/fancybox.umd.js"></script>
+
+
+ 
+
+<script async src="/js/app.js?v=1661671024043"></script>
+
+
+	<script async src="/js/search.js?v=1661671024043"></script>
+
+
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+    <!-- CNZZ Analytics -->
+<div hidden>
+    <script src="//s95.cnzz.com/z_stat.php?id=1280008647&web_id=1280008647" language="JavaScript"></script>
+</div>
+
+
+
+
+    <script src="https://gcore.jsdelivr.net/gh/bobcn/hexo_resize_image.js@latest/hexo_resize_image.js"></script>
+</body>
+
+</html>

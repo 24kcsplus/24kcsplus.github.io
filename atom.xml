@@ -6,7 +6,7 @@
   <link href="https://24kblog.tk/atom.xml" rel="self"/>
   
   <link href="https://24kblog.tk/"/>
-  <updated>2022-08-27T15:44:19.690Z</updated>
+  <updated>2022-08-28T07:16:23.778Z</updated>
   <id>https://24kblog.tk/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>机器人帮助文档</title>
+    <link href="https://24kblog.tk/2022/08/28/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3/"/>
+    <id>https://24kblog.tk/2022/08/28/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3/</id>
+    <published>2022-08-28T04:05:04.000Z</published>
+    <updated>2022-08-28T07:16:23.778Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="欢迎来到海中bot帮助文档"><a href="#欢迎来到海中bot帮助文档" class="headerlink" title="欢迎来到海中bot帮助文档"></a>欢迎来到海中bot帮助文档</h1><p>在这里,你可以获得各个指令的用法<br>至于为什么是在我的博客,原因还是我懒得再建一个文档网站 <del>(虽然不要钱就是了)</del></p><h2 id="签到"><a href="#签到" class="headerlink" title="签到"></a>签到</h2><p>用法:<code>@海中bot /签到</code><br>描述:签到,获得随机数量的一堂二堂三堂饭券<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/1.jpg?40" alt="签到" data-caption="签到" loading="lazy"><br>注:后续可能会增加抽卡功能,所以建议每天都来签签到<br>\  顺便征集一二三堂菜名或其他内容作为抽卡项目</p><h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><p>用法:<code>@海中bot /查询</code><br>描述:查询你所持有的一二三堂饭券<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/2.jpg?40" alt="签到" data-caption="签到" loading="lazy"><br>注:后续若添加了抽卡功能,还可查询所抽到的内容</p><h2 id="天气"><a href="#天气" class="headerlink" title="天气"></a>天气</h2><p>用法:<code>@海中bot /天气 [城市名]</code>(请注意指令后的空格,不可删除,否则会报错)<br>使用效果:获取天气<br>参数:<br>城市名:选填,留空默认查询海口天气<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/3.jpg?40" alt="签到" data-caption="签到" loading="lazy"> <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/3_1.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h2 id="每日一图"><a href="#每日一图" class="headerlink" title="每日一图"></a>每日一图</h2><p>用法:<code>@海中bot /每日一图 [图片类型]</code>(请注意指令后的空格,不可删除,否则会报错)<br>使用效果:获取随机图片<br>参数:<br>图片类型:选填,可选二次元,留空默认获取美景图片<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/4.jpg?40" alt="签到" data-caption="签到" loading="lazy"> <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/4_2.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><p>注:有时候带二次元参数返回会比较慢,请耐心等待,或再试一遍,如下图:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/4_1.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h2 id="土味骚话"><a href="#土味骚话" class="headerlink" title="土味骚话"></a>土味骚话</h2><p>用法:<code>@海中bot /土味骚话</code><br>使用效果:获得随机土味情话或骚话<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/5.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”} <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/5_1.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h2 id="查词"><a href="#查词" class="headerlink" title="查词"></a>查词</h2><p>用法:<code>@海中bot /查词 [待查询词]</code><br>使用效果:获取单词释义或语言<br>参数:<br>待查单词:必填,当语言为英语时,返回单词释义及有道词典链接,当语言为其他时,返回语言代码及有道词典链接<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/6.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”} <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/6_1.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h2 id="视频解析"><a href="#视频解析" class="headerlink" title="视频解析"></a>视频解析</h2><p>用法:<code>@海中bot /视频解析 [AV/BV号]</code><br>使用效果:获取哔哩哔哩视频封面、下载链接<br>参数:<br>AV&#x2F;BV号:必填,哔哩哔哩视频AV&#x2F;BV号<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/7.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h2 id="视频封面"><a href="#视频封面" class="headerlink" title="视频封面"></a>视频封面</h2><p>用法:<code>@海中bot /视频封面 [AV/BV号]</code><br>使用效果:获取哔哩哔哩视频封面<br>参数:<br>AV&#x2F;BV号:必填,哔哩哔哩视频AV&#x2F;BV号<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/8.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h2 id="音乐下载"><a href="#音乐下载" class="headerlink" title="音乐下载"></a>音乐下载</h2><p>用法:<code>@海中bot /音乐下载 [网易云音乐id]</code><br>使用效果:获取网易云音乐音频下载链接(注意:黑胶歌曲下载只有前30秒,无版权歌曲或其他歌曲自行测试)<br>参数:<br>网易云音乐id:必填,网易云音乐id,可在音乐分享链接里获取<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/9.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h1 id="管理员选项"><a href="#管理员选项" class="headerlink" title="管理员选项"></a>管理员选项</h1><p>以下条目仅管理员可用,请注意自身权限</p><h2 id="禁言"><a href="#禁言" class="headerlink" title="禁言"></a>禁言</h2><p>用法:<code>@海中bot /禁言 @禁言对象 [时间]</code><br>使用效果:快速禁言某个成员,范围为整个频道<br>参数:<br>时间:选填,单位为秒,留空默认7200(两小时)(注意:此处填纯数字即可,不要带单位,否则会报错)<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/10.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h2 id="解禁"><a href="#解禁" class="headerlink" title="解禁"></a>解禁</h2><p>用法:<code>@海中bot /解禁 @解禁对象</code><br>使用效果:快速解禁某个成员,范围为整个频道<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/11.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h2 id="全员禁言"><a href="#全员禁言" class="headerlink" title="全员禁言"></a>全员禁言</h2><p>用法:<code>@海中bot /全员禁言</code><br>使用效果:快速全员禁言(注意:由于范围为整个频道而非子频道,所以非特殊情况请不要使用)<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/12.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h2 id="全员解禁"><a href="#全员解禁" class="headerlink" title="全员解禁"></a>全员解禁</h2><p>用法:<code>@海中bot /全员解禁</code><br>使用效果:快速全员解禁<br>效果图片:<br><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/%E4%BA%8B%E4%BE%8B%E7%85%A7%E7%89%87/13.jpg" alt="签到" data-caption="签到" loading="lazy">{:height&#x3D;”30%” width&#x3D;”40%”}</p><h1 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h1><p>目前就写了这些功能,如果你有什么想添加的功能,可以在底下留言,或者通过QQ向我反馈<br>感谢:@Developing. @怎么能有这么难学的东西 协助测试</p><p><del>突发奇想就写了这个机器人,也不知道会有多少人用(悲)</del></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;欢迎来到海中bot帮助文档&quot;&gt;&lt;a href=&quot;#欢迎来到海中bot帮助文档&quot; class=&quot;headerlink&quot; title=&quot;欢迎来到海中bot帮助文档&quot;&gt;&lt;/a&gt;欢迎来到海中bot帮助文档&lt;/h1&gt;&lt;p&gt;在这里,你可以获得各个指令的用法&lt;br&gt;至于为什么是</summary>
+      
+    
+    
+    
+    
+    <category term="QQ频道 QQ机器人" scheme="https://24kblog.tk/tags/QQ%E9%A2%91%E9%81%93-QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/"/>
+    
+  </entry>
   
   <entry>
     <title>刷题记录</title>
@@ -55,28 +77,6 @@
     
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>哔哩漫游解析服务器</title>
-    <link href="https://24kblog.tk/2021/07/15/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8%E8%A7%A3%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
-    <id>https://24kblog.tk/2021/07/15/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8%E8%A7%A3%E6%9E%90%E6%9C%8D%E5%8A%A1%E5%99%A8/</id>
-    <published>2021-07-15T04:52:03.000Z</published>
-    <updated>2022-08-27T16:50:02.552Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="哔哩漫游解析服务器"><a href="#哔哩漫游解析服务器" class="headerlink" title="哔哩漫游解析服务器"></a>哔哩漫游解析服务器</h2><h3 id="地址"><a href="#地址" class="headerlink" title="地址"></a>地址</h3><pre><code>hk.biliunlock.xyz</code></pre><h3 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h3><p><a href="https://github.com/yujincheng08/BiliRoaming/wiki">哔哩漫游使用方法</a></p><h3 id="捐赠"><a href="#捐赠" class="headerlink" title="捐赠"></a>捐赠</h3><h4 id="微信"><a href="#微信" class="headerlink" title="微信"></a>微信</h4><p><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/donate_wechat.png" alt="微信" data-caption="微信" loading="lazy"></p><h4 id="支付宝"><a href="#支付宝" class="headerlink" title="支付宝"></a>支付宝</h4><p><img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/donate_alipay.jpg" alt="支付宝" data-caption="支付宝" loading="lazy"></p><p>送一杯咖啡提提神~<br>(大陆、台湾、泰区准备中)</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;哔哩漫游解析服务器&quot;&gt;&lt;a href=&quot;#哔哩漫游解析服务器&quot; class=&quot;headerlink&quot; title=&quot;哔哩漫游解析服务器&quot;&gt;&lt;/a&gt;哔哩漫游解析服务器&lt;/h2&gt;&lt;h3 id=&quot;地址&quot;&gt;&lt;a href=&quot;#地址&quot; class=&quot;headerlink&quot; </summary>
-      
-    
-    
-    
-    
-    <category term="哔哩哔哩" scheme="https://24kblog.tk/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/"/>
     
   </entry>
   
