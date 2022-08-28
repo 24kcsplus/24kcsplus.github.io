@@ -138,7 +138,14 @@
   </url>
   
   <url>
-    <loc>https://24kblog.tk/tags/QQ%E9%A2%91%E9%81%93-QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/</loc>
+    <loc>https://24kblog.tk/tags/QQ%E9%A2%91%E9%81%93/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://24kblog.tk/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/</loc>
     <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
