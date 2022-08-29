@@ -1,3 +1,4 @@
+https://24kblog.tk/2022/08/28/%E6%89%93%E6%89%AB%E5%8D%9A%E5%AE%A2/
 https://24kblog.tk/about.html
 https://24kblog.tk/2022/08/28/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3/
 https://24kblog.tk/2021/08/13/%E6%B5%B7%E4%B8%AD%E4%BF%A1%E6%81%AF%E5%AD%A6%E5%A4%8F%E4%BB%A4%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
@@ -16,3 +17,7 @@ https://24kblog.tk/tags/%E8%80%83%E8%AF%95/
 https://24kblog.tk/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/
 https://24kblog.tk/tags/QQ%E9%A2%91%E9%81%93/
 https://24kblog.tk/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/
+https://24kblog.tk/tags/%E5%8D%9A%E5%AE%A2/
+https://24kblog.tk/tags/npm/
+https://24kblog.tk/tags/hexo/
+https://24kblog.tk/tags/js/
