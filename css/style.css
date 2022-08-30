@@ -175,6 +175,23 @@ article code::-webkit-scrollbar-thumb {
 .highlight .gutter {
   border-right: 1px solid #35393b;
 }
+.hljs-ln-numbers {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: center;
+  color: #ccc;
+  border-right: 10px solid rgba(128,0,0,0.059);
+  vertical-align: top;
+  padding-right: 20px;
+/* your custom style here */
+}
+.hljs-ln-code {
+  padding-left: 20px;
+}
 article pre {
   border-radius: var(--radius);
   overflow: hidden;
