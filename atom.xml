@@ -3,11 +3,11 @@
   <title>24k的小站</title>
   
   
-  <link href="https://24kblog.tk/atom.xml" rel="self"/>
+  <link href="https://24kblog.top/atom.xml" rel="self"/>
   
-  <link href="https://24kblog.tk/"/>
-  <updated>2022-08-29T16:55:44.755Z</updated>
-  <id>https://24kblog.tk/</id>
+  <link href="https://24kblog.top/"/>
+  <updated>2022-09-11T15:49:38.432Z</updated>
+  <id>https://24kblog.top/</id>
   
   <author>
     <name>24kcsplus</name>
@@ -17,9 +17,48 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>审核之旅</title>
+    <link href="https://24kblog.top/2022/09/10/%E5%AE%A1%E6%A0%B8%E4%B9%8B%E6%97%85/"/>
+    <id>https://24kblog.top/2022/09/10/%E5%AE%A1%E6%A0%B8%E4%B9%8B%E6%97%85/</id>
+    <published>2022-09-10T14:45:41.000Z</published>
+    <updated>2022-09-11T15:49:38.432Z</updated>
+    
+    <content type="html"><![CDATA[# 审核之旅鄙人因为常在一名为哔哩哔哩之网站浏览,故有几次在b站上上传视频的经历,也是体感程度的发现审核之严,一开始我还以为是gov的问题,在看到其他平台有能过审的视频后,我才发现原来是平台自己nt,下面的经历也可以证实这点## 腾讯审核,用空格创造快乐在机器人开发的过程中遇到了一些问题,其中有50%是因为腾讯的QQ机器人文档不够完善,跑到官方频道去问东问西才了解的,剩下的这是自己对Python这门语言的特性不够熟悉而造成的不过开发上面的小问题不算什么,我也是一时突发奇想才开始开发的,开发的周期也不算长3-4天就开发完成了(这也是得益于还在暑假~~还不写作业~~的原因)整个开发过程最地狱的还当属审核阶段众所周知,审核就是提审-不通过-猜哪里没符合要求-瞎改-重新提审的魔鬼循环打破这个循环还是需要动用阳气的### 第一次提审经验不足,在进行第一次自信满满的提审后被拒了,然后得到了下面这张壮观的景象,翻日志全然不知道发生了什么事![](http://)在频道里问了下,有个和蔼老哥经验老道,虽然看了我的日志之后并没有什么头绪,但是他告诉了我一个过审小妙招,在后台记录下审核输了什么(没错这东西腾讯的SDK不自带)在这之间,还有一位老哥玩了一个梗:“又一个太空乐人”年幼无知的我但是并不知道这是什么意思,不过在这之后我便理解了一切和蔼老哥还不知道为什么就突然跟玩梗老哥聊上了,并说出了“我提过的审比你吃过的屎都多”这般暴躁生草之话我结束提问,准备第二天的提审,在代码中加了这么一句:```with open('log.txt', 'a', encoding='utf-8') as file0:print(message, file=file0)```以保存审核输入了什么### 本程序依靠bug执行,请勿修改第二次和第三次的审核我是没有什么意见的因为他们帮我找出了bug,是不管输入怎样的参数都会输出报错找到出bug的地方,稍微改了一下跑不起来了经过不懈的努力,我开摆了不过本着为人民服务的思想,我还是去上网找了方法去解救(没错又是搜索地狱)~~(至于为什么不把代码啥的放出来还是因为没素材,都忘了是出啥bug了)~~在一顿整顿后,开启了第四次提审之旅### 不要打空格!!!现在可以说说我刚刚提到的太空乐人了这位审核,不知是寂寞空虚冷还是什么其他原因他非常喜欢在各个指令参数之间加空格,以至于机器人无法识别指令一开始我还以为只有我一个知道我想起了之前群友玩的梗,我就知道这审核干这事不是一天两天了在一阵狂暴搜索后,我选择了去除输入中所有空格的主意过是能过审了,但会出现一些很鬼畜的现象参数正确的情况下打多少空格都无所谓,参数中穿插空格也无所谓(总觉得弱敏感很容易出问题啊)]]></content>
+    
+    
+      
+      
+    <summary type="html"># 审核之旅
+鄙人因为常在一名为哔哩哔哩之网站浏览,故有几次在b站上上传视频的经历,也是体感程度的发现审核之严,一开始我还以为是gov的问题,在看到其他平台有能过审的视频后,我才发现原来是平台自己nt,下面的经历也可以证实这点
+
+## 腾讯审核,用空格创造快乐
+
+在机器人开发的过</summary>
+      
+    
+    
+    
+    
+    <category term="QQ机器人" scheme="https://24kblog.top/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/"/>
+    
+    <category term="审核" scheme="https://24kblog.top/tags/%E5%AE%A1%E6%A0%B8/"/>
+    
+    <category term="工信部" scheme="https://24kblog.top/tags/%E5%B7%A5%E4%BF%A1%E9%83%A8/"/>
+    
+    <category term="公安备案" scheme="https://24kblog.top/tags/%E5%85%AC%E5%AE%89%E5%A4%87%E6%A1%88/"/>
+    
+    <category term="ICP备案" scheme="https://24kblog.top/tags/ICP%E5%A4%87%E6%A1%88/"/>
+    
+    <category term="萌国" scheme="https://24kblog.top/tags/%E8%90%8C%E5%9B%BD/"/>
+    
+    <category term="萌国备案" scheme="https://24kblog.top/tags/%E8%90%8C%E5%9B%BD%E5%A4%87%E6%A1%88/"/>
+    
+  </entry>
+  
+  <entry>
     <title>打扫博客</title>
-    <link href="https://24kblog.tk/2022/08/28/%E6%89%93%E6%89%AB%E5%8D%9A%E5%AE%A2/"/>
-    <id>https://24kblog.tk/2022/08/28/%E6%89%93%E6%89%AB%E5%8D%9A%E5%AE%A2/</id>
+    <link href="https://24kblog.top/2022/08/28/%E6%89%93%E6%89%AB%E5%8D%9A%E5%AE%A2/"/>
+    <id>https://24kblog.top/2022/08/28/%E6%89%93%E6%89%AB%E5%8D%9A%E5%AE%A2/</id>
     <published>2022-08-28T09:04:08.000Z</published>
     <updated>2022-08-29T16:55:44.755Z</updated>
     
@@ -37,20 +76,20 @@
     
     
     
-    <category term="博客" scheme="https://24kblog.tk/tags/%E5%8D%9A%E5%AE%A2/"/>
+    <category term="博客" scheme="https://24kblog.top/tags/%E5%8D%9A%E5%AE%A2/"/>
     
-    <category term="npm" scheme="https://24kblog.tk/tags/npm/"/>
+    <category term="npm" scheme="https://24kblog.top/tags/npm/"/>
     
-    <category term="hexo" scheme="https://24kblog.tk/tags/hexo/"/>
+    <category term="hexo" scheme="https://24kblog.top/tags/hexo/"/>
     
-    <category term="js" scheme="https://24kblog.tk/tags/js/"/>
+    <category term="js" scheme="https://24kblog.top/tags/js/"/>
     
   </entry>
   
   <entry>
     <title>机器人帮助文档</title>
-    <link href="https://24kblog.tk/2022/08/28/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3/"/>
-    <id>https://24kblog.tk/2022/08/28/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3/</id>
+    <link href="https://24kblog.top/2022/08/28/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3/"/>
+    <id>https://24kblog.top/2022/08/28/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3/</id>
     <published>2022-08-28T04:05:04.000Z</published>
     <updated>2022-08-28T07:38:55.755Z</updated>
     
@@ -66,16 +105,16 @@
     
     
     
-    <category term="QQ频道" scheme="https://24kblog.tk/tags/QQ%E9%A2%91%E9%81%93/"/>
+    <category term="QQ机器人" scheme="https://24kblog.top/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/"/>
     
-    <category term="QQ机器人" scheme="https://24kblog.tk/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/"/>
+    <category term="QQ频道" scheme="https://24kblog.top/tags/QQ%E9%A2%91%E9%81%93/"/>
     
   </entry>
   
   <entry>
     <title>刷题记录</title>
-    <link href="https://24kblog.tk/2021/10/07/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
-    <id>https://24kblog.tk/2021/10/07/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</id>
+    <link href="https://24kblog.top/2021/10/07/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+    <id>https://24kblog.top/2021/10/07/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</id>
     <published>2021-10-07T02:22:21.000Z</published>
     <updated>2022-08-27T15:44:19.690Z</updated>
     
@@ -90,14 +129,14 @@
     
     
     
-    <category term="CSP" scheme="https://24kblog.tk/tags/CSP/"/>
+    <category term="CSP" scheme="https://24kblog.top/tags/CSP/"/>
     
   </entry>
   
   <entry>
     <title>海中信息学夏令营学习笔记&amp;心得</title>
-    <link href="https://24kblog.tk/2021/08/13/%E6%B5%B7%E4%B8%AD%E4%BF%A1%E6%81%AF%E5%AD%A6%E5%A4%8F%E4%BB%A4%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    <id>https://24kblog.tk/2021/08/13/%E6%B5%B7%E4%B8%AD%E4%BF%A1%E6%81%AF%E5%AD%A6%E5%A4%8F%E4%BB%A4%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
+    <link href="https://24kblog.top/2021/08/13/%E6%B5%B7%E4%B8%AD%E4%BF%A1%E6%81%AF%E5%AD%A6%E5%A4%8F%E4%BB%A4%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <id>https://24kblog.top/2021/08/13/%E6%B5%B7%E4%B8%AD%E4%BF%A1%E6%81%AF%E5%AD%A6%E5%A4%8F%E4%BB%A4%E8%90%A5%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
     <published>2021-08-13T00:52:50.000Z</published>
     <updated>2022-08-27T16:50:02.572Z</updated>
     
@@ -116,8 +155,8 @@
   
   <entry>
     <title>有点紧张</title>
-    <link href="https://24kblog.tk/2021/06/19/%E6%9C%89%E7%82%B9%E7%B4%A7%E5%BC%A0/"/>
-    <id>https://24kblog.tk/2021/06/19/%E6%9C%89%E7%82%B9%E7%B4%A7%E5%BC%A0/</id>
+    <link href="https://24kblog.top/2021/06/19/%E6%9C%89%E7%82%B9%E7%B4%A7%E5%BC%A0/"/>
+    <id>https://24kblog.top/2021/06/19/%E6%9C%89%E7%82%B9%E7%B4%A7%E5%BC%A0/</id>
     <published>2021-06-19T13:56:01.000Z</published>
     <updated>2021-06-19T13:57:16.438Z</updated>
     
@@ -132,14 +171,14 @@
     
     
     
-    <category term="考试" scheme="https://24kblog.tk/tags/%E8%80%83%E8%AF%95/"/>
+    <category term="考试" scheme="https://24kblog.top/tags/%E8%80%83%E8%AF%95/"/>
     
   </entry>
   
   <entry>
     <title>每日播报（2021-06-14）</title>
-    <link href="https://24kblog.tk/2021/06/14/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-14%EF%BC%89/"/>
-    <id>https://24kblog.tk/2021/06/14/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-14%EF%BC%89/</id>
+    <link href="https://24kblog.top/2021/06/14/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-14%EF%BC%89/"/>
+    <id>https://24kblog.top/2021/06/14/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-14%EF%BC%89/</id>
     <published>2021-06-14T04:35:45.000Z</published>
     <updated>2021-06-14T04:39:48.204Z</updated>
     
@@ -157,14 +196,14 @@
     
     
     
-    <category term="每日播报" scheme="https://24kblog.tk/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/"/>
+    <category term="每日播报" scheme="https://24kblog.top/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/"/>
     
   </entry>
   
   <entry>
     <title>每日播报（2021.06.13）</title>
-    <link href="https://24kblog.tk/2021/06/13/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-13%EF%BC%89/"/>
-    <id>https://24kblog.tk/2021/06/13/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-13%EF%BC%89/</id>
+    <link href="https://24kblog.top/2021/06/13/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-13%EF%BC%89/"/>
+    <id>https://24kblog.top/2021/06/13/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5%EF%BC%882021-06-13%EF%BC%89/</id>
     <published>2021-06-13T02:31:00.000Z</published>
     <updated>2021-06-13T02:32:50.535Z</updated>
     
@@ -182,14 +221,14 @@
     
     
     
-    <category term="每日播报" scheme="https://24kblog.tk/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/"/>
+    <category term="每日播报" scheme="https://24kblog.top/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/"/>
     
   </entry>
   
   <entry>
     <title>我的第一篇文章</title>
-    <link href="https://24kblog.tk/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/"/>
-    <id>https://24kblog.tk/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</id>
+    <link href="https://24kblog.top/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/"/>
+    <id>https://24kblog.top/2021/06/12/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/</id>
     <published>2021-06-12T14:39:59.000Z</published>
     <updated>2021-07-08T14:39:07.313Z</updated>
     
@@ -205,7 +244,7 @@
     
     
     
-    <category term="初见" scheme="https://24kblog.tk/tags/%E5%88%9D%E8%A7%81/"/>
+    <category term="初见" scheme="https://24kblog.top/tags/%E5%88%9D%E8%A7%81/"/>
     
   </entry>
   
