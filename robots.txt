@@ -1,0 +1,7 @@
+# robots.txt generated at https://www.sojson.com/robots/
+Disallow:https://24kblog.top/sitemap.xml
+Disallow:https://24kblog.top/baidusitemap.xml
+Disallow:/tags/
+Disallow:/search/
+User-agent: *
+Disallow:
