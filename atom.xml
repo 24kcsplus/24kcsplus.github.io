@@ -6,7 +6,7 @@
   <link href="https://24kblog.top/atom.xml" rel="self"/>
   
   <link href="https://24kblog.top/"/>
-  <updated>2023-01-29T06:14:20.096Z</updated>
+  <updated>2023-05-27T05:38:05.947Z</updated>
   <id>https://24kblog.top/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>追番备份</title>
+    <link href="https://24kblog.top/2023/05/27/%E8%BF%BD%E7%95%AA%E5%A4%87%E4%BB%BD/"/>
+    <id>https://24kblog.top/2023/05/27/%E8%BF%BD%E7%95%AA%E5%A4%87%E4%BB%BD/</id>
+    <published>2023-05-27T05:19:33.000Z</published>
+    <updated>2023-05-27T05:38:05.947Z</updated>
+    
+    <content type="html"><![CDATA[<p>还有一年就要高考了,在此做一个追番备份,等考完了再补</p><h2 id="2023年7月">2023年7月</h2><ul><li>死神少爷与黑女仆 第2期</li><li>喜欢的人忘记戴眼镜了</li><li>公司里的小小前辈</li><li>AI电子基因</li><li>无职转生 第2期</li><li>间谍教室 第2期</li><li>Liar・Liar 谎言游戏</li><li>满怀美梦的少年是现实主义者</li><li>莱莎的炼金工房</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;还有一年就要高考了,在此做一个追番备份,等考完了再补&lt;/p&gt;
+&lt;h2 id=&quot;2023年7月&quot;&gt;2023年7月&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;死神少爷与黑女仆 第2期&lt;/li&gt;
+&lt;li&gt;喜欢的人忘记戴眼镜了&lt;/li&gt;
+&lt;li&gt;公司里的小小前辈&lt;/li&gt;
+&lt;li&gt;AI电子基因&lt;</summary>
+      
+    
+    
+    
+    
+    <category term="番剧" scheme="https://24kblog.top/tags/%E7%95%AA%E5%89%A7/"/>
+    
+  </entry>
   
   <entry>
     <title>树莓派搭建哔哩漫游解析服务器</title>
