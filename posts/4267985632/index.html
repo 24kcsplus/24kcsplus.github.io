@@ -13,7 +13,7 @@
         hljs.initLineNumbersOnLoad();
     </script>
     
-    <title>有点紧张 - 24k的小站</title>
+    <title>刷题记录 - 24k的小站</title>
     <meta charset="UTF-8">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -21,17 +21,17 @@
     
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <meta name="description" content="明天就要进行海中的自主招生考试了 有点紧张">
+    <meta name="description" content="刷题记录 1.P1179 [NOIP2010 普及组] 数字统计 解题思路: 声明一个整型变量,作为计数器,再计算两个值之间2的出现次数 核心代码: while(g!&#x3D;0)&amp;#123;             if(g%10&#x3D;&#x3D;2)ans++;             g&#x2F;&#x3D;10;         &amp;#125;  我的代码: #include &lt;bits&#x2F;stdc++.h&gt; using">
 <meta property="og:type" content="article">
-<meta property="og:title" content="有点紧张">
-<meta property="og:url" content="https://24kblog.top/2021/06/19/%E6%9C%89%E7%82%B9%E7%B4%A7%E5%BC%A0/index.html">
+<meta property="og:title" content="刷题记录">
+<meta property="og:url" content="https://24kblog.top/posts/4267985632/index.html">
 <meta property="og:site_name" content="24k的小站">
-<meta property="og:description" content="明天就要进行海中的自主招生考试了 有点紧张">
+<meta property="og:description" content="刷题记录 1.P1179 [NOIP2010 普及组] 数字统计 解题思路: 声明一个整型变量,作为计数器,再计算两个值之间2的出现次数 核心代码: while(g!&#x3D;0)&amp;#123;             if(g%10&#x3D;&#x3D;2)ans++;             g&#x2F;&#x3D;10;         &amp;#125;  我的代码: #include &lt;bits&#x2F;stdc++.h&gt; using">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-06-19T13:56:01.000Z">
-<meta property="article:modified_time" content="2021-06-19T13:57:16.438Z">
+<meta property="article:published_time" content="2021-10-07T02:22:21.000Z">
+<meta property="article:modified_time" content="2022-08-27T15:44:19.690Z">
 <meta property="article:author" content="24kcsplus">
-<meta property="article:tag" content="考试">
+<meta property="article:tag" content="CSP">
 <meta name="twitter:card" content="summary">
     
 <link rel="stylesheet" href="/lib/fancybox/fancybox.css">
@@ -39,9 +39,9 @@
 <link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
 
 
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1689491062876">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1689690565130">
     
-    <link rel="stylesheet" href="/css/style.css?v=1689491062876">
+    <link rel="stylesheet" href="/css/style.css?v=1689690565130">
     
 <meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
 </head>
@@ -211,24 +211,195 @@
   <article>
       
           <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
-              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="有点紧张" loading="lazy">
-              <h1>有点紧张</h1>
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="刷题记录" loading="lazy">
+              <h1>刷题记录</h1>
           </div>
       
       
       <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2021年06月19日</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年10月07日</a>
 </div>
 
       <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
     
-        <a><i class="nexmoefont icon-areachart"></i>约20字</a>
-        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要1分钟</a>
+        <a><i class="nexmoefont icon-areachart"></i>约754字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要4分钟</a>
     
 </div>
 
-      <h1>明天就要进行海中的自主招生考试了</h1>
-<h3 id="有点紧张">有点紧张</h3>
+      <h1>刷题记录</h1>
+<h2 id="1-P1179-NOIP2010-普及组-数字统计">1.<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1179">P1179 [NOIP2010 普及组] 数字统计</a></h2>
+<h3 id="解题思路">解题思路:</h3>
+<p>声明一个整型变量,作为计数器,再计算两个值之间2的出现次数</p>
+<p>核心代码:</p>
+<pre><code>while(g!=0)&#123;
+            if(g%10==2)ans++;
+            g/=10;
+        &#125;
+</code></pre>
+<h3 id="我的代码">我的代码:</h3>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main()&#123;
+    int l,r,ans=0;
+    cin&gt;&gt;l&gt;&gt;r;
+    for(int i=l;i&lt;=r;i++)&#123;
+        int g=i;
+        while(g!=0)&#123;
+            if(g%10==2)ans++;
+            g/=10;
+        &#125;
+    &#125;
+    cout&lt;&lt;ans&lt;&lt;endl;
+    return 0;
+&#125;
+</code></pre>
+<h2 id="2-P1307-NOIP2011-普及组-数字反转"><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1307">2.P1307 [NOIP2011 普及组] 数字反转</a></h2>
+<h3 id="解题思路-2">解题思路:</h3>
+<p>声明待输入数和输出数,输出数扩充一位给输入数最后一位,输入数再舍去最后一位</p>
+<p>核心代码:</p>
+<pre><code>for(na;na!=0;na/=10) nb=nb*10+na%10;
+</code></pre>
+<h3 id="我的代码-2">我的代码</h3>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int na,nb=0;
+
+int main()&#123;
+    cin&gt;&gt;na;
+    for(na;na!=0;na/=10) nb=nb*10+na%10;
+    cout&lt;&lt;nb;
+&#125;
+</code></pre>
+<h2 id="3-P1075-NOIP2012-普及组-质因数分解"><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1075">3.P1075 [NOIP2012 普及组] 质因数分解</a></h2>
+<h3 id="解题思路-3">解题思路:</h3>
+<p>从小到大轮流除,找到最小因数,质因数/最小因数=最大因数</p>
+<p>核心代码:</p>
+<pre><code>    for(int i=2;i&lt;=n;++i)&#123;
+        if(n%i==0)&#123;
+            cout&lt;&lt;n/i;
+            return 0;
+        &#125;
+    &#125;
+</code></pre>
+<h3 id="我的代码-3">我的代码:</h3>
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()&#123;
+    int n;
+    cin&gt;&gt;n;
+    for(int i=2;i&lt;=n;++i)&#123;
+        if(n%i==0)&#123;
+            cout&lt;&lt;n/i;
+            return 0;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="4-P1980-NOIP2013-普及组-计数问题"><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1980">4.P1980 [NOIP2013 普及组] 计数问题</a></h2>
+<h3 id="解题思路-4">解题思路:</h3>
+<p>每个数都进行判断,使用计数器计数</p>
+<p>核心代码:</p>
+<pre><code>for(i=1;i&lt;=n;i++)&#123;
+        temp=i;
+        while(temp!=0)&#123;
+            t=temp%10;
+            temp/=10;
+            if(t==x) c++;
+        &#125;
+</code></pre>
+<h3 id="我的代码-4">我的代码:</h3>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int n,x,temp,i,t,c;
+
+int main()&#123;
+    cin&gt;&gt;n&gt;&gt;x;
+    for(i=1;i&lt;=n;i++)&#123;
+        temp=i;
+        while(temp!=0)&#123;
+            t=temp%10;
+            temp/=10;
+            if(t==x) c++;
+        &#125;
+    &#125;
+    cout&lt;&lt;c&lt;&lt;endl;
+    return 0;
+&#125;
+</code></pre>
+<h2 id="5-P2141-NOIP2014-普及组-珠心算测验"><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2141">5.P2141 [NOIP2014 普及组] 珠心算测验</a></h2>
+<h3 id="解题思路-5">解题思路:</h3>
+<p>暴力查找</p>
+<p>核心代码:</p>
+<pre><code>for(i=1;i&lt;=n;i++)&#123;
+        cin&gt;&gt;a[i];
+        tf[a[i]]++;
+    &#125;
+    for (i=1;i&lt;=n;i++)&#123;
+        for(g=1+1;g&lt;=n;g++)&#123;
+            ti[a[i]+a[g]]++;
+            mn=max(mn,a[i]+a[g]);
+        &#125;
+    &#125;
+    for(i=1;i&lt;=mn;i++)&#123;
+        if(ti[i]&gt;0&amp;&amp;tf[i]) ans++;
+    &#125;
+</code></pre>
+<h3 id="我的代码-5">我的代码:</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+
+const int M=20005;
+int ti[M],tf[M],n,a[205],ans,mn,i,g;
+
+int main()&#123;
+    cin&gt;&gt;n;
+    for(i=1;i&lt;=n;i++)&#123;
+        cin&gt;&gt;a[i];
+        tf[a[i]]++;
+    &#125;
+    for (i=1;i&lt;=n;i++)&#123;
+        for(g=1+1;g&lt;=n;g++)&#123;
+            ti[a[i]+a[g]]++;
+            mn=max(mn,a[i]+a[g]);
+        &#125;
+    &#125;
+    for(i=1;i&lt;=mn;i++)&#123;
+        if(ti[i]&gt;0&amp;&amp;tf[i]) ans++;
+    &#125;
+    cout&lt;&lt;ans;
+&#125;
+</code></pre>
+<h2 id="6-P2669-NOIP2015-普及组-金币"><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2669">6.P2669 [NOIP2015 普及组] 金币</a></h2>
+<h3 id="解题思路-6">解题思路:</h3>
+<p>自加,后减去超出部分</p>
+<p>核心代码:</p>
+<pre><code>    for(i=1;k-i&gt;0;k-=i++)&#123;
+        coin+=i*i;
+    &#125;
+    cout&lt;&lt;coin+k*i;
+</code></pre>
+<h3 id="我的代码-6">我的代码:</h3>
+<pre><code class="language-cpp">#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+long long int k,i,coin;
+
+int main()&#123;
+    cin&gt;&gt;k;
+    for(i=1;k-i&gt;0;k-=i++)&#123;
+        coin+=i*i;
+    &#125;
+    cout&lt;&lt;coin+k*i;
+&#125;
+</code></pre>
 
   </article>
 
@@ -236,7 +407,7 @@
       
     <div class="nexmoe-post-copyright">
         <strong>本文作者：</strong>24kcsplus<br>
-        <strong>本文链接：</strong><a href="https://24kblog.top/2021/06/19/%E6%9C%89%E7%82%B9%E7%B4%A7%E5%BC%A0/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;2021&#x2F;06&#x2F;19&#x2F;%E6%9C%89%E7%82%B9%E7%B4%A7%E5%BC%A0&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;2021&#x2F;06&#x2F;19&#x2F;%E6%9C%89%E7%82%B9%E7%B4%A7%E5%BC%A0&#x2F;</a><br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/4267985632/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;4267985632&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;4267985632&#x2F;</a><br>
         
             <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
         
@@ -248,7 +419,7 @@
   <div class="nexmoe-post-meta nexmoe-rainbow">
     
     
-        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E8%80%83%E8%AF%95/" rel="tag">考试</a>
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CSP/" rel="tag">CSP</a>
     
 </div>
 
@@ -285,7 +456,7 @@
                               <button class="mdui-fab catalog" style="overflow:unset;">
                                   <i class="nexmoefont icon-i-catalog"></i>
                                   <div class="nexmoe-toc">
-                                      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">明天就要进行海中的自主招生考试了</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E7%82%B9%E7%B4%A7%E5%BC%A0"><span class="toc-number">1.0.1.</span> <span class="toc-text">有点紧张</span></a></li></ol></li></ol></li></ol>
+                                      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">刷题记录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-P1179-NOIP2010-%E6%99%AE%E5%8F%8A%E7%BB%84-%E6%95%B0%E5%AD%97%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.1.</span> <span class="toc-text">1.P1179 [NOIP2010 普及组] 数字统计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">1.1.1.</span> <span class="toc-text">解题思路:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="toc-number">1.1.2.</span> <span class="toc-text">我的代码:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-P1307-NOIP2011-%E6%99%AE%E5%8F%8A%E7%BB%84-%E6%95%B0%E5%AD%97%E5%8F%8D%E8%BD%AC"><span class="toc-number">1.2.</span> <span class="toc-text">2.P1307 [NOIP2011 普及组] 数字反转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-2"><span class="toc-number">1.2.1.</span> <span class="toc-text">解题思路:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E4%BB%A3%E7%A0%81-2"><span class="toc-number">1.2.2.</span> <span class="toc-text">我的代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-P1075-NOIP2012-%E6%99%AE%E5%8F%8A%E7%BB%84-%E8%B4%A8%E5%9B%A0%E6%95%B0%E5%88%86%E8%A7%A3"><span class="toc-number">1.3.</span> <span class="toc-text">3.P1075 [NOIP2012 普及组] 质因数分解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-3"><span class="toc-number">1.3.1.</span> <span class="toc-text">解题思路:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E4%BB%A3%E7%A0%81-3"><span class="toc-number">1.3.2.</span> <span class="toc-text">我的代码:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-P1980-NOIP2013-%E6%99%AE%E5%8F%8A%E7%BB%84-%E8%AE%A1%E6%95%B0%E9%97%AE%E9%A2%98"><span class="toc-number">1.4.</span> <span class="toc-text">4.P1980 [NOIP2013 普及组] 计数问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-4"><span class="toc-number">1.4.1.</span> <span class="toc-text">解题思路:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E4%BB%A3%E7%A0%81-4"><span class="toc-number">1.4.2.</span> <span class="toc-text">我的代码:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-P2141-NOIP2014-%E6%99%AE%E5%8F%8A%E7%BB%84-%E7%8F%A0%E5%BF%83%E7%AE%97%E6%B5%8B%E9%AA%8C"><span class="toc-number">1.5.</span> <span class="toc-text">5.P2141 [NOIP2014 普及组] 珠心算测验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-5"><span class="toc-number">1.5.1.</span> <span class="toc-text">解题思路:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E4%BB%A3%E7%A0%81-5"><span class="toc-number">1.5.2.</span> <span class="toc-text">我的代码:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-P2669-NOIP2015-%E6%99%AE%E5%8F%8A%E7%BB%84-%E9%87%91%E5%B8%81"><span class="toc-number">1.6.</span> <span class="toc-text">6.P2669 [NOIP2015 普及组] 金币</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF-6"><span class="toc-number">1.6.1.</span> <span class="toc-text">解题思路:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E4%BB%A3%E7%A0%81-6"><span class="toc-number">1.6.2.</span> <span class="toc-text">我的代码:</span></a></li></ol></li></ol></li></ol>
                                   </div>
                               </button>
                           
@@ -320,10 +491,10 @@
 
  
 
-<script async src="/js/app.js?v=1689491062877"></script>
+<script async src="/js/app.js?v=1689690565134"></script>
 
 
-	<script async src="/js/search.js?v=1689491062877"></script>
+	<script async src="/js/search.js?v=1689690565134"></script>
 
 
 <script>
