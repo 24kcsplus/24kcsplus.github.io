@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/vs2015.min.css">
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+    </script>
+    
+    <title>2024 红岩杯 CTF WP - 24k的小站</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="开学前忘记迁移 hexo 数据了，几个月都没更新，现在回家不知道发什么，就把之前写的 wp 拉过来凑个数了  Misc Are you a JPG master? step 1 根据提示使用 Java 盲水印来获得 level2.zip 的密码  step 2 有一个 level2.jpg 和 dic.txt 猜测要跑字典，可能是图种或用某种隐写方式隐写了flag 使用 binwalk 未检测出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2024 红岩杯 CTF WP">
+<meta property="og:url" content="https://24kblog.top/posts/undefined/index.html">
+<meta property="og:site_name" content="24k的小站">
+<meta property="og:description" content="开学前忘记迁移 hexo 数据了，几个月都没更新，现在回家不知道发什么，就把之前写的 wp 拉过来凑个数了  Misc Are you a JPG master? step 1 根据提示使用 Java 盲水印来获得 level2.zip 的密码  step 2 有一个 level2.jpg 和 dic.txt 猜测要跑字典，可能是图种或用某种隐写方式隐写了flag 使用 binwalk 未检测出">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=SUs3RnJCQXFqdzZYbTJGWEMzaDFHUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=UlRFTVFPYS84Rmtuam1IUzBOOWp4eEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MXozbjhjTS9SNGpKSnZFOEhvUHVLUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=OUR5M0dwb0JvZTJXazhoUTRic0ZXUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=VEFjOHM2RWdHNldJdzlTS2oxaEJhQkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=RmlEVUxoSHIrY2RVMkRZN1FGN05XQkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=UnhEemdtZ0hSaURkQVNuS2NJUmhwUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=V0tpUHhnTHc4VllzOVQzbXBuRGltUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=OUh6dEdLRHRSZFVET2xwSEJhb1F5UkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=dkx4UzQwUjBHR0tUUzdQWFIzbERMUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=NS9wRnVwQmRockV2VVlBamJoMzdTQkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=TlRxZHpjUk1CM3kyRXVQWDhqRjEzeEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=VXAwN0FmSitrU0VKMzRwaUt5UDFaeEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=blpQVjZGMktSbWFMQm1wQ3poVGhZQkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=VGZ1Rk9uSDN3MTBHYlYvdWJGekY0UkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=WStTWnpDVk04alJ6ZytmS1Vwa1RMeEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=UmRTckdrN2NnbEkwcVpacVordlRqaEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=R2N6UzBvYnU4ODZ4aXI4b0tjbDh4eEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MUxGZW4yZ25mWGVqUmVXL09xWkNJeEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=NWNuR2c2NG9VcjdjRkxUdWlLd2RkeEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=WnV1b3E0UDdzVFBlZnpOQTJMbm4zUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cHNtRDNVNE1OV0xyWStWb2I5bUpzUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=WFk0OS9pRnVSVVdvN1hLSjU3dzR1eEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=b2FUa0x0V2lTNE45azBZM1lSY201eEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=dXh2SmxFSXA4eS9QTEtnWEREbzBNaEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=UVNmR2RkMGtWT1FoMXcvaWxuWXUzUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=bW5yVUVPNWNXZDZuL2Q3N3NXR2ROUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=S3Rnb3kva0VoSDJuSGc5K2t5SjhDeEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=TXlnQ0pjekwvRkdTUWhkL0g0RFJKUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=RWxnRFZlbGV2L0RvdlgrS01hZnUxUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=aHQwaythbnFsbUpERC9ySzB1WHpTeEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MnQ0MHV2ajBLcFlieE9sVERFRDJQaEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=Mjlwa2xoSnlOZXljVTRERCsyQWRtUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=dGpNNHd4ZU5iOUtxTWVmSFBqcDV2aEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ZUV3N3d6ZnNqbDcrMXUyUmNzUWJSUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=R2doU1pSOWVMS3VueDlSL2liNEh5UkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=Qm1lNFM1QWpqRUhmekM3bFBWTWtoUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=azdGZVQzU005NzVwRFh5Q1NwN3czaEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=b3QrWTM1ekw2cHRBS3A4YVB1WnAwQkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=dERhdHRkOTFyMStLMXdZUEptR1J3QkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ZUF6NU5UWDJyUm9taHZqMFdqU1ZmUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cUtvaXJyeVZQWG5ZWkl6SWZ3RnVseEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=S0dGVWlnUk9PaVFscE1qc1ErYXI0QkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=N3ZqWUdtazhHUWFHWllUc1pZS0RBeEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=U3RsYU14dWVjdFBKMkZqcXRtaHEyUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=UCtIa0RWOHUzc0RJQWRPN0FUUTNCQkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ak9JWENnTyt3UXlxY1Bsem5MR1pqeEFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ajJrY1ZjNFI1dlNwMy8wK0l6SXpEUkFHQnBrUGkzTFlxdz09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=aWpsUjZpalZ5c01FSjUyaUp0YjlyQkFHQnBrUGkzTFlxdz09">
+<meta property="article:published_time" content="2025-01-18T15:58:49.000Z">
+<meta property="article:modified_time" content="2025-01-19T15:49:59.040Z">
+<meta property="article:author" content="24kcsplus">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.24kblog.top/app/hide.php?key=SUs3RnJCQXFqdzZYbTJGWEMzaDFHUkFHQnBrUGkzTFlxdz09">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1737301821322">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1737301821322">
+    
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+</head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="24kcsplus" class="mdui-btn mdui-btn-icon"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="24kcsplus">
+            <img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus" alt="24kcsplus">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>13</div>
+        <div><span>标签</span>15</div>
+        <div><span>分类</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://net.24kblog.top" title="DN42">
+            <i class="mdui-list-item-icon nexmoefont icon-dribbble"></i>
+            <div class="mdui-list-item-content">
+                DN42
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://qd.24kblog.top" title="贴吧云签到">
+            <i class="mdui-list-item-icon nexmoefont icon-appstore-fill"></i>
+            <div class="mdui-list-item-content">
+                贴吧云签到
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://gaokao.24kblog.top" title="高考倒计时">
+            <i class="mdui-list-item-icon nexmoefont icon-calendar-fill"></i>
+            <div class="mdui-list-item-content">
+                高考倒计时
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://pd.qq.com/s/bo1vmn" target="_blank" mdui-tooltip="{content: 'QQ频道（学校）'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/225319411" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/24kcsplus/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a><a class="mdui-ripple" href="https://twitter.com/24k_ghost_acc" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(59, 151, 239);background-color: rgba(59, 151, 239, .1);">
+            <i class="nexmoefont icon-twitter"></i>
+        </a>
+    </div>
+</div>
+    
+    
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 20px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 20px;">每日播报</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E8%80%83%E8%AF%95/" style="font-size: 10px;">考试</a>
+    </div>
+    
+  </div>
+
+    
+    <!-- 一言 -->
+
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">
+      一言
+    </h3>
+    <div class="nexmoe-widget">
+      <ul class="hitokoto-box">
+        <li id="hitokoto_text_parent" class="hitokoto-text" hitokotoCategory="a">
+          <a href="#" id="hitokoto_text">
+            
+          </a>
+          <a href="#" id="hitokoto_error_text" style="display: none;">
+            
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let hitokotoText = document.getElementById('hitokoto_text')
+    let hitokotoErroText = document.getElementById('hitokoto_error_text')
+    let hitokotoCategory = document.getElementById('hitokoto_text_parent').getAttribute('hitokotoCategory')
+    window.onload = function () {
+      let url = 'https://v1.hitokoto.cn'
+      if (hitokotoCategory) {
+        url += '?c=' + hitokotoCategory
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          hitokotoText.innerText = "「 " + data.hitokoto + " 」 from " + data.from
+          hitokotoText.href = 'https://hitokoto.cn/?uuid=' + data.uuid
+        })
+        .catch((reason) => {
+          console.error(11, reason)
+          hitokotoText.style.display = 'none'
+          hitokotoErroText.style.display = 'block'
+        })
+    }
+  </script>
+  
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2025 24kcsplus <br />
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+         <br /><a href="https://icp.gov.moe/?keyword=20241969" target="_blank">萌ICP备20241969号</a> <br /><a href="https://beian.miit.gov.cn/" target="_blank">琼ICP备2022012208号</a> <br /><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=46010602001577"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/beian.png" style="float:left;width:12px;height:12px"/>琼公网安备46010602001577号</a> <!--<br /><a target="_blank" rel="noopener" href="https://cdnnb.cn" class="active"><img style="float:right" src="https://img.shields.io/badge/本站由失控的防御系统提供加速防御支持-green"></a>-->
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="2024 红岩杯 CTF WP" loading="lazy">
+              <h1>2024 红岩杯 CTF WP</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2025年01月18日</a>
+</div>
+
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约2.6k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要11分钟</a>
+    
+</div>
+
+      <blockquote>
+<p>开学前忘记迁移 hexo 数据了，几个月都没更新，现在回家不知道发什么，就把之前写的 wp 拉过来凑个数了</p>
+</blockquote>
+<h2 id="Misc">Misc</h2>
+<h3 id="Are-you-a-JPG-master">Are you a JPG master?</h3>
+<h4 id="step-1">step 1</h4>
+<p>根据提示使用 <a target="_blank" rel="noopener" href="https://github.com/ww23/BlindWatermark">Java 盲水印</a>来获得 <code>level2.zip</code> 的密码</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=SUs3RnJCQXFqdzZYbTJGWEMzaDFHUkFHQnBrUGkzTFlxdz09" alt="1" data-caption="1" loading="lazy"></p>
+<h4 id="step-2">step 2</h4>
+<p>有一个 <code>level2.jpg</code> 和 <code>dic.txt</code> 猜测要跑字典，可能是图种或用某种隐写方式隐写了flag</p>
+<p>使用 <code>binwalk</code> 未检测出压缩包</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=UlRFTVFPYS84Rmtuam1IUzBOOWp4eEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123190606" data-caption="Pasted image 20241123190606" loading="lazy"></p>
+<p>使用 <code>stegdetect</code> 检测隐写类型：</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MXozbjhjTS9SNGpKSnZFOEhvUHVLUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123185412" data-caption="Pasted image 20241123185412" loading="lazy"></p>
+<p>未检测出有效隐写类型，猜测使用了 <code>steghide</code> ，尝试使用 <code>stegbrute</code> 跑字典，得到flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=OUR5M0dwb0JvZTJXazhoUTRic0ZXUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123185722" data-caption="Pasted image 20241123185722" loading="lazy"></p>
+<h3 id="HardZip">HardZip</h3>
+<h4 id="step-1-2">step 1</h4>
+<p>给了一个 <code>dic.txt</code> ，所以使用 ARCHPR 跑字典</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=VEFjOHM2RWdHNldJdzlTS2oxaEJhQkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123190849" data-caption="Pasted image 20241123190849" loading="lazy"></p>
+<h4 id="step-2-2">step 2</h4>
+<p>得到密码，解压得到 <code>第二关.zip</code> 和 <code>hint.txt</code> ，根据 <code>hint.txt</code> ，了解到要用掩码攻击</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=RmlEVUxoSHIrY2RVMkRZN1FGN05XQkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123191308" data-caption="Pasted image 20241123191308" loading="lazy"></p>
+<h4 id="step-3">step 3</h4>
+<p>得到密码，继续解压得到一个 <code>flag.zip</code> 文件</p>
+<p>使用 <code>010editor</code> 查看其十六进制，得知此文件并非伪加密</p>
+<p>查看压缩包目录，发现有 <code>flag.txt</code> 和 <code>What's_this.png</code> 两个文件，可以知道要使用明文攻击，因为已知文件中12字节数据，且其中至少8字节连续，即可进行明文攻击</p>
+<p>因为 <code>png</code> 头都是一样的，所以我构造了一个 <code>png</code> 头，然后使用 <code>bkcrack</code> 进行明文攻击，得到3个密钥并解密，得到 flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=UnhEemdtZ0hSaURkQVNuS2NJUmhwUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123195009" data-caption="Pasted image 20241123195009" loading="lazy"></p>
+<blockquote>
+<p>刚做题时的情形：“我真傻，真的，”蒟蒻抬起他没有神采的眼睛来，接着说。“我单知道明文攻击时候需要一个已知文件；我不知道只要前12字节就能攻击了。我一清早起来就开了电脑，计算flag.txt的crc32值，叫我们的Python脚本开始工作。到了下午，终于给出了12个crc32值相同的字符串，我便开了12个ARPHCR来攻击，过了一阵子没出结果。我急了，CPU内核们都说找不到了，再一看，8个密钥未找到，还有几个还在算呢。。。。”他接着但是呜咽，说不出成句的话来。。</p>
+</blockquote>
+<blockquote>
+<p>对此，我们伟大的Beta猫学长回复道：成长需要时间</p>
+</blockquote>
+<h3 id="YourCraft">YourCraft</h3>
+<p>666，这个入开桂了</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=V0tpUHhnTHc4VllzOVQzbXBuRGltUkFHQnBrUGkzTFlxdz09" alt="2024-11-22_12.03.15" data-caption="2024-11-22_12.03.15" loading="lazy"></p>
+<h3 id="点击即送flag">点击即送flag</h3>
+<p>点击即送 flag：</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=OUh6dEdLRHRSZFVET2xwSEJhb1F5UkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123192350" data-caption="Pasted image 20241123192350" loading="lazy"></p>
+<h3 id="290的小秘密">290的小秘密</h3>
+<p>根据题目提示，该图片使用了lsb隐写</p>
+<p>使用 <code>stegsolve</code> 打开，这题的信息隐藏在 RGB 三个通道的最低位中，通过 <code>Analyse -&gt; Data Extract</code> 得到flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=dkx4UzQwUjBHR0tUUzdQWFIzbERMUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123192941" data-caption="Pasted image 20241123192941" loading="lazy"></p>
+<h3 id="5525">5525</h3>
+<p>根据题目提示采用了 <code>SilentEye</code> 隐写，从压缩包中的 <code>hint.txt</code> 得到密钥为 “Mayday” ，使用 <code>SilentEye</code> 解密，得到flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=NS9wRnVwQmRockV2VVlBamJoMzdTQkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123193358" data-caption="Pasted image 20241123193358" loading="lazy"></p>
+<h3 id="EasyZip">EasyZip</h3>
+<p>根据题目描述得知要暴力破解，使用 <code>ARCHPR</code> 暴力破解得到密码：</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=TlRxZHpjUk1CM3kyRXVQWDhqRjEzeEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123193717" data-caption="Pasted image 20241123193717" loading="lazy"></p>
+<h3 id="WirrreShark">WirrreShark</h3>
+<h3 id="step-1-3">step 1</h3>
+<p>使用 <code>WirrreShark</code> 打开题目文件</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=VXAwN0FmSitrU0VKMzRwaUt5UDFaeEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123194043" data-caption="Pasted image 20241123194043" loading="lazy"></p>
+<h4 id="step-2-3">step 2</h4>
+<p>依次查看各个条目，在第五个条目中发现flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=blpQVjZGMktSbWFMQm1wQ3poVGhZQkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123194153" data-caption="Pasted image 20241123194153" loading="lazy"></p>
+<h3 id="我图图呢">我图图呢</h3>
+<h4 id="step-1-4">step 1</h4>
+<p>题目文件是一个图片，无法打开</p>
+<p>使用 <code>010editor</code> 查看</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=VGZ1Rk9uSDN3MTBHYlYvdWJGekY0UkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123194700" data-caption="Pasted image 20241123194700" loading="lazy"></p>
+<p>发现文件标头被修改，将其改正</p>
+<p>修正后得到图片</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=WStTWnpDVk04alJ6ZytmS1Vwa1RMeEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123195245" data-caption="Pasted image 20241123195245" loading="lazy"></p>
+<h4 id="step-2-4">step 2</h4>
+<p>图片宽高不对，需要使用脚本爆破CRC得到宽高</p>
+<p>脚本源码：</p>
+<pre><code class="language-python">import zlib  
+import struct  
+import argparse  
+import itertools  
+  
+  
+parser = argparse.ArgumentParser()  
+parser.add_argument(&quot;-f&quot;, type=str, default=None, required=True,  
+                    help=&quot;crc.png&quot;)  
+args  = parser.parse_args()  
+  
+  
+bin_data = open(args.f, 'rb').read()  
+crc32key = zlib.crc32(bin_data[12:29]) # 计算crc  
+original_crc32 = int(bin_data[29:33].hex(), 16) # 原始crc  
+  
+  
+if crc32key == original_crc32: # 计算crc对比原始crc  
+    print('宽高没有问题!')  
+else:  
+    input_ = input(&quot;宽高被改了, 是否CRC爆破宽高? (Y/n):&quot;)  
+    if input_ not in [&quot;Y&quot;, &quot;y&quot;, &quot;&quot;]:  
+        exit()  
+    else:  
+        for i, j in itertools.product(range(4095), range(4095)): # 理论上0x FF FF FF FF，但考虑到屏幕实际和cpu，0x 0F FF就差不多了，也就是4095宽度和高度  
+            data = bin_data[12:16] + struct.pack('&gt;i', i) + struct.pack('&gt;i', j) + bin_data[24:29]  
+            crc32 = zlib.crc32(data)  
+            if(crc32 == original_crc32): # 计算当图片大小为i:j时的CRC校验值，与图片中的CRC比较，若相同，则图片大小已经确定  
+                print(f&quot;\nCRC32: &#123;hex(original_crc32)&#125;&quot;)  
+                print(f&quot;宽度: &#123;i&#125;, hex: &#123;hex(i)&#125;&quot;)  
+                print(f&quot;高度: &#123;j&#125;, hex: &#123;hex(j)&#125;&quot;)  
+                exit(0)
+</code></pre>
+<p>最后得到宽高为：</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=UmRTckdrN2NnbEkwcVpacVordlRqaEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123200317" data-caption="Pasted image 20241123200317" loading="lazy"></p>
+<p>使用 <code>010editor</code> 编辑宽高，得到完整图片</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=R2N6UzBvYnU4ODZ4aXI4b0tjbDh4eEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123200827" data-caption="Pasted image 20241123200827" loading="lazy"></p>
+<h4 id="step-3-2">step 3</h4>
+<p>在文件尾找到后半部分 flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MUxGZW4yZ25mWGVqUmVXL09xWkNJeEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123200923" data-caption="Pasted image 20241123200923" loading="lazy"></p>
+<h2 id="Crypto">Crypto</h2>
+<h3 id="Classic-AES">Classic_AES</h3>
+<p>由题目可知采用了AES_ECB加密，并且种子是一个小整数，编写脚本爆破：</p>
+<pre><code class="language-python">import random  
+from Crypto.Cipher import AES  
+import base64  
+import os  
+  
+def generate_key(seed):  
+    random.seed(seed)  
+    key = bytes([random.randint(0, 255) for _ in range(16)])  
+    return key  
+  
+def decrypt(ciphertext, key):  
+    cipher = AES.new(key, AES.MODE_ECB)  
+    plaintext = cipher.decrypt(base64.b64decode(ciphertext))  
+    pad_len = plaintext[-1]  # 去除 PKCS#7 填充  
+    return plaintext[:-pad_len].decode()  
+  
+if __name__ == &quot;__main__&quot;:  
+    flag = &quot;x/xvgy+sXb6I8j96FTT5fgEGT9lMR4XC/zKTvdY77a3Yntdvn1GScfkf/MHziWzI&quot;  
+    for seed in range(100000):  # 暴力破解种子  
+        try: # 使用try...except...避免无法解码错误退出  
+            key = generate_key(seed)  
+            decrypted_flag = decrypt(flag, key)  
+            if &quot;Redrock&quot; in decrypted_flag:  # 筛选出包含&quot;Redrock&quot;的结果  
+                print(decrypted_flag)  
+                break  
+        except:  
+            pass
+</code></pre>
+<p>得到 flag ：</p>
+<pre><code>Redrock&#123;6b16bf86-6749-4112-b438-319e4ce7a5c1&#125;
+</code></pre>
+<h3 id="Morse-Code">Morse_Code</h3>
+<p>密文：</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=NWNuR2c2NG9VcjdjRkxUdWlLd2RkeEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123203637" data-caption="Pasted image 20241123203637" loading="lazy"></p>
+<p>解密得：</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=WnV1b3E0UDdzVFBlZnpOQTJMbm4zUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123203849" data-caption="Pasted image 20241123203849" loading="lazy"></p>
+<h3 id="What-is-RSA">What is RSA</h3>
+<p>文件中有p,q,e,c四个值</p>
+<p>From ChatGPT:</p>
+<p>在RSA加密算法中，以下是每个符号的含义：</p>
+<ol>
+<li>
+<p><strong>p 和 q</strong>：<br />
+这两个是大素数，用于生成密钥。</p>
+<ul>
+<li>选择两个大素数 p 和 q，它们应尽可能随机且保密。</li>
+<li>计算 n=p×q，n 是密钥的一部分。</li>
+</ul>
+</li>
+<li>
+<p><strong>e</strong>：<br />
+公钥指数（加密指数）。</p>
+<ul>
+<li>e 是一个与 ϕ(n)=(p−1)(q−1) 互素的整数，满足 1&lt;e&lt;ϕ(n)。</li>
+<li>常见的 e 值是 65537，因为它计算效率高，且足够安全。</li>
+</ul>
+</li>
+<li>
+<p><strong>c</strong>：<br />
+密文（ciphertext）。</p>
+<ul>
+<li>明文 m 加密后生成的结果 c，计算公式是： c=m^e mod  n</li>
+</ul>
+</li>
+</ol>
+<h5 id="补充说明">补充说明</h5>
+<ul>
+<li><strong>私钥指数 d</strong>：解密指数，用于解密密文。它满足： d×e≡1mod  ϕ(n)</li>
+<li>解密公式： m=c^d mod  n</li>
+</ul>
+<p>RSA 的核心在于大数分解的困难性。</p>
+<p>根据以上内容写出解密脚本代码：</p>
+<pre><code class="language-python">from sympy import mod_inverse  
+  
+p = 107838628855654812471413655393398150378995246065154350033910452648032730414023 
+q = 63326381933899241811507370594269184413864749996932931556519044275437019848179  
+e = 65537  
+c = 2614337245710053040032169192794377666429639491165446083830186166080709603975820326607483164927365452151697893098970942225623463372515924991756039075659888  
+  
+phi_n = (p - 1) * (q - 1)  # 计算 n 和 φ(n)
+n = p * q  
+d = mod_inverse(e, phi_n)  # 计算 d
+
+m = pow(c, d, n)  # 得到明文
+  
+# 将得到的明文转为字符串  
+def int_to_string(m):   
+    hex_string = hex(m)[2:]  # 转成16进制并去掉 &quot;0x&quot; 前缀  
+    if len(hex_string) % 2:  # 确保长度为偶数  
+        hex_string = &quot;0&quot; + hex_string  
+    return bytes.fromhex(hex_string).decode('utf-8')  # 按照字节解码
+  
+# 转换并输出字符串  
+try:  
+    plaintext = int_to_string(m)  
+    print(plaintext)  
+except UnicodeDecodeError:  
+    print(&quot;无法解码&quot;)
+</code></pre>
+<p>得到 flag ：</p>
+<pre><code>Redrock&#123;0b46cdfc-4b31-4023-a33d-b8defada9457&#125;
+</code></pre>
+<h3 id="real1ty的小秘密">real1ty的小秘密</h3>
+<p>由题目可知是凯撒密码，因为不知道偏移量，所以需要枚举26次得到明文</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cHNtRDNVNE1OV0xyWStWb2I5bUpzUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123210844" data-caption="Pasted image 20241123210844" loading="lazy"></p>
+<h3 id="我解md5真的假的">我解md5真的假的</h3>
+<p>part1-3和5可通过 [[<a target="_blank" rel="noopener" href="https://www.somd5.com/">https://www.somd5.com/</a>]] 查到，part4根据提示，可通过穷举得到原文，穷举代码如下：</p>
+<pre><code class="language-python">import hashlib  
+  
+# MD5目标值  
+target_md5 = &quot;ad5da884551e8e48886ce42b926d7fe8&quot;  
+  
+# 字符来源  
+special_chars = &quot;!@#$%^&amp;-()&quot;  
+numbers = &quot;0123456789&quot;  
+letters = &quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;  
+  
+# 所有可能的组合  
+for special_pair1 in special_chars:  
+    for special_pair2 in special_chars:  # 从特殊字符中选2个  
+        for number in numbers:  # 从数字中选1个  
+            for letter in letters:  # 从字母中选1个  
+                # 拼接成字符串  
+                candidate = '' + special_pair1 + special_pair2 + number + letter  
+                # 计算MD5  
+                md5_hash = hashlib.md5(candidate.encode()).hexdigest()  
+                # 判断是否匹配  
+                if md5_hash == target_md5:  
+                    print(f&quot;找到匹配字符串: &#123;candidate&#125;&quot;)  
+                    break
+</code></pre>
+<p>最终得到flag：</p>
+<pre><code>youknowmd5isnotsafe%@7D8545
+</code></pre>
+<h2 id="Pwn">Pwn</h2>
+<h3 id="login">login</h3>
+<h4 id="step-1-5">step 1</h4>
+<p>分析程序逻辑，发现输入-1即可得到shell</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=WFk0OS9pRnVSVVdvN1hLSjU3dzR1eEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123224127" data-caption="Pasted image 20241123224127" loading="lazy"></p>
+<h4 id="step-2-5">step 2</h4>
+<p>nc连接输入-1，得到shell</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=b2FUa0x0V2lTNE45azBZM1lSY201eEFHQnBrUGkzTFlxdz09" alt="4bde6e6ce2d381dbf85a4384dc5a180f" data-caption="4bde6e6ce2d381dbf85a4384dc5a180f" loading="lazy"></p>
+<h3 id="real-login">real_login</h3>
+<p>按照提示操作即可</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=dXh2SmxFSXA4eS9QTEtnWEREbzBNaEFHQnBrUGkzTFlxdz09" alt="1e02562d7e402e99ded2cd20d42287a3" data-caption="1e02562d7e402e99ded2cd20d42287a3" loading="lazy"></p>
+<h3 id="计算猫">计算猫</h3>
+<p>手动计算得到 <code>shell</code></p>
+<h2 id="Web">Web</h2>
+<h3 id="这是真签到">这是真签到</h3>
+<p><code>F12</code> 大法好</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=UVNmR2RkMGtWT1FoMXcvaWxuWXUzUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123132248" data-caption="Pasted image 20241123132248" loading="lazy"></p>
+<h3 id="Ping">Ping</h3>
+<p>注入题，输入 <code>1|ls /</code> 查看根目录</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=bW5yVUVPNWNXZDZuL2Q3N3NXR2ROUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123132438" data-caption="Pasted image 20241123132438" loading="lazy"></p>
+<p>发现有flag，尝试查看文件，输入 <code>1|cat /flag</code></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=S3Rnb3kva0VoSDJuSGc5K2t5SjhDeEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123132504" data-caption="Pasted image 20241123132504" loading="lazy"></p>
+<p>可能是对 <code>flag</code> 关键字做了特殊处理，用模糊匹配就行了<br />
+输入 <code>1|cat /fla*</code> 即可</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=TXlnQ0pjekwvRkdTUWhkL0g0RFJKUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123132556" data-caption="Pasted image 20241123132556" loading="lazy"></p>
+<h3 id="贪吃蛇">贪吃蛇</h3>
+<p>打开控制台，给score赋值10000即可</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=RWxnRFZlbGV2L0RvdlgrS01hZnUxUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123230515" data-caption="Pasted image 20241123230515" loading="lazy"></p>
+<h2 id="Reverse">Reverse</h2>
+<h3 id="srand-s">srand%s</h3>
+<p>Linux远程调试后，得到对应的v4值，并将其输出</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=aHQwaythbnFsbUpERC9ySzB1WHpTeEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123232140" data-caption="Pasted image 20241123232140" loading="lazy"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;  
+  
+int main()  
+&#123;  
+    int v3[41];  
+    v3[0] = 53;  
+    v3[1] = 163;  
+    v3[2] = 13;  
+    v3[3] = 1;  
+    v3[4] = 62;  
+    v3[5] = 156;  
+    v3[6] = 33;  
+    v3[7] = 151;  
+    v3[8] = 72;  
+    v3[9] = 190;  
+    v3[10] = 222;  
+    v3[11] = 221;  
+    v3[12] = 194;  
+    v3[13] = 195;  
+    v3[14] = 208;  
+    v3[15] = 46;  
+    v3[16] = 26;  
+    v3[17] = 168;  
+    v3[18] = 49;  
+    v3[19] = 150;  
+    v3[20] = 113;  
+    v3[21] = 219;  
+    v3[22] = 223;  
+    v3[23] = 184;  
+    v3[24] = 78;  
+    v3[25] = 99;  
+    v3[26] = 29;  
+    v3[27] = 11;  
+    v3[28] = 91;  
+    v3[29] = 249;  
+    v3[30] = 163;  
+    v3[31] = 185;  
+    v3[32] = 38;  
+    v3[33] = 20;  
+    v3[34] = 101;  
+    v3[35] = 196;  
+    v3[36] = 91;  
+    v3[37] = 96;  
+    v3[38] = 154;  
+    v3[39] = 39;  
+  
+    printf(&quot;Redrock&#123;&quot;);  
+    printf(&quot;%c&quot;,0x29u^v3[8]);  
+    printf(&quot;%c&quot;,0xCDu^v3[9]);  
+    printf(&quot;%c&quot;,0xBAu^v3[10]);  
+    printf(&quot;%c&quot;,0xABu^v3[11]);  
+    printf(&quot;%c&quot;,0xF2u^v3[12]);  
+    printf(&quot;%c&quot;,0xFBu^v3[13]);  
+    printf(&quot;%c&quot;,0xE3u^v3[14]);  
+    printf(&quot;%c&quot;,0x46u^v3[15]);  
+    printf(&quot;%c&quot;,0x7Cu^v3[16]);  
+    printf(&quot;%c&quot;,0xC2u^v3[17]);  
+    printf(&quot;%c&quot;,0x54u^v3[18]);  
+    printf(&quot;%c&quot;,0xF8u^v3[19]);  
+    printf(&quot;%c&quot;,0x1Bu^v3[20]);  
+    printf(&quot;%c&quot;,0xE8u^v3[21]);  
+    printf(&quot;%c&quot;,0xE7u^v3[22]);  
+    printf(&quot;%c&quot;,0x8Du^v3[23]);  
+    printf(&quot;%c&quot;,0x76u^v3[24]);  
+    printf(&quot;%c&quot;,0x5Au^v3[25]);  
+    printf(&quot;%c&quot;,0x2Eu^v3[26]);  
+    printf(&quot;%c&quot;,0x63u^v3[27]);  
+    printf(&quot;%c&quot;,0x33u^v3[28]);  
+    printf(&quot;%c&quot;,0x9Fu^v3[29]);  
+    printf(&quot;%c&quot;,0xC9u^v3[30]);  
+    printf(&quot;%c&quot;,0x9Au^v3[31]);  
+    printf(&quot;%c&quot;,0x66u^v3[32]);  
+    printf(&quot;%c&quot;,0x32u^v3[33]);  
+    printf(&quot;%c&quot;,0xDu^v3[34]);  
+    printf(&quot;%c&quot;,0xB7u^v3[35]);  
+    printf(&quot;%c&quot;,0x31u^v3[36]);  
+    printf(&quot;%c&quot;,0x58u^v3[37]);  
+    printf(&quot;%c&quot;,0xA3u^v3[38]);  
+    printf(&quot;%c&quot;,0x5Au^v3[39]);  
+  
+  
+&#125;
+</code></pre>
+<p>通过对应的值输出对应的字符</p>
+<h3 id="easy">easy</h3>
+<p>在 IDA 中按下 <code>Shift + F12</code> 查看字符串，即可找到flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MnQ0MHV2ajBLcFlieE9sVERFRDJQaEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123232717" data-caption="Pasted image 20241123232717" loading="lazy"></p>
+<h3 id="花花的世界">花花的世界</h3>
+<p>先查壳，但查不到，根据题目描述猜测使用 <code>UPX</code> 壳<br />
+无法使用 <code>UPX</code> 直接去壳，使用 <code>010editor</code> 打开发现识别 <code>UPX</code> 的部分被改成了 <code>SRE</code> ，改回去壳即可</p>
+<p>反编译使用 <a target="_blank" rel="noopener" href="https://github.com/x1aon1ng/NoMoreFlower/blob/master/NoMoreFlower.py">NoMoreFlower</a> 去花</p>
+<p>再对关键函数按下 <code>P</code> 重构函数，按 <code>F5</code> 得到伪代码</p>
+<p>分析代码逻辑，程序将输入进行 <code>RC4</code> 加密，密钥为 <code>flower</code> ，后将其与随机数进异或位运算，最后与预存数组比较<br />
+<img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=Mjlwa2xoSnlOZXljVTRERCsyQWRtUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123234816" data-caption="Pasted image 20241123234816" loading="lazy"><br />
+<img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=dGpNNHd4ZU5iOUtxTWVmSFBqcDV2aEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123234824" data-caption="Pasted image 20241123234824" loading="lazy"><br />
+<img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=ZUV3N3d6ZnNqbDcrMXUyUmNzUWJSUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123234812" data-caption="Pasted image 20241123234812" loading="lazy"></p>
+<p>srand种子是取了高位，所以随机数种子短时间不变</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=R2doU1pSOWVMS3VueDlSL2liNEh5UkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123234859" data-caption="Pasted image 20241123234859" loading="lazy"></p>
+<p>最后根据逻辑编写程序算出原RC4密文，再进行解密，得到flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=Qm1lNFM1QWpqRUhmekM3bFBWTWtoUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123234942" data-caption="Pasted image 20241123234942" loading="lazy"></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=azdGZVQzU005NzVwRFh5Q1NwN3czaEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123235030" data-caption="Pasted image 20241123235030" loading="lazy"></p>
+<h3 id="Rc4-py">Rc4_py</h3>
+<p>使用 <code>pyinstxtractor</code> 解包，然后在 <code>ereee</code> 文件发现base64字符串后，又根据题目描述使用rc4解密，密钥为 <code>flag&#123;123321321123badbeef012&#125;</code> ，密文即发现的base64字符串</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=b3QrWTM1ekw2cHRBS3A4YVB1WnAwQkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123235454" data-caption="Pasted image 20241123235454" loading="lazy"></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=dERhdHRkOTFyMStLMXdZUEptR1J3QkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123235502" data-caption="Pasted image 20241123235502" loading="lazy"></p>
+<h3 id="baby-reverse">baby_reverse</h3>
+<p>走迷宫，程序似乎会对行顺序进行调整</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=ZUF6NU5UWDJyUm9taHZqMFdqU1ZmUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241123235742" data-caption="Pasted image 20241123235742" loading="lazy"></p>
+<p>调整后即可得到路径</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cUtvaXJyeVZQWG5ZWkl6SWZ3RnVseEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241124002424" data-caption="Pasted image 20241124002424" loading="lazy"></p>
+<p>原文wp：[[<a target="_blank" rel="noopener" href="https://singularityctf.blogspot.com/2014/03/volgactf-quals-2014-writeup-reverse-100.html">https://singularityctf.blogspot.com/2014/03/volgactf-quals-2014-writeup-reverse-100.html</a>]]</p>
+<h3 id="这是什么语言">这是什么语言</h3>
+<p>下述操作需要先找到入口</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=S0dGVWlnUk9PaVFscE1qc1ErYXI0QkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241124003902" data-caption="Pasted image 20241124003902" loading="lazy"><br />
+<img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=N3ZqWUdtazhHUWFHWllUc1pZS0RBeEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241124003937" data-caption="Pasted image 20241124003937" loading="lazy"><br />
+<img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=U3RsYU14dWVjdFBKMkZqcXRtaHEyUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241124003942" data-caption="Pasted image 20241124003942" loading="lazy"><br />
+<img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=UCtIa0RWOHUzc0RJQWRPN0FUUTNCQkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241124003537" data-caption="Pasted image 20241124003537" loading="lazy"><br />
+<img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=ak9JWENnTyt3UXlxY1Bsem5MR1pqeEFHQnBrUGkzTFlxdz09" alt="Pasted image 20241124003548" data-caption="Pasted image 20241124003548" loading="lazy"></p>
+<p>这是仓颉语言，分析貌似使用了RSA或AES，但无法找到对应公私钥和密文，所以使用动态调试，在栈中找到flag<br />
+设置断点在解密结束后，在寄存器中找到了flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=ajJrY1ZjNFI1dlNwMy8wK0l6SXpEUkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241124000552" data-caption="Pasted image 20241124000552" loading="lazy"></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=aWpsUjZpalZ5c01FSjUyaUp0YjlyQkFHQnBrUGkzTFlxdz09" alt="Pasted image 20241124000757" data-caption="Pasted image 20241124000757" loading="lazy"></p>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>24kcsplus<br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/undefined/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;undefined&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;undefined&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+<div id="gitalk"></div>
+<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'e33bbc7053e81da42425',
+        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
+        id: md5(window.location.pathname),
+        repo: 'home_gitalk',
+        owner: '24kcsplus',
+        admin: '24kcsplus'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Misc"><span class="toc-number">1.</span> <span class="toc-text">Misc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Are-you-a-JPG-master"><span class="toc-number">1.1.</span> <span class="toc-text">Are you a JPG master?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#step-1"><span class="toc-number">1.1.1.</span> <span class="toc-text">step 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#step-2"><span class="toc-number">1.1.2.</span> <span class="toc-text">step 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HardZip"><span class="toc-number">1.2.</span> <span class="toc-text">HardZip</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#step-1-2"><span class="toc-number">1.2.1.</span> <span class="toc-text">step 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#step-2-2"><span class="toc-number">1.2.2.</span> <span class="toc-text">step 2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#step-3"><span class="toc-number">1.2.3.</span> <span class="toc-text">step 3</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YourCraft"><span class="toc-number">1.3.</span> <span class="toc-text">YourCraft</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%82%B9%E5%87%BB%E5%8D%B3%E9%80%81flag"><span class="toc-number">1.4.</span> <span class="toc-text">点击即送flag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#290%E7%9A%84%E5%B0%8F%E7%A7%98%E5%AF%86"><span class="toc-number">1.5.</span> <span class="toc-text">290的小秘密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5525"><span class="toc-number">1.6.</span> <span class="toc-text">5525</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EasyZip"><span class="toc-number">1.7.</span> <span class="toc-text">EasyZip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WirrreShark"><span class="toc-number">1.8.</span> <span class="toc-text">WirrreShark</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#step-1-3"><span class="toc-number">1.9.</span> <span class="toc-text">step 1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#step-2-3"><span class="toc-number">1.9.1.</span> <span class="toc-text">step 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E5%9B%BE%E5%9B%BE%E5%91%A2"><span class="toc-number">1.10.</span> <span class="toc-text">我图图呢</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#step-1-4"><span class="toc-number">1.10.1.</span> <span class="toc-text">step 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#step-2-4"><span class="toc-number">1.10.2.</span> <span class="toc-text">step 2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#step-3-2"><span class="toc-number">1.10.3.</span> <span class="toc-text">step 3</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Crypto"><span class="toc-number">2.</span> <span class="toc-text">Crypto</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Classic-AES"><span class="toc-number">2.1.</span> <span class="toc-text">Classic_AES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Morse-Code"><span class="toc-number">2.2.</span> <span class="toc-text">Morse_Code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-RSA"><span class="toc-number">2.3.</span> <span class="toc-text">What is RSA</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="toc-number">2.3.0.1.</span> <span class="toc-text">补充说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#real1ty%E7%9A%84%E5%B0%8F%E7%A7%98%E5%AF%86"><span class="toc-number">2.4.</span> <span class="toc-text">real1ty的小秘密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E8%A7%A3md5%E7%9C%9F%E7%9A%84%E5%81%87%E7%9A%84"><span class="toc-number">2.5.</span> <span class="toc-text">我解md5真的假的</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pwn"><span class="toc-number">3.</span> <span class="toc-text">Pwn</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#login"><span class="toc-number">3.1.</span> <span class="toc-text">login</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#step-1-5"><span class="toc-number">3.1.1.</span> <span class="toc-text">step 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#step-2-5"><span class="toc-number">3.1.2.</span> <span class="toc-text">step 2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#real-login"><span class="toc-number">3.2.</span> <span class="toc-text">real_login</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E7%8C%AB"><span class="toc-number">3.3.</span> <span class="toc-text">计算猫</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web"><span class="toc-number">4.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E6%98%AF%E7%9C%9F%E7%AD%BE%E5%88%B0"><span class="toc-number">4.1.</span> <span class="toc-text">这是真签到</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ping"><span class="toc-number">4.2.</span> <span class="toc-text">Ping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%AA%E5%90%83%E8%9B%87"><span class="toc-number">4.3.</span> <span class="toc-text">贪吃蛇</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reverse"><span class="toc-number">5.</span> <span class="toc-text">Reverse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#srand-s"><span class="toc-number">5.1.</span> <span class="toc-text">srand%s</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#easy"><span class="toc-number">5.2.</span> <span class="toc-text">easy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%B1%E8%8A%B1%E7%9A%84%E4%B8%96%E7%95%8C"><span class="toc-number">5.3.</span> <span class="toc-text">花花的世界</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Rc4-py"><span class="toc-number">5.4.</span> <span class="toc-text">Rc4_py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#baby-reverse"><span class="toc-number">5.5.</span> <span class="toc-text">baby_reverse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E6%98%AF%E4%BB%80%E4%B9%88%E8%AF%AD%E8%A8%80"><span class="toc-number">5.6.</span> <span class="toc-text">这是什么语言</span></a></li></ol></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    
+<script src="/lib/mdui_043tiny/mdui.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/justifiedGallery/jquery.justifiedGallery.min.js"></script>
+<script src="/lib/fancybox/fancybox.umd.js"></script>
+
+
+ 
+
+<script async src="/js/app.js?v=1737301821328"></script>
+
+
+	<script async src="/js/search.js?v=1737301821328"></script>
+
+
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+    <!-- baidu Analytics -->
+<script>
+    var _hmt = _hmt || [];
+    (function() {var hm = document.createElement('script');
+    hm.src = 'https://hm.baidu.com/hm.js?3d735f78ee82156c8945803fe0b5d46c';
+    var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <script src="https://gcore.jsdelivr.net/gh/bobcn/hexo_resize_image.js@latest/hexo_resize_image.js"></script>
+</body>
+
+</html>
