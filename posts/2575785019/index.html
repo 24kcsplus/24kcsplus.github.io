@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/vs2015.min.css">
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+    </script>
+    
+    <title>Jarbas 渗透测试笔记 - 24k的小站</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="靶机地址：https:&#x2F;&#x2F;download.vulnhub.com&#x2F;jarbas&#x2F;Jarbas.zip  渗透过程 拿到靶机开机第一件事就是就是找到靶机，先用 nmap 扫一下同一网段的机子 $ nmap 10.0.2.0&#x2F;24   Starting Nmap 7.95 ( https:&#x2F;&#x2F;nmap.org ) at 2025-01-21 02:01 EST Nmap scan report f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jarbas 渗透测试笔记">
+<meta property="og:url" content="https://24kblog.top/posts/2575785019/index.html">
+<meta property="og:site_name" content="24k的小站">
+<meta property="og:description" content="靶机地址：https:&#x2F;&#x2F;download.vulnhub.com&#x2F;jarbas&#x2F;Jarbas.zip  渗透过程 拿到靶机开机第一件事就是就是找到靶机，先用 nmap 扫一下同一网段的机子 $ nmap 10.0.2.0&#x2F;24   Starting Nmap 7.95 ( https:&#x2F;&#x2F;nmap.org ) at 2025-01-21 02:01 EST Nmap scan report f">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=Y1RHNTcwUEE2YVVqT3ZpK3Rua0QvL013b2Yzd0x2TUtaQT09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=OW5XRjVVZnJsTnVZSUtNVmh3UGpCL013b2Yzd0x2TUtaQT09">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=b25tZklnZmRBWGZsZTIrUXVjbEZaT0VMcnVtZUt5MD0=">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cFNLWkR1TkdJVmtTTlk0VHJKRjV4R0hXK2hPdUNYd0Y=">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=RXhtZEtzajExOUJqQnRiR1dsWjFQSG14amZNZ3Vkdz0=">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cHJGRTZlcWU5MlhoYy9adHNsMnB2VkFZYTJjek9IQT0=">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=d2wxWWduNXVScUt2aFVic2V0bjFLdlRhV2VjUnNKST0=">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=QXlsQVVZeVA3WVN4MUxuZHJrdTE5V0oyY3B4SWI0VT0=">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=RVYzTVRVYW54L3owU2tRSzFVWVZTQzFWNHU4MVlIND0=">
+<meta property="article:published_time" content="2025-01-21T18:10:37.000Z">
+<meta property="article:modified_time" content="2025-01-21T18:16:11.508Z">
+<meta property="article:author" content="24kcsplus">
+<meta property="article:tag" content="网安">
+<meta property="article:tag" content="渗透">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.24kblog.top/app/hide.php?key=Y1RHNTcwUEE2YVVqT3ZpK3Rua0QvL013b2Yzd0x2TUtaQT09">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1737483384257">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1737483384257">
+    
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+</head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="24kcsplus" class="mdui-btn mdui-btn-icon"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="24kcsplus">
+            <img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus" alt="24kcsplus">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>14</div>
+        <div><span>标签</span>18</div>
+        <div><span>分类</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://net.24kblog.top" title="DN42">
+            <i class="mdui-list-item-icon nexmoefont icon-dribbble"></i>
+            <div class="mdui-list-item-content">
+                DN42
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://qd.24kblog.top" title="贴吧云签到">
+            <i class="mdui-list-item-icon nexmoefont icon-appstore-fill"></i>
+            <div class="mdui-list-item-content">
+                贴吧云签到
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://gaokao.24kblog.top" title="高考倒计时">
+            <i class="mdui-list-item-icon nexmoefont icon-calendar-fill"></i>
+            <div class="mdui-list-item-content">
+                高考倒计时
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://space.bilibili.com/225319411" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/24kcsplus/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a><a class="mdui-ripple" href="https://twitter.com/24k_ghost_acc" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(59, 151, 239);background-color: rgba(59, 151, 239, .1);">
+            <i class="nexmoefont icon-twitter"></i>
+        </a>
+    </div>
+</div>
+    
+    
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 20px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 20px;">每日播报</a> <a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 10px;">渗透</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E7%BD%91%E5%AE%89/" style="font-size: 20px;">网安</a> <a href="/tags/%E8%80%83%E8%AF%95/" style="font-size: 10px;">考试</a>
+    </div>
+    
+  </div>
+
+    
+    <!-- 一言 -->
+
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">
+      一言
+    </h3>
+    <div class="nexmoe-widget">
+      <ul class="hitokoto-box">
+        <li id="hitokoto_text_parent" class="hitokoto-text" hitokotoCategory="a">
+          <a href="#" id="hitokoto_text">
+            
+          </a>
+          <a href="#" id="hitokoto_error_text" style="display: none;">
+            
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let hitokotoText = document.getElementById('hitokoto_text')
+    let hitokotoErroText = document.getElementById('hitokoto_error_text')
+    let hitokotoCategory = document.getElementById('hitokoto_text_parent').getAttribute('hitokotoCategory')
+    window.onload = function () {
+      let url = 'https://v1.hitokoto.cn'
+      if (hitokotoCategory) {
+        url += '?c=' + hitokotoCategory
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          hitokotoText.innerText = "「 " + data.hitokoto + " 」 from " + data.from
+          hitokotoText.href = 'https://hitokoto.cn/?uuid=' + data.uuid
+        })
+        .catch((reason) => {
+          console.error(11, reason)
+          hitokotoText.style.display = 'none'
+          hitokotoErroText.style.display = 'block'
+        })
+    }
+  </script>
+  
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2025 24kcsplus <br />
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+         <br /><a href="https://icp.gov.moe/?keyword=20241969" target="_blank">萌ICP备20241969号</a> <br /><a href="https://beian.miit.gov.cn/" target="_blank">琼ICP备2022012208号</a> <br /><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=46010602001577"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/beian.png" style="float:left;width:12px;height:12px"/>琼公网安备46010602001577号</a> <!--<br /><a target="_blank" rel="noopener" href="https://cdnnb.cn" class="active"><img style="float:right" src="https://img.shields.io/badge/本站由失控的防御系统提供加速防御支持-green"></a>-->
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="Jarbas 渗透测试笔记" loading="lazy">
+              <h1>Jarbas 渗透测试笔记</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2025年01月22日</a>
+</div>
+
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约1.8k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要9分钟</a>
+    
+</div>
+
+      <blockquote>
+<p>靶机地址：<a target="_blank" rel="noopener" href="https://download.vulnhub.com/jarbas/Jarbas.zip">https://download.vulnhub.com/jarbas/Jarbas.zip</a></p>
+</blockquote>
+<h2 id="渗透过程">渗透过程</h2>
+<p>拿到靶机开机第一件事就是就是找到靶机，先用 nmap 扫一下同一网段的机子</p>
+<pre><code class="language-shell">$ nmap 10.0.2.0/24  
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-01-21 02:01 EST
+Nmap scan report for 10.0.2.1
+Host is up (0.000034s latency).
+Not shown: 999 closed tcp ports (reset)
+PORT   STATE SERVICE
+53/tcp open  domain
+MAC Address: 52:54:00:12:35:00 (QEMU virtual NIC)
+
+Nmap scan report for 10.0.2.2
+Host is up (0.000063s latency).
+Not shown: 993 closed tcp ports (reset)
+PORT      STATE SERVICE
+22/tcp    open  ssh
+80/tcp    open  http
+139/tcp   open  netbios-ssn
+445/tcp   open  microsoft-ds
+631/tcp   open  ipp
+902/tcp   open  iss-realsecure
+24800/tcp open  unknown
+MAC Address: 52:54:00:12:35:00 (QEMU virtual NIC)
+
+Nmap scan report for 10.0.2.3
+Host is up (0.000042s latency).
+All 1000 scanned ports on 10.0.2.3 are in ignored states.
+Not shown: 1000 filtered tcp ports (proto-unreach)
+MAC Address: 08:00:27:A3:71:23 (PCS Systemtechnik/Oracle VirtualBox virtual NIC)
+
+Nmap scan report for 10.0.2.15
+Host is up (0.000049s latency).
+Not shown: 996 closed tcp ports (reset)
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+3306/tcp open  mysql
+8080/tcp open  http-proxy
+MAC Address: 08:00:27:FE:DD:8E (PCS Systemtechnik/Oracle VirtualBox virtual NIC)
+
+Nmap scan report for 10.0.2.5
+Host is up (0.0000020s latency).
+All 1000 scanned ports on 10.0.2.5 are in ignored states.
+Not shown: 1000 closed tcp ports (reset)
+
+Nmap done: 256 IP addresses (5 hosts up) scanned in 2.32 seconds
+</code></pre>
+<p>访问两个开放了 80 端口的机子可以知道目标机器是10.0.2.15</p>
+<p>找到目标后进行更进一步的扫描</p>
+<pre><code class="language-shell">$ nmap 10.0.2.15 -sV -sT -O
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-01-21 02:03 EST
+Nmap scan report for 10.0.2.15
+Host is up (0.00049s latency).
+Not shown: 996 closed tcp ports (conn-refused)
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.4 (protocol 2.0)
+80/tcp   open  http    Apache httpd 2.4.6 ((CentOS) PHP/5.4.16)
+3306/tcp open  mysql   MariaDB 10.3.23 or earlier (unauthorized)
+8080/tcp open  http    Jetty 9.4.z-SNAPSHOT
+MAC Address: 08:00:27:FE:DD:8E (PCS Systemtechnik/Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.14
+Network Distance: 1 hop
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 8.00 seconds
+</code></pre>
+<p>获取到有 <code>OpenSSH 7.4</code> <code>Apache httpd 2.4.6</code> <code>MariaDB 10.3.23</code> <code>Jetty 9.4.z-SNAPSHOT</code> 等服务，系统版本是 <code>Linux 3.2 - 4.14</code> ，报告中也可以知道是 <code>CentOS</code> 这个发行版（其实启动靶机的时候就知道了）</p>
+<p>除了 <code>TCP</code> 要扫，<code>UDP</code> 也要扫</p>
+<pre><code class="language-shell">$ nmap 10.0.2.15 -sU       
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-01-21 02:05 EST
+Stats: 0:00:52 elapsed; 0 hosts completed (1 up), 1 undergoing UDP Scan
+UDP Scan Timing: About 6.20% done; ETC: 02:19 (0:13:22 remaining)
+Stats: 0:02:18 elapsed; 0 hosts completed (1 up), 1 undergoing UDP Scan
+UDP Scan Timing: About 14.30% done; ETC: 02:21 (0:13:53 remaining)
+Stats: 0:07:01 elapsed; 0 hosts completed (1 up), 1 undergoing UDP Scan
+UDP Scan Timing: About 40.78% done; ETC: 02:22 (0:10:13 remaining)
+Stats: 0:15:54 elapsed; 0 hosts completed (1 up), 1 undergoing UDP Scan
+UDP Scan Timing: About 88.06% done; ETC: 02:23 (0:02:09 remaining)
+Nmap scan report for 10.0.2.15
+Host is up (0.00064s latency).
+Not shown: 996 closed udp ports (port-unreach)
+PORT     STATE         SERVICE
+68/udp   open|filtered dhcpc
+539/udp  open|filtered apertus-ldp
+998/udp  open|filtered puparp
+5353/udp open|filtered zeroconf
+MAC Address: 08:00:27:FE:DD:8E (PCS Systemtechnik/Oracle VirtualBox virtual NIC)
+
+Nmap done: 1 IP address (1 host up) scanned in 1114.07 seconds
+</code></pre>
+<p>并没有什么特别有用的价值，目前已知有两个站点，一个在80端口，一个在8080端口<br />
+访问发现一个是网站主站，一个是管理网站的</p>
+<p>两个站点都可以试着目录爆破一下</p>
+<pre><code class="language-shell">$ gobuster  dir -u http://10.0.2.15 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x html,php
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.0.2.15
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Extensions:              html,php
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/index.html           (Status: 200) [Size: 32808]
+/.html                (Status: 403) [Size: 207]
+/access.html          (Status: 200) [Size: 359]
+/.html                (Status: 403) [Size: 207]
+Progress: 429860 / 661683 (64.96%)[ERROR] Get &quot;http://10.0.2.15/60411.html&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[ERROR] Get &quot;http://10.0.2.15/60411.php&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[ERROR] Get &quot;http://10.0.2.15/Yasasoft%20Dvd%20To%20Vcd%20Avi%20Divx%20Converter%20Magicdvdripper%20v3&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[ERROR] Get &quot;http://10.0.2.15/60411&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[ERROR] Get &quot;http://10.0.2.15/Yasasoft%20Dvd%20To%20Vcd%20Avi%20Divx%20Converter%20Magicdvdripper%20v3.php&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[ERROR] Get &quot;http://10.0.2.15/10691&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[ERROR] Get &quot;http://10.0.2.15/10691.html&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[ERROR] Get &quot;http://10.0.2.15/10691.php&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[ERROR] Get &quot;http://10.0.2.15/74516&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+[ERROR] Get &quot;http://10.0.2.15/74516.html&quot;: context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+Progress: 661680 / 661683 (100.00%)
+===============================================================
+Finished
+===============================================================
+</code></pre>
+<p>可以发现有一些比较有趣的页面，<code>access.html</code></p>
+<p>（PS: 刚开始扫描没有加 -x 参数，没有扫到目录，加上 -x 以添加后缀后就可以扫到了）</p>
+<p>访问 <code>access.html</code> ，可以看到有三个像是 md5 加密值的东西</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=Y1RHNTcwUEE2YVVqT3ZpK3Rua0QvL013b2Yzd0x2TUtaQT09" alt="截图_选择区域_20250121225656" data-caption="截图_选择区域_20250121225656" loading="lazy"></p>
+<p>找解密的网站找一下，发现都能找到</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=OW5XRjVVZnJsTnVZSUtNVmh3UGpCL013b2Yzd0x2TUtaQT09" alt="屏幕截图 2025-01-21 152718" data-caption="屏幕截图 2025-01-21 152718" loading="lazy"><br />
+貌似是账号和密码的对应关系，试着在 8080 端口的站点登录，可以发现 eder 这串可以登入</p>
+<p>网站使用的是 Jerkins，可以通过构建任务来执行 shell 命令</p>
+<p>利用此来反弹 shell</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=b25tZklnZmRBWGZsZTIrUXVjbEZaT0VMcnVtZUt5MD0=" alt="截图_选择区域_20250121153702" data-caption="截图_选择区域_20250121153702" loading="lazy"></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cFNLWkR1TkdJVmtTTlk0VHJKRjV4R0hXK2hPdUNYd0Y=" alt="截图_选择区域_20250121153800" data-caption="截图_选择区域_20250121153800" loading="lazy"></p>
+<p>反弹指令执行前要先开启监听</p>
+<p>得到 shell 后先查明用户情况</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=RXhtZEtzajExOUJqQnRiR1dsWjFQSG14amZNZ3Vkdz0=" alt="截图_选择区域_20250121154150" data-caption="截图_选择区域_20250121154150" loading="lazy"></p>
+<p>可以看到大部分都是功能性的账户，所以提权的目标是 root 用户</p>
+<p>检查一下其他的地方，比如 <code>crontab</code></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cHJGRTZlcWU5MlhoYy9adHNsMnB2VkFZYTJjek9IQT0=" alt="截图_选择区域_20250121154306" data-caption="截图_选择区域_20250121154306" loading="lazy"></p>
+<p>发现 <code>crontab</code> 有在用 root 身份每五分钟执行一个脚本，可以通过修改脚本来获取 root 用户的 shell</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=d2wxWWduNXVScUt2aFVic2V0bjFLdlRhV2VjUnNKST0=" alt="截图_选择区域_20250121155145" data-caption="截图_选择区域_20250121155145" loading="lazy"></p>
+<p>等待最多五分钟即可得到 root shell，同样的，也要提前开启监听</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=QXlsQVVZeVA3WVN4MUxuZHJrdTE5V0oyY3B4SWI0VT0=" alt="截图_选择区域_20250121155539" data-caption="截图_选择区域_20250121155539" loading="lazy"></p>
+<p>拿到 shell 后就可以试着找 flag 等文件了</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=RVYzTVRVYW54L3owU2tRSzFVWVZTQzFWNHU4MVlIND0=" alt="截图_选择区域_20250121155647" data-caption="截图_选择区域_20250121155647" loading="lazy"></p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>操作上：
+<ul>
+<li>在扫描时没有进行全端口扫描，只扫描了低位端口，<code>-p-</code> 参数没有加。虽然有很多服务默认端口都在低位，但不扫描高位的话容易错过可以利用的地方。</li>
+<li>目录爆破可能需要备一些字典</li>
+<li>8080 端口站点也可以尝试字典爆破</li>
+</ul>
+</li>
+<li>过程难点：
+<ul>
+<li>想获取 root shell 的时候有点不好找如何提权，这需要熟悉常见的可利用提权方法 <a target="_blank" rel="noopener" href="https://hackerqwq.github.io/2020/10/23/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E6%8F%90%E6%9D%83%E7%AF%87/">渗透测试之提权篇一</a> <a target="_blank" rel="noopener" href="https://hackerqwq.github.io/2021/09/06/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E6%8F%90%E6%9D%83%E7%AF%87%E4%BA%8C-Linux%E6%8F%90%E6%9D%83/">渗透测试之提权篇二（Linux 提权）</a> <a target="_blank" rel="noopener" href="https://hackerqwq.github.io/2021/09/17/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E6%8F%90%E6%9D%83%E7%AF%87%E4%B8%89-Windows%E6%8F%90%E6%9D%83/">渗透测试之提权篇三（Windows 提权）</a></li>
+<li>除了常用提权方法，也需要熟悉常用的反弹 shell 手段 <a target="_blank" rel="noopener" href="https://hackerqwq.github.io/2022/01/13/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%8F%8D%E5%BC%B9shell%E5%90%88%E9%9B%86/">渗透测试之反弹shell合集</a></li>
+</ul>
+</li>
+<li>其它手段：
+<ul>
+<li>Jerkins 有许多可以利用的漏洞，本次渗透可以尝试利用<br />
+<a target="_blank" rel="noopener" href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-1003000">CVE-2019-1003000</a><br />
+有关<a target="_blank" rel="noopener" href="https://www.jenkins.io/security/advisories/">更多 Jenkins 的漏洞</a></li>
+<li>一些奇技淫巧：通过编辑 grub 以进入 root shell，因为在一般的渗透测试中比较难拿到机器的物理控制权限，所以比较罕见（<s>黑客潜入服务器机房戏码</s>，不过 grub 也可以上密码来着）</li>
+<li>端口扫描时还有一个开放的 3306 端口，使用的是 <code>MariaDB</code> ，可以尝试查找<a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/changes-improvements-in-mariadb-10-3/">可利用的漏洞 </a></li>
+</ul>
+</li>
+</ul>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>24kcsplus<br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/2575785019/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;2575785019&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;2575785019&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%BD%91%E5%AE%89/" rel="tag">网安</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+<div id="gitalk"></div>
+<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'e33bbc7053e81da42425',
+        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
+        id: md5(window.location.pathname),
+        repo: 'home_gitalk',
+        owner: '24kcsplus',
+        admin: '24kcsplus'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%97%E9%80%8F%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">渗透过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    
+<script src="/lib/mdui_043tiny/mdui.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/justifiedGallery/jquery.justifiedGallery.min.js"></script>
+<script src="/lib/fancybox/fancybox.umd.js"></script>
+
+
+ 
+
+<script async src="/js/app.js?v=1737483384260"></script>
+
+
+	<script async src="/js/search.js?v=1737483384260"></script>
+
+
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+    <!-- baidu Analytics -->
+<script>
+    var _hmt = _hmt || [];
+    (function() {var hm = document.createElement('script');
+    hm.src = 'https://hm.baidu.com/hm.js?3d735f78ee82156c8945803fe0b5d46c';
+    var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <script src="https://gcore.jsdelivr.net/gh/bobcn/hexo_resize_image.js@latest/hexo_resize_image.js"></script>
+</body>
+
+</html>
