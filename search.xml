@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>花指令笔记</title>
+      <link href="/posts/1856646162/"/>
+      <url>/posts/1856646162/</url>
+      
+        <content type="html"><![CDATA[<h3 id="花指令是什么">花指令是什么</h3><p>简单来说就是用来干扰反编译器进行分析的一些代码小技巧</p><p>要说专业一点的话就是：</p><blockquote><p>花指令是企图隐藏掉不想被逆向工程的代码块(或其它功能)的一种方法, 在真实代码中插入一些垃圾代码的同时还保证原有程序的正确执行, 而程序无法很好地反编译, 难以理解程序内容, 达到混淆视听的效果。</p></blockquote><blockquote><p>花指令通常用于加大静态分析的难度。 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p></blockquote><h3 id="常见花指令类别">常见花指令类别</h3><h4 id="抵消型花指令">抵消型花指令</h4><p>这类花指令一般不会影响分析，但是可能会影响栈平衡</p><p>这类花指令通常要注意两个方面，逆运算与栈平衡</p><p>常见的逆运算：</p><pre><code class="language-asm">push-pop（压栈-出栈）add-sub adc-sbb （加法-减法 进位加法-借位减法）mul-div imul-idiv （乘法-除法 整数乘法-整数除法）inc-dec （加1-减1）shl-shr （左移-右移）xor-xor (异或)not-not (取反)</code></pre><h4 id="jmp-db型花指令">jmp db型花指令</h4><p>这类花指令可能不太会影响到 IDA 的分析，但有可能会影响到其它逆向分析软件，尤其是使用线性扫描算法的软件</p><p>这类花指令分为无条件跳转、条件跳转和干扰分析型</p><p>比较需要注意的是干扰分析型</p><p>一个栗子：</p><pre><code class="language-asm">start:    xor eax,eax;    test eax,eax;    jz label0;    jnz label1;label 0:    db 0E8hlabel 1:    xor eax,3;    add eax,3;    ...........</code></pre><h3 id="花指令去除步骤">花指令去除步骤</h3><h4 id="手动去除">手动去除</h4><p>找到花指令 nop 掉，然后选择先前为分析成功的部分，先按 <code>P</code> 转换为函数，再尝试将重新分析后的程序转换为伪代码</p><p>具体可参考<a href="https://anjio-fighting.github.io/2024/03/11/Reverse/Reverse-%E8%8A%B1%E6%8C%87%E4%BB%A4/">这篇文章</a></p><h4 id="脚本去除">脚本去除</h4><p>有时候遇到工作量比较大时可以使用脚本去除，如果是比较简单的花指令使用脚本也可以提高效率</p><p>要使用脚本需要先将对应的脚本拷到 IDA 对应的文件夹里</p><p>然后在 <code>Edit -&gt; Plugins -&gt; 插件名</code> 使用</p><p>我使用了 <a href="https://github.com/x1aon1ng/NoMoreFlower">NoMoreFlower</a> ，这个可以去除一些基本的花指令</p><hr class="footnotes-sep" /><section class="footnotes"><ol class="footnotes-list"><li id="fn1" class="footnote-item"><p>如想更详细的了解请阅读这篇文章：<a href="https://bbs.kanxue.com/thread-279604.htm">https://bbs.kanxue.com/thread-279604.htm</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p></li></ol></section>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> 网安 </tag>
+            
+            <tag> 笔记 </tag>
+            
+            <tag> 汇编 </tag>
+            
+            <tag> 逆向 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Jarbas 渗透测试笔记</title>
       <link href="/posts/2575785019/"/>
       <url>/posts/2575785019/</url>
@@ -17,6 +44,8 @@
             <tag> 网安 </tag>
             
             <tag> 渗透 </tag>
+            
+            <tag> 笔记 </tag>
             
         </tags>
       
