@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Python逆向</title>
+      <link href="/posts/426072920/"/>
+      <url>/posts/426072920/</url>
+      
+        <content type="html"><![CDATA[<h2 id="常用工具">常用工具</h2><blockquote><p>工欲善其事，必先利其器</p></blockquote><ul><li><code>pyinstxtractor-ng</code>：用于解压打包好的 exe 文件</li><li><code>pycdc/pycdas</code>：用于反编译 pyc 文件</li><li><code>IDA</code>：逆向 pyd/so 文件</li></ul><h2 id="如何判断">如何判断</h2><p>可以通过图标来判断，也可以先拖入 IDA 查看，可以看到有很多 Py 开头的引用</p><h2 id="几种题型">几种题型</h2><h3 id="直接反编译型">直接反编译型</h3><p>一般来说，这种题型不会在放反编译上下太大功夫，而主要考察其它方面，如密码学<br />通常是打包成exe文件或者直接给pyc文件</p><h4 id="解法">解法</h4><p><code>pycdc</code> 直接唆</p><pre><code>pycdc -o output.py ./input.pyc</code></pre><p>如果遇到已经打包好的：</p><pre><code>pyinstxtractor-ng target.exe</code></pre><p>然后找到对应的pyc文件使用pycdc反编译即可</p><h4 id="例题">例题</h4><ul><li>2024 红岩杯 - MniGame</li><li>2020 moeCTF - MidPython</li></ul><h3 id="字节码类">字节码类</h3><p>python 编译后也是有类似汇编的东西的，通过 PVM 来执行这些代码<br />简单来说就是虚拟机，跟寒假考核的虚拟机是相似的原理，像这样的虚拟机还有 JVM，处理 Java Class 文件的</p><h4 id="解法-2">解法</h4><p>这类型的题目分为两种，一种是直接给字节码的文本文件，需要自己翻译成普通的 Python 代码 ，<br />还有一种就是 <code>pycdc</code> 无法正常反编译时，需要使用 <code>pycdas</code> 来读取汇编理解程序</p><p>这样的题目主要在于如何理解程序，好在 Python 汇编比较好理解，也有对应的文档可查</p><p>使用 <code>uTools</code> 软件安装 Python 文档插件，然后输入 <code>opcode 对应汇编语句</code> 即可查询对应用法</p><h4 id="例题-2">例题</h4><ul><li>2021 ZJCTF - crackPYC</li><li>第二届黄河流域网络安全技能挑战赛 - ezpyc</li></ul><h3 id="pyd-so-逆向-Cython">pyd/so 逆向 (Cython)</h3><p>最难的部分</p><p>首先讲一下 Cython 的原理，Cython 是一个 Python 扩展或者说是另一种编程语言，这取决于你怎么去使用它，使用 Cython 可以加快程序的运行速度</p><p>Cython 的一个用法是先将一个 Python 文件翻译为 C 语言文件，然后再编译为 pyd(WIindows)/so(Linux) ，最后在需要的 Python 文件中引入这些动态链接库</p><p>另外一个用法是直接使用由 C 编译好的库</p><p>还有一个就是将其当作一个结合了 C 和 Python 的编程语言，源码文件后缀为 <code>pyx</code></p><p>在逆向实践中，主要是对 <code>pyd/so</code> 文件进行逆向，但是为了兼容 Python 的动态类型、面向对象等特性，Cython 生成的 C 源码加入了大量的兼容性内容，可读性很差，更不用说逆向之后了</p><p>Cython 视频：BV1JQiCY9ELX BV1J2BJYoEGo</p><h4 id="解法-3">解法</h4><p>参考：<a href="https://blog.csdn.net/qq_36791177/article/details/144567790">系统讲解pyd逆向/Cython逆向</a></p><ul><li><p>分析 <code>pyd</code> 文件进行信息搜集，确认 Python 版本，函数名等</p><ul><li>可以通过编写另外一个python程序并引用此pyd文件，然后dir查看</li><li>也可以导入 IDA 然后查找字符串</li></ul></li><li><p>linux编译一份相同python版本的so文件，ida载入，File-&gt;Produce File-&gt;Create C Header File导出结构体</p></li><li><p>加载需要逆向的pyd，File-&gt;Load File-&gt;Parse C Header File，导入so文件导出xxx.h(有错误就修复)，导入so文件导出的xxx.h是因为错误比较少，windows带调试符号导出的header错误较多比较难修复</p></li><li><p>windows编译一份带调试信息的pyd，ida导出idb，bindiff载入</p></li><li><p>定位__Pyx_CreateStringTabAndInitStrings()，还原__pyx_mstate结构体(python变量名)</p></li><li><p>定位_Pyx_InitConstants()，还原__pyx_mstate结构中的整数成员</p></li><li><p>定位到核心函数，动态调试</p></li><li><p>根据调用Cython api的库函数，重新定义变量类型为导入的结构体，来高效还原python代码</p></li><li><p>动态调试，frida hook等<br />可能还有其它方法，有待研究</p></li></ul><h4 id="例题-3">例题</h4><ul><li>2024-CCB-CISCN-Quals - cython</li><li>2024-CCB-CISCN-Quals - rand0m</li></ul><h3 id="其它">其它</h3><p>除了上述的几种，还有 Pyinstaller 打包时加密，或者是对 <code>pyc</code> 加花，改或删 magic_number 等等<br />不知道之后出题人还会有什么玩法</p><h4 id="解法-4">解法</h4><ul><li>magic_number：<a href="https://www.cnblogs.com/czlnb/p/15118864.html">https://www.cnblogs.com/czlnb/p/15118864.html</a></li><li>Pyinstaller 打包时加密：<a href="https://bbs.kanxue.com/thread-271253.htm">详细解法</a>/简述：先解包，然后找crypto_key(含key参数)和archive(含加密过程)</li><li><code>pyc</code> 加花：可能需要16进制编辑去花</li><li>有些解法还要搭配动态调试等食用</li></ul>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> 笔记 </tag>
+            
+            <tag> 逆向 </tag>
+            
+            <tag> 信安 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>花指令笔记</title>
       <link href="/posts/1856646162/"/>
       <url>/posts/1856646162/</url>

@@ -6,7 +6,7 @@
   <link href="https://24kblog.top/atom.xml" rel="self"/>
   
   <link href="https://24kblog.top/"/>
-  <updated>2025-01-23T20:48:45.825Z</updated>
+  <updated>2025-03-23T06:59:55.890Z</updated>
   <id>https://24kblog.top/</id>
   
   <author>
@@ -17,11 +17,45 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Python逆向</title>
+    <link href="https://24kblog.top/posts/426072920/"/>
+    <id>https://24kblog.top/posts/426072920/</id>
+    <published>2025-03-23T06:57:37.000Z</published>
+    <updated>2025-03-23T06:59:55.890Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="常用工具">常用工具</h2><blockquote><p>工欲善其事，必先利其器</p></blockquote><ul><li><code>pyinstxtractor-ng</code>：用于解压打包好的 exe 文件</li><li><code>pycdc/pycdas</code>：用于反编译 pyc 文件</li><li><code>IDA</code>：逆向 pyd/so 文件</li></ul><h2 id="如何判断">如何判断</h2><p>可以通过图标来判断，也可以先拖入 IDA 查看，可以看到有很多 Py 开头的引用</p><h2 id="几种题型">几种题型</h2><h3 id="直接反编译型">直接反编译型</h3><p>一般来说，这种题型不会在放反编译上下太大功夫，而主要考察其它方面，如密码学<br />通常是打包成exe文件或者直接给pyc文件</p><h4 id="解法">解法</h4><p><code>pycdc</code> 直接唆</p><pre><code>pycdc -o output.py ./input.pyc</code></pre><p>如果遇到已经打包好的：</p><pre><code>pyinstxtractor-ng target.exe</code></pre><p>然后找到对应的pyc文件使用pycdc反编译即可</p><h4 id="例题">例题</h4><ul><li>2024 红岩杯 - MniGame</li><li>2020 moeCTF - MidPython</li></ul><h3 id="字节码类">字节码类</h3><p>python 编译后也是有类似汇编的东西的，通过 PVM 来执行这些代码<br />简单来说就是虚拟机，跟寒假考核的虚拟机是相似的原理，像这样的虚拟机还有 JVM，处理 Java Class 文件的</p><h4 id="解法-2">解法</h4><p>这类型的题目分为两种，一种是直接给字节码的文本文件，需要自己翻译成普通的 Python 代码 ，<br />还有一种就是 <code>pycdc</code> 无法正常反编译时，需要使用 <code>pycdas</code> 来读取汇编理解程序</p><p>这样的题目主要在于如何理解程序，好在 Python 汇编比较好理解，也有对应的文档可查</p><p>使用 <code>uTools</code> 软件安装 Python 文档插件，然后输入 <code>opcode 对应汇编语句</code> 即可查询对应用法</p><h4 id="例题-2">例题</h4><ul><li>2021 ZJCTF - crackPYC</li><li>第二届黄河流域网络安全技能挑战赛 - ezpyc</li></ul><h3 id="pyd-so-逆向-Cython">pyd/so 逆向 (Cython)</h3><p>最难的部分</p><p>首先讲一下 Cython 的原理，Cython 是一个 Python 扩展或者说是另一种编程语言，这取决于你怎么去使用它，使用 Cython 可以加快程序的运行速度</p><p>Cython 的一个用法是先将一个 Python 文件翻译为 C 语言文件，然后再编译为 pyd(WIindows)/so(Linux) ，最后在需要的 Python 文件中引入这些动态链接库</p><p>另外一个用法是直接使用由 C 编译好的库</p><p>还有一个就是将其当作一个结合了 C 和 Python 的编程语言，源码文件后缀为 <code>pyx</code></p><p>在逆向实践中，主要是对 <code>pyd/so</code> 文件进行逆向，但是为了兼容 Python 的动态类型、面向对象等特性，Cython 生成的 C 源码加入了大量的兼容性内容，可读性很差，更不用说逆向之后了</p><p>Cython 视频：BV1JQiCY9ELX BV1J2BJYoEGo</p><h4 id="解法-3">解法</h4><p>参考：<a href="https://blog.csdn.net/qq_36791177/article/details/144567790">系统讲解pyd逆向/Cython逆向</a></p><ul><li><p>分析 <code>pyd</code> 文件进行信息搜集，确认 Python 版本，函数名等</p><ul><li>可以通过编写另外一个python程序并引用此pyd文件，然后dir查看</li><li>也可以导入 IDA 然后查找字符串</li></ul></li><li><p>linux编译一份相同python版本的so文件，ida载入，File-&gt;Produce File-&gt;Create C Header File导出结构体</p></li><li><p>加载需要逆向的pyd，File-&gt;Load File-&gt;Parse C Header File，导入so文件导出xxx.h(有错误就修复)，导入so文件导出的xxx.h是因为错误比较少，windows带调试符号导出的header错误较多比较难修复</p></li><li><p>windows编译一份带调试信息的pyd，ida导出idb，bindiff载入</p></li><li><p>定位__Pyx_CreateStringTabAndInitStrings()，还原__pyx_mstate结构体(python变量名)</p></li><li><p>定位_Pyx_InitConstants()，还原__pyx_mstate结构中的整数成员</p></li><li><p>定位到核心函数，动态调试</p></li><li><p>根据调用Cython api的库函数，重新定义变量类型为导入的结构体，来高效还原python代码</p></li><li><p>动态调试，frida hook等<br />可能还有其它方法，有待研究</p></li></ul><h4 id="例题-3">例题</h4><ul><li>2024-CCB-CISCN-Quals - cython</li><li>2024-CCB-CISCN-Quals - rand0m</li></ul><h3 id="其它">其它</h3><p>除了上述的几种，还有 Pyinstaller 打包时加密，或者是对 <code>pyc</code> 加花，改或删 magic_number 等等<br />不知道之后出题人还会有什么玩法</p><h4 id="解法-4">解法</h4><ul><li>magic_number：<a href="https://www.cnblogs.com/czlnb/p/15118864.html">https://www.cnblogs.com/czlnb/p/15118864.html</a></li><li>Pyinstaller 打包时加密：<a href="https://bbs.kanxue.com/thread-271253.htm">详细解法</a>/简述：先解包，然后找crypto_key(含key参数)和archive(含加密过程)</li><li><code>pyc</code> 加花：可能需要16进制编辑去花</li><li>有些解法还要搭配动态调试等食用</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;常用工具&quot;&gt;常用工具&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;工欲善其事，必先利其器&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pyinstxtractor-ng&lt;/code&gt;：用于解压打包好的 exe 文件&lt;/li&gt;
+&lt;li&gt;&lt;code</summary>
+      
+    
+    
+    
+    
+    <category term="CTF" scheme="https://24kblog.top/tags/CTF/"/>
+    
+    <category term="笔记" scheme="https://24kblog.top/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+    <category term="逆向" scheme="https://24kblog.top/tags/%E9%80%86%E5%90%91/"/>
+    
+    <category term="信安" scheme="https://24kblog.top/tags/%E4%BF%A1%E5%AE%89/"/>
+    
+  </entry>
+  
+  <entry>
     <title>花指令笔记</title>
     <link href="https://24kblog.top/posts/1856646162/"/>
     <id>https://24kblog.top/posts/1856646162/</id>
     <published>2025-01-23T19:59:21.000Z</published>
-    <updated>2025-01-23T20:48:45.825Z</updated>
+    <updated>2025-01-23T20:48:53.405Z</updated>
     
     <content type="html"><![CDATA[<h3 id="花指令是什么">花指令是什么</h3><p>简单来说就是用来干扰反编译器进行分析的一些代码小技巧</p><p>要说专业一点的话就是：</p><blockquote><p>花指令是企图隐藏掉不想被逆向工程的代码块(或其它功能)的一种方法, 在真实代码中插入一些垃圾代码的同时还保证原有程序的正确执行, 而程序无法很好地反编译, 难以理解程序内容, 达到混淆视听的效果。</p></blockquote><blockquote><p>花指令通常用于加大静态分析的难度。 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p></blockquote><h3 id="常见花指令类别">常见花指令类别</h3><h4 id="抵消型花指令">抵消型花指令</h4><p>这类花指令一般不会影响分析，但是可能会影响栈平衡</p><p>这类花指令通常要注意两个方面，逆运算与栈平衡</p><p>常见的逆运算：</p><pre><code class="language-asm">push-pop（压栈-出栈）add-sub adc-sbb （加法-减法 进位加法-借位减法）mul-div imul-idiv （乘法-除法 整数乘法-整数除法）inc-dec （加1-减1）shl-shr （左移-右移）xor-xor (异或)not-not (取反)</code></pre><h4 id="jmp-db型花指令">jmp db型花指令</h4><p>这类花指令可能不太会影响到 IDA 的分析，但有可能会影响到其它逆向分析软件，尤其是使用线性扫描算法的软件</p><p>这类花指令分为无条件跳转、条件跳转和干扰分析型</p><p>比较需要注意的是干扰分析型</p><p>一个栗子：</p><pre><code class="language-asm">start:    xor eax,eax;    test eax,eax;    jz label0;    jnz label1;label 0:    db 0E8hlabel 1:    xor eax,3;    add eax,3;    ...........</code></pre><h3 id="花指令去除步骤">花指令去除步骤</h3><h4 id="手动去除">手动去除</h4><p>找到花指令 nop 掉，然后选择先前为分析成功的部分，先按 <code>P</code> 转换为函数，再尝试将重新分析后的程序转换为伪代码</p><p>具体可参考<a href="https://anjio-fighting.github.io/2024/03/11/Reverse/Reverse-%E8%8A%B1%E6%8C%87%E4%BB%A4/">这篇文章</a></p><h4 id="脚本去除">脚本去除</h4><p>有时候遇到工作量比较大时可以使用脚本去除，如果是比较简单的花指令使用脚本也可以提高效率</p><p>要使用脚本需要先将对应的脚本拷到 IDA 对应的文件夹里</p><p>然后在 <code>Edit -&gt; Plugins -&gt; 插件名</code> 使用</p><p>我使用了 <a href="https://github.com/x1aon1ng/NoMoreFlower">NoMoreFlower</a> ，这个可以去除一些基本的花指令</p><hr class="footnotes-sep" /><section class="footnotes"><ol class="footnotes-list"><li id="fn1" class="footnote-item"><p>如想更详细的了解请阅读这篇文章：<a href="https://bbs.kanxue.com/thread-279604.htm">https://bbs.kanxue.com/thread-279604.htm</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p></li></ol></section>]]></content>
     
