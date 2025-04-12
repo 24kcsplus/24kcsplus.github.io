@@ -4,13 +4,16 @@
 
 <head>
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/vs2015.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/vs2015.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
     <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
-    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
     <script>
         hljs.initHighlightingOnLoad();
         hljs.initLineNumbersOnLoad();
+        hljs.addPlugin(new CopyButtonPlugin());
     </script>
     
     <title>Python漏洞总结 - 24k的小站</title>
@@ -21,12 +24,12 @@
     
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <meta name="description" content="RCE XSS XXE CSRF SSRF SSTI 原型链构造 文件操作 反序列化  RCE（远程代码执行） 常见的命令执行模块及函数：  os subprocess pty codecs popen eval exec  常见 Python RCE 情况 ip&#x3D;input() os.system(f&#39;ping -c 4 &amp;#123;ip&amp;#125;&#39;) a&#x3D;__import__(&#39;os&#39;).">
+    <meta name="description" content="RCE XSS XXE CSRF SSRF SSTI 原型链构造 文件操作 反序列化  RCE（远程代码执行） 常见的命令执行模块及函数：  os subprocess pty codecs popen eval exec  常见 Python RCE 情况 ip&#x3D;input() os.system(f&#39;ping -c 4 &#123;ip&#125;&#39;) a&#x3D;__import__(&#39;os&#39;).">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python漏洞总结">
 <meta property="og:url" content="https://24kblog.top/posts/1724511731/index.html">
 <meta property="og:site_name" content="24k的小站">
-<meta property="og:description" content="RCE XSS XXE CSRF SSRF SSTI 原型链构造 文件操作 反序列化  RCE（远程代码执行） 常见的命令执行模块及函数：  os subprocess pty codecs popen eval exec  常见 Python RCE 情况 ip&#x3D;input() os.system(f&#39;ping -c 4 &amp;#123;ip&amp;#125;&#39;) a&#x3D;__import__(&#39;os&#39;).">
+<meta property="og:description" content="RCE XSS XXE CSRF SSRF SSTI 原型链构造 文件操作 反序列化  RCE（远程代码执行） 常见的命令执行模块及函数：  os subprocess pty codecs popen eval exec  常见 Python RCE 情况 ip&#x3D;input() os.system(f&#39;ping -c 4 &#123;ip&#125;&#39;) a&#x3D;__import__(&#39;os&#39;).">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=R2RnS2RZZ0tvSDhzdWlEUGIyR3N1My9NMHc5eXBxTmdRcmM9">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MVQ5T0NqYmN4TnpiSm40ZWJtSU14WC9NMHc5eXBxTmdRcmM9">
@@ -45,9 +48,9 @@
 <meta property="article:published_time" content="2025-04-12T05:47:31.000Z">
 <meta property="article:modified_time" content="2025-04-12T05:53:44.194Z">
 <meta property="article:author" content="24kcsplus">
-<meta property="article:tag" content="CTF">
 <meta property="article:tag" content="网安">
 <meta property="article:tag" content="笔记">
+<meta property="article:tag" content="CTF">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="原型链污染">
 <meta name="twitter:card" content="summary">
@@ -58,11 +61,11 @@
 <link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
 
 
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1744437293676">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1744465255928">
     
-    <link rel="stylesheet" href="/css/style.css?v=1744437293676">
+    <link rel="stylesheet" href="/css/style.css?v=1744465255928">
     
-<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
 </head>
 
 <body class="mdui-drawer-body-left">
@@ -678,7 +681,7 @@ if __name__ == '__main__':
       <div class="nexmoe-post-footer">
           <section class="nexmoe-comment">
     <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
-<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
 <div id="gitalk"></div>
 <script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
 <script type="text/javascript">
@@ -742,10 +745,10 @@ if __name__ == '__main__':
 
  
 
-<script async src="/js/app.js?v=1744437293682"></script>
+<script async src="/js/app.js?v=1744465255937"></script>
 
 
-	<script async src="/js/search.js?v=1744437293682"></script>
+	<script async src="/js/search.js?v=1744465255937"></script>
 
 
 <script>
