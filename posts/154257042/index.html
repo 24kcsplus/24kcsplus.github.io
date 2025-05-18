@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/vs2015.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+        hljs.addPlugin(new CopyButtonPlugin());
+    </script>
+    
+    <title>文件上传漏洞 - 24k的小站</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="文件上传漏洞是指由于程序员在对用户文件上传部分的控制不足或者处理缺陷，而导致的用户可以越过其本身权限向服务器上上传可执行的动态脚本文件。这里上传的文件可以是木马，病毒，恶意脚本或者WebShell等。“文件上传”本身没有问题，有问题的是文件上传后，服务器怎么处理、解释文件。如果服务器的处理逻辑做的不够安全，则会导致严重的后果。 文件上传绕过 黑名单绕过 有些网站在黑名单添加了一些后缀，但是一个语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件上传漏洞">
+<meta property="og:url" content="https://24kblog.top/posts/154257042/index.html">
+<meta property="og:site_name" content="24k的小站">
+<meta property="og:description" content="文件上传漏洞是指由于程序员在对用户文件上传部分的控制不足或者处理缺陷，而导致的用户可以越过其本身权限向服务器上上传可执行的动态脚本文件。这里上传的文件可以是木马，病毒，恶意脚本或者WebShell等。“文件上传”本身没有问题，有问题的是文件上传后，服务器怎么处理、解释文件。如果服务器的处理逻辑做的不够安全，则会导致严重的后果。 文件上传绕过 黑名单绕过 有些网站在黑名单添加了一些后缀，但是一个语言">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-10T12:11:17.000Z">
+<meta property="article:modified_time" content="2025-05-18T06:05:36.381Z">
+<meta property="article:author" content="24kcsplus">
+<meta property="article:tag" content="网安">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="文件上传">
+<meta name="twitter:card" content="summary">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1747549263589">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1747549263589">
+    
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+</head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="24kcsplus" class="mdui-btn mdui-btn-icon"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="24kcsplus">
+            <img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus" alt="24kcsplus">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>20</div>
+        <div><span>标签</span>29</div>
+        <div><span>分类</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://net.24kblog.top" title="DN42">
+            <i class="mdui-list-item-icon nexmoefont icon-dribbble"></i>
+            <div class="mdui-list-item-content">
+                DN42
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://qd.24kblog.top" title="贴吧云签到">
+            <i class="mdui-list-item-icon nexmoefont icon-appstore-fill"></i>
+            <div class="mdui-list-item-content">
+                贴吧云签到
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://gaokao.24kblog.top" title="高考倒计时">
+            <i class="mdui-list-item-icon nexmoefont icon-calendar-fill"></i>
+            <div class="mdui-list-item-content">
+                高考倒计时
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://space.bilibili.com/225319411" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/24kcsplus/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a><a class="mdui-ripple" href="https://twitter.com/24k_ghost_acc" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(59, 151, 239);background-color: rgba(59, 151, 239, .1);">
+            <i class="nexmoefont icon-twitter"></i>
+        </a>
+    </div>
+</div>
+    
+    
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/RCE/" style="font-size: 10px;">RCE</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Z3/" style="font-size: 10px;">Z3</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E4%BF%A1%E5%AE%89/" style="font-size: 10px;">信安</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 10px;">原型链污染</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 12.5px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">文件上传</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 12.5px;">每日播报</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 10px;">汇编</a> <a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 10px;">渗透</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BD%91%E5%AE%89/" style="font-size: 17.5px;">网安</a> <a href="/tags/%E8%80%83%E8%AF%95/" style="font-size: 10px;">考试</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 15px;">逆向</a>
+    </div>
+    
+  </div>
+
+    
+    <!-- 一言 -->
+
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">
+      一言
+    </h3>
+    <div class="nexmoe-widget">
+      <ul class="hitokoto-box">
+        <li id="hitokoto_text_parent" class="hitokoto-text" hitokotoCategory="a">
+          <a href="#" id="hitokoto_text">
+            
+          </a>
+          <a href="#" id="hitokoto_error_text" style="display: none;">
+            
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let hitokotoText = document.getElementById('hitokoto_text')
+    let hitokotoErroText = document.getElementById('hitokoto_error_text')
+    let hitokotoCategory = document.getElementById('hitokoto_text_parent').getAttribute('hitokotoCategory')
+    window.onload = function () {
+      let url = 'https://v1.hitokoto.cn'
+      if (hitokotoCategory) {
+        url += '?c=' + hitokotoCategory
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          hitokotoText.innerText = "「 " + data.hitokoto + " 」 from " + data.from
+          hitokotoText.href = 'https://hitokoto.cn/?uuid=' + data.uuid
+        })
+        .catch((reason) => {
+          console.error(11, reason)
+          hitokotoText.style.display = 'none'
+          hitokotoErroText.style.display = 'block'
+        })
+    }
+  </script>
+  
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2025 24kcsplus <br />
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+         <br /><a href="https://icp.gov.moe/?keyword=20241969" target="_blank">萌ICP备20241969号</a> <br /><a href="https://beian.miit.gov.cn/" target="_blank">琼ICP备2022012208号</a> <br /><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=46010602001577"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/beian.png" style="float:left;width:12px;height:12px"/>琼公网安备46010602001577号</a> <!--<br /><a target="_blank" rel="noopener" href="https://cdnnb.cn" class="active"><img style="float:right" src="https://img.shields.io/badge/本站由失控的防御系统提供加速防御支持-green"></a>-->
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="文件上传漏洞" loading="lazy">
+              <h1>文件上传漏洞</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2025年05月10日</a>
+</div>
+
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约2.5k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要9分钟</a>
+    
+</div>
+
+      <p>文件上传漏洞是指由于程序员在对用户文件上传部分的控制不足或者处理缺陷，而导致的用户可以越过其本身权限向服务器上上传可执行的动态脚本文件。这里上传的文件可以是木马，病毒，恶意脚本或者WebShell等。“文件上传”本身没有问题，有问题的是文件上传后，服务器怎么处理、解释文件。如果服务器的处理逻辑做的不够安全，则会导致严重的后果。</p>
+<h2 id="文件上传绕过">文件上传绕过</h2>
+<h3 id="黑名单绕过">黑名单绕过</h3>
+<p>有些网站在黑名单添加了一些后缀，但是一个语言有很多的可解释后缀，黑名单不全面时即可利用</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">语言</th>
+<th style="text-align:center">默认服务器及可解析后缀</th>
+<th style="text-align:center">猜测可绕过后缀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="http://asp.net">asp.net</a></td>
+<td style="text-align:center">IIS:N/A</td>
+<td style="text-align:center"><code>asp</code>, <code>aspx</code>,  <code>asa</code>, <code>asax</code>, <code>ascx</code>, <code>ashx</code>, <code>asmx</code>, <code>cer</code>, <code>aSp</code>, <code>aSpx</code>, <code>aSa</code>, <code>aSax</code>, <code>aScx</code>, <code>aShx</code>, <code>aSmx</code>, <code>cEr</code></td>
+</tr>
+<tr>
+<td style="text-align:center">php</td>
+<td style="text-align:center">apache:<code>.php</code> <code>.html</code> <code>.htm</code></td>
+<td style="text-align:center"><code>php</code>, <code>php5</code>, <code>php4</code>, <code>php3</code>, <code>php2</code>, <code>pHp</code>, <code>pHp5</code>, <code>pHp4</code>, <code>pHp3</code>, <code>pHp2</code>, <code>html</code>, <code>htm</code>, <code>phtml</code>, <code>pht</code>, <code>Html</code>, <code>Htm</code>, <code>pHtml</code></td>
+</tr>
+<tr>
+<td style="text-align:center">jsp</td>
+<td style="text-align:center">tomcat:<code>*.jsp</code> <code>*jspx</code></td>
+<td style="text-align:center"><code>jsp</code>, <code>jspa</code>, <code>jspx</code>, <code>jsw</code>, <code>jsv</code>, <code>jspf</code>, <code>jtml</code>, <code>jSp</code>, <code>jSpx</code>, <code>jSpa</code>, <code>jSw</code>, <code>jSv</code>, <code>jSpf</code>, <code>jHtml</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="Tomcat添加可解析后缀名">Tomcat添加可解析后缀名:</h4>
+<ul>
+<li>
+<p>路径: apache-tomcat-x.x.x\conf\web.xml</p>
+</li>
+<li>
+<p>文件: web.xml</p>
+</li>
+<li>
+<p>修改位置: <code>&lt;url-pattern&gt;*.*&lt;/url-pattern&gt;</code></p>
+</li>
+</ul>
+<pre><code class="language-xml">&lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;jsp&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.jsp&lt;/url-pattern&gt;
+        &lt;url-pattern&gt;*.jspx&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</code></pre>
+<h4 id="Apache添加可解析后缀名">Apache添加可解析后缀名:</h4>
+<ul>
+<li>
+<p>路径：Apache24\conf\httpd.conf</p>
+</li>
+<li>
+<p>文件：httpd.conf</p>
+</li>
+<li>
+<p>修改位置：AddType application/x-httpd-php .php .html .htm</p>
+</li>
+<li>
+<p><code>AddType application/x-httpd-php .php .html .htm</code></p>
+</li>
+</ul>
+<h3 id="htaccess解析">.htaccess解析</h3>
+<h4 id="前提条件：">前提条件：</h4>
+<ul>
+<li>
+<p>Apache开启.htaccess文件功能</p>
+</li>
+<li>
+<p><code>.htaccess</code> 文件能正常上传</p>
+</li>
+</ul>
+<h4 id="开启-htaccess文件功能：">开启.htaccess文件功能：</h4>
+<ul>
+<li>
+<p>路径：Apache24\conf\httpd.conf</p>
+</li>
+<li>
+<p>文件：httpd.conf</p>
+</li>
+</ul>
+<pre><code>&lt;Directory &quot;$&#123;SRVROOT&#125;/htdocs&quot;&gt; 
+    Options Indexes FollowSymLinks
+    
+    AllowOverride None ( None -&gt; ALL )
+    
+    Require all granted
+&lt;/Directory&gt;
+
+...
+
+#去掉下一行代码的注释
+#LoadModule rewrite_module modules/mod_rewrite.so
+</code></pre>
+<p><code>.htaccess</code> 文件例：</p>
+<pre><code>//1.这将把目录下的shell.jpg的文件当做可执行的php脚本进行解析并执行。[优先]
+&lt;FilesMatch &quot;shell.jpg&quot;&gt;
+  SetHandler application/x-httpd-php
+&lt;/FilesMatch&gt;
+ 
+//2.上传后缀为.aaa的文件，让其做为php类型文件进行解析
+AddType application/x-httpd-php .aaa
+</code></pre>
+<h3 id="user-ini绕过">.user.ini绕过</h3>
+<h4 id="原理：">原理：</h4>
+<ul>
+<li>
+<p>除了主php.ini之外，PHP还会在每个目录下扫描INI文件，从被执行的PHP文件所在目录开始一直上升到web根目录( <code>$_SERVER['DOCUMENT_ROOT']</code> 所指定的）。如果被执行的PHP文件在web根目录之外，则只扫描该目录。</p>
+</li>
+<li>
+<p>.user.ini是PHP支持基于每个目录的INI文件配置。如果你的PHP以模块化运行在Apache里，则用.htaccess文件有同样效果。</p>
+</li>
+</ul>
+<p><code>.user.ini</code> 文件例：</p>
+<pre><code>//效果跟上一部分提到的差不多
+auto_prepend_file=shell.jpg
+</code></pre>
+<h3 id="大小写绕过">大小写绕过</h3>
+<h4 id="原理：-2">原理：</h4>
+<ul>
+<li>后缀名黑名单过滤不全面
+<ul>
+<li>虽然设置了黑名单对常见的后缀进行过滤，但并未对后缀名大小写进行统一。可以利用大小写进行绕过。例如：.phP</li>
+</ul>
+</li>
+</ul>
+<h4 id="示例：">示例：</h4>
+<ul>
+<li>
+<p>代码只对后缀名为.php的文件进行了拦截,并未对.pHp后缀名的文件拦截</p>
+</li>
+<li>
+<p>上传后缀名为.pHp的文件</p>
+</li>
+</ul>
+<h3 id="点绕过">点绕过</h3>
+<h4 id="原理：-3">原理：</h4>
+<ul>
+<li>Windows 系统下，文件后缀名最后一个点会被自动去除。</li>
+</ul>
+<h4 id="使用条件：">使用条件：</h4>
+<ul>
+<li>服务器为Windows系统</li>
+</ul>
+<h4 id="利用方法：">利用方法：</h4>
+<p>利用 BurpSuite 工具截断 HTTP 请求，上传文件后缀名后加 . 绕过上传。</p>
+<h3 id="空格绕过">空格绕过</h3>
+<h4 id="原理：-4">原理：</h4>
+<ul>
+<li>文件上传功能过滤不完善，没有考虑到空格的情况，将文件 <code>demo.php(空格)</code> 认为是以<code>(空格）</code> 结尾的特殊文件，允许上传，当文件成功上传到windows系统下时，因为Windows系统特性会被作为空处理，也就是删除文件最后的空格，结果为 <code>demo.php</code></li>
+</ul>
+<h4 id="使用条件：-2">使用条件：</h4>
+<ul>
+<li>服务器为Windows系统</li>
+</ul>
+<h4 id="利用方法：-2">利用方法：</h4>
+<p>利用 BurpSuite 工具截断 HTTP 请求，上传文件后缀名后加 <code>(空格)</code> 绕过上传。</p>
+<p>可与上一条结合使用</p>
+<h3 id="DATA绕过">::$DATA绕过</h3>
+<h4 id="原理：-5">原理：</h4>
+<ul>
+<li>Windows 中，<code>文件名+::$DATA</code> 会把 <code>$DATA</code> 之后的数据当成文件流处理,不会检测后缀名，且保持&quot;::$DATA&quot;之前的文件名，不会检查后缀名。</li>
+</ul>
+<h4 id="使用条件：-3">使用条件：</h4>
+<ul>
+<li>服务器为Windows系统</li>
+</ul>
+<h4 id="利用方法：-3">利用方法：</h4>
+<p>利用 BurpSuite 工具截断 HTTP 请求，上传文件后缀名后加 <code>::$DATA</code> 绕过上传。</p>
+<h3 id="双写后缀绕过">双写后缀绕过</h3>
+<h4 id="原理：-6">原理：</h4>
+<ul>
+<li>在上传模块，有的代码会把黑名单的后缀名替换成空，例如a.php 会把php 替换成空，但是可以使用双写绕过例如 asaspp，pphphp，即可绕过上传。</li>
+</ul>
+<h3 id="00截断绕过">%00截断绕过</h3>
+<h4 id="原理：-7">原理：</h4>
+<ul>
+<li>
+<p>如果黑名单上传检测后，没有限定后缀名，绕过的方法很多，使用白名单验证会相对比较安全，因为只允许指定的文件后缀名。但是如果有可控的参数目录，也存在被绕过的风险。</p>
+</li>
+<li>
+<p>保存文件时处理文件名的函数会从左往右检测，在遇到%00字符认为这是终止符，从而丢弃之后的字符。但是白名单检测时会从右往左检测，如果后面的字符符合后缀白名单要求时，就会通过检测。</p>
+</li>
+</ul>
+<h4 id="条件：">条件：</h4>
+<ul>
+<li><code>PHP</code> 版本小于 <code>5.3.4</code></li>
+</ul>
+<h4 id="利用方法">利用方法</h4>
+<h5 id="GET方式：">GET方式：</h5>
+<p>利用 BurpSuite 工具截断 HTTP 请求，上传文件后缀名后加 <code>::$DATA</code> 绕过上传。</p>
+<h5 id="POST方式：">POST方式：</h5>
+<p>通过 BurpSuite 修改 hex 值为 00 进行截断</p>
+<h3 id="Content-Type-绕过">Content-Type 绕过</h3>
+<h4 id="原理：-8">原理：</h4>
+<p>后端通过检查HTTP请求头中的 Content-Type 字段来确定上传文件的类型。服务器是通过 Content-Type 判断类型，Content-Type 在客户端可被修改，因此可以绕过。</p>
+<h4 id="利用方法：-4">利用方法：</h4>
+<p>利用 BurpSuite 工具截断 HTTP 请求，修改 Content-Type。</p>
+<h3 id="文件头检测绕过">文件头检测绕过</h3>
+<h4 id="原理：-9">原理：</h4>
+<p>所有的文件都是以二进制的形式进行存储的，在每一个文件（包括图片，视频或其他的非ASCII文件）的开头（十六进制表示）都有一片区域来显示这个文件的实际用法，这就是文件头标志，服务器对白名单进行文件头检测，符合，则允许上传，反之不允许。</p>
+<p>主要分为三个方面：前两字节绕过，getimagesize绕过和exif_imagetype绕过。</p>
+<h4 id="常见文件头：">常见文件头：</h4>
+<ul>
+<li>JPEG (jpg)，文件头：FFD8FF</li>
+<li>PNG (png)，文件头：89504E47</li>
+<li>GIF (gif)，文件头：47494638</li>
+<li>XML (xml)，文件头：3C3F786D6C</li>
+<li>ZIP Archive (zip)，文件头：504B0304</li>
+</ul>
+<h4 id="利用条件：">利用条件：</h4>
+<ul>
+<li>exif_imagetype绕过需启用php_exif扩展</li>
+</ul>
+<h4 id="利用方式">利用方式</h4>
+<h5 id="前两字节绕过">前两字节绕过</h5>
+<p>修改前两字节再上传</p>
+<h5 id="绕过-getimagesize-函数">绕过 getimagesize 函数</h5>
+<p>getimagesize 函数用于获取图像大小及相关信息。可以通过隐写术将恶意代码嵌入图片中，从而绕过检测</p>
+<p>步骤：</p>
+<ul>
+<li>
+<p>准备一张图片和一个包含恶意代码的文件。</p>
+</li>
+<li>
+<p>使用隐写术将恶意代码写入图片中。</p>
+</li>
+<li>
+<p>上传经过处理的图片。</p>
+</li>
+</ul>
+<p>示例：</p>
+<p><code> copy /b image.jpg + shell.php new_image.jpg</code></p>
+<h5 id="绕过-exif-imagetype-函数">绕过 exif_imagetype 函数</h5>
+<p>exif_imagetype 函数读取图像的第一个字节并检查其签名。如果发现恰当的签名则返回对应的常量，否则返回 FALSE</p>
+<p>步骤：</p>
+<ul>
+<li>
+<p>准备一个合法的图片文件。</p>
+</li>
+<li>
+<p>在图片末尾添加 PHP 代码。</p>
+</li>
+<li>
+<p>上传修改后的图片。</p>
+</li>
+</ul>
+<p>示例：</p>
+<pre><code class="language-php">// 使用 010Editor 打开图片，在末尾添加 PHP 代码
+&lt;?php echo &quot;Hello, World!&quot;; ?&gt;
+</code></pre>
+<h3 id="二次渲染绕过">二次渲染绕过</h3>
+<h4 id="原理：-10">原理：</h4>
+<p>在我们上传文件后，网站会对图片进行二次处理（格式、尺寸要求等），服务器会把里面的内容进行替换更新。</p>
+<p>处理完成后，根据原有的图片对比，找到没被修改的部分，然后利用这一部分，生成一个新的图片并放到网站对应的标签进行显示。</p>
+<h4 id="利用方法：-5">利用方法：</h4>
+<p>使用 GIF 图片插入一句话木马，然后上传</p>
+<blockquote>
+<p>不使用 PNG 等格式的原因：<br />
+渲染前后相同部分很少，一句话木马经过渲染会被删除</p>
+</blockquote>
+<p>然后，</p>
+<ul>
+<li>将渲染前后对比，在渲染前两者的相同部分插入一句话木马</li>
+</ul>
+<p>或者</p>
+<ul>
+<li>直接在渲染后的图片中插入一句话木马</li>
+</ul>
+<h3 id="条件竞争绕过">条件竞争绕过</h3>
+<h4 id="原理：-11">原理：</h4>
+<p>程序逻辑为先将文件上传到服务器中，再判断文件后缀是否在白名单里面。如果在则重命名，否则删除，或其它类似逻辑，则可以在上传后删除前的窗口期快速访问以获取 Webshell。</p>
+<h4 id="利用方法：-6">利用方法：</h4>
+<ul>
+<li>上传a.php木马文件，以极快的时候进行访问，执行文件流重新写入一个新的木马文件b.php</li>
+</ul>
+<pre><code class="language-php">&lt;?php fputs(fopen(&quot;info.php&quot;, &quot;w&quot;), '&lt;?php @eval($_POST[&quot;x&quot;]);?&gt;'); ?&gt;
+</code></pre>
+<p>只要访问了a.php文件，php文件就会成功解析执行，自动创建一个info.php，写入一句话木马：<code>&lt;?php @eval($_POST[&quot;x&quot;]);?&gt;</code></p>
+<p>或者</p>
+<ul>
+<li>上传多个a.php木马文件，赶在应用程序删除它之前，我们进行访问；</li>
+</ul>
+<h2 id="例题">例题</h2>
+<p><a target="_blank" rel="noopener" href="https://portswigger.net/web-security/file-upload/lab-file-upload-web-shell-upload-via-race-condition">Lab: Web shell upload via race condition</a></p>
+<p>审计 Hint 中的代码</p>
+<pre><code class="language-php">`&lt;?php 
+$target_dir = &quot;avatars/&quot;; 
+$target_file = $target_dir . $_FILES[&quot;avatar&quot;][&quot;name&quot;]; 
+
+// temporary move 
+// 这里先上传了
+move_uploaded_file($_FILES[&quot;avatar&quot;][&quot;tmp_name&quot;], $target_file); 
+
+// 后检查
+if (checkViruses($target_file) &amp;&amp; checkFileType($target_file)) &#123; 
+	echo &quot;The file &quot;. htmlspecialchars( $target_file). &quot; has been uploaded.&quot;; 
+&#125; else &#123; 
+	unlink($target_file); 
+	echo &quot;Sorry, there was an error uploading your file.&quot;; 
+	http_response_code(403); 
+&#125; 
+
+function checkViruses($fileName) &#123; // checking for viruses ... &#125; 
+
+function checkFileType($fileName) &#123; 
+	$imageFileType = strtolower(pathinfo($fileName,PATHINFO_EXTENSION)); 
+	if($imageFileType != &quot;jpg&quot; &amp;&amp; $imageFileType != &quot;png&quot;) &#123; 
+		echo &quot;Sorry, only JPG &amp; PNG files are allowed\n&quot;; 
+		return false; &#125; 
+	else &#123; 
+		return true; 
+	&#125; 
+&#125; 
+?&gt;`
+</code></pre>
+<p>可以发现代码中先进行文件存储再进行文件检查</p>
+<p>在检查后删除前和文件存储前的间隙访问即可</p>
+<p>使用 BurpSuite 发送上传文件请求和访问请求到 Repeater，然后平行发送请求即可</p>
+<p>根据题目要求使用以下 Payload</p>
+<pre><code class="language-php">&lt;?php echo file_get_contents('/home/carlos/secret'); ?&gt;
+</code></pre>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>24kcsplus<br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/154257042/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;154257042&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;154257042&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CTF/" rel="tag">CTF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Web/" rel="tag">Web</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" rel="tag">文件上传</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%BD%91%E5%AE%89/" rel="tag">网安</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+<div id="gitalk"></div>
+<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'e33bbc7053e81da42425',
+        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
+        id: md5(window.location.pathname),
+        repo: 'home_gitalk',
+        owner: '24kcsplus',
+        admin: '24kcsplus'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%BB%95%E8%BF%87"><span class="toc-number">1.</span> <span class="toc-text">文件上传绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%91%E5%90%8D%E5%8D%95%E7%BB%95%E8%BF%87"><span class="toc-number">1.1.</span> <span class="toc-text">黑名单绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Tomcat%E6%B7%BB%E5%8A%A0%E5%8F%AF%E8%A7%A3%E6%9E%90%E5%90%8E%E7%BC%80%E5%90%8D"><span class="toc-number">1.1.1.</span> <span class="toc-text">Tomcat添加可解析后缀名:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Apache%E6%B7%BB%E5%8A%A0%E5%8F%AF%E8%A7%A3%E6%9E%90%E5%90%8E%E7%BC%80%E5%90%8D"><span class="toc-number">1.1.2.</span> <span class="toc-text">Apache添加可解析后缀名:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#htaccess%E8%A7%A3%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">.htaccess解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6%EF%BC%9A"><span class="toc-number">1.2.1.</span> <span class="toc-text">前提条件：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%90%AF-htaccess%E6%96%87%E4%BB%B6%E5%8A%9F%E8%83%BD%EF%BC%9A"><span class="toc-number">1.2.2.</span> <span class="toc-text">开启.htaccess文件功能：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#user-ini%E7%BB%95%E8%BF%87"><span class="toc-number">1.3.</span> <span class="toc-text">.user.ini绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="toc-number">1.3.1.</span> <span class="toc-text">原理：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E5%B0%8F%E5%86%99%E7%BB%95%E8%BF%87"><span class="toc-number">1.4.</span> <span class="toc-text">大小写绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-2"><span class="toc-number">1.4.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="toc-number">1.4.2.</span> <span class="toc-text">示例：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%82%B9%E7%BB%95%E8%BF%87"><span class="toc-number">1.5.</span> <span class="toc-text">点绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-3"><span class="toc-number">1.5.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%EF%BC%9A"><span class="toc-number">1.5.2.</span> <span class="toc-text">使用条件：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="toc-number">1.5.3.</span> <span class="toc-text">利用方法：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87"><span class="toc-number">1.6.</span> <span class="toc-text">空格绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-4"><span class="toc-number">1.6.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%EF%BC%9A-2"><span class="toc-number">1.6.2.</span> <span class="toc-text">使用条件：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%9A-2"><span class="toc-number">1.6.3.</span> <span class="toc-text">利用方法：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DATA%E7%BB%95%E8%BF%87"><span class="toc-number">1.7.</span> <span class="toc-text">::$DATA绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-5"><span class="toc-number">1.7.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%EF%BC%9A-3"><span class="toc-number">1.7.2.</span> <span class="toc-text">使用条件：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%9A-3"><span class="toc-number">1.7.3.</span> <span class="toc-text">利用方法：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8C%E5%86%99%E5%90%8E%E7%BC%80%E7%BB%95%E8%BF%87"><span class="toc-number">1.8.</span> <span class="toc-text">双写后缀绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-6"><span class="toc-number">1.8.1.</span> <span class="toc-text">原理：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#00%E6%88%AA%E6%96%AD%E7%BB%95%E8%BF%87"><span class="toc-number">1.9.</span> <span class="toc-text">%00截断绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-7"><span class="toc-number">1.9.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%EF%BC%9A"><span class="toc-number">1.9.2.</span> <span class="toc-text">条件：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">1.9.3.</span> <span class="toc-text">利用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#GET%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-number">1.9.3.1.</span> <span class="toc-text">GET方式：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#POST%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-number">1.9.3.2.</span> <span class="toc-text">POST方式：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Content-Type-%E7%BB%95%E8%BF%87"><span class="toc-number">1.10.</span> <span class="toc-text">Content-Type 绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-8"><span class="toc-number">1.10.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%9A-4"><span class="toc-number">1.10.2.</span> <span class="toc-text">利用方法：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%A4%B4%E6%A3%80%E6%B5%8B%E7%BB%95%E8%BF%87"><span class="toc-number">1.11.</span> <span class="toc-text">文件头检测绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-9"><span class="toc-number">1.11.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%96%87%E4%BB%B6%E5%A4%B4%EF%BC%9A"><span class="toc-number">1.11.2.</span> <span class="toc-text">常见文件头：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6%EF%BC%9A"><span class="toc-number">1.11.3.</span> <span class="toc-text">利用条件：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.11.4.</span> <span class="toc-text">利用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%89%8D%E4%B8%A4%E5%AD%97%E8%8A%82%E7%BB%95%E8%BF%87"><span class="toc-number">1.11.4.1.</span> <span class="toc-text">前两字节绕过</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%95%E8%BF%87-getimagesize-%E5%87%BD%E6%95%B0"><span class="toc-number">1.11.4.2.</span> <span class="toc-text">绕过 getimagesize 函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%95%E8%BF%87-exif-imagetype-%E5%87%BD%E6%95%B0"><span class="toc-number">1.11.4.3.</span> <span class="toc-text">绕过 exif_imagetype 函数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E6%AC%A1%E6%B8%B2%E6%9F%93%E7%BB%95%E8%BF%87"><span class="toc-number">1.12.</span> <span class="toc-text">二次渲染绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-10"><span class="toc-number">1.12.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%9A-5"><span class="toc-number">1.12.2.</span> <span class="toc-text">利用方法：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E7%AB%9E%E4%BA%89%E7%BB%95%E8%BF%87"><span class="toc-number">1.13.</span> <span class="toc-text">条件竞争绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A-11"><span class="toc-number">1.13.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%9A-6"><span class="toc-number">1.13.2.</span> <span class="toc-text">利用方法：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">例题</span></a></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    
+<script src="/lib/mdui_043tiny/mdui.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/justifiedGallery/jquery.justifiedGallery.min.js"></script>
+<script src="/lib/fancybox/fancybox.umd.js"></script>
+
+
+ 
+
+<script async src="/js/app.js?v=1747549263602"></script>
+
+
+	<script async src="/js/search.js?v=1747549263602"></script>
+
+
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+    <!-- baidu Analytics -->
+<script>
+    var _hmt = _hmt || [];
+    (function() {var hm = document.createElement('script');
+    hm.src = 'https://hm.baidu.com/hm.js?3d735f78ee82156c8945803fe0b5d46c';
+    var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <script src="https://gcore.jsdelivr.net/gh/bobcn/hexo_resize_image.js@latest/hexo_resize_image.js"></script>
+</body>
+
+</html>

@@ -16,7 +16,7 @@
         hljs.addPlugin(new CopyButtonPlugin());
     </script>
     
-    <title>花指令笔记 - 24k的小站</title>
+    <title>Z3简单介绍 - 24k的小站</title>
     <meta charset="UTF-8">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -24,21 +24,21 @@
     
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <meta name="description" content="花指令是什么 简单来说就是用来干扰反编译器进行分析的一些代码小技巧 要说专业一点的话就是：  花指令是企图隐藏掉不想被逆向工程的代码块(或其它功能)的一种方法, 在真实代码中插入一些垃圾代码的同时还保证原有程序的正确执行, 而程序无法很好地反编译, 难以理解程序内容, 达到混淆视听的效果。   花指令通常用于加大静态分析的难度。 [1]  常见花指令类别 抵消型花指令 这类花指令一般不会影响分析，">
+    <meta name="description" content="Z3 是什么 Z3 是一个微软出品的开源约束求解器，能够解决很多种情况下的给定部分约束条件寻求一组满足条件的解的问题（可以简单理解为解方程的感觉，虽然这么比喻其实还差距甚远，请勿吐槽），功能强大且易于使用，本文以近期的 CTF 题为实例，向尚未接触过约束求解器的小伙伴们介绍 Z3 在 CTF 解题中的应用。 Z3 约束求解器是针对 Satisfiability modulo theories Pr">
 <meta property="og:type" content="article">
-<meta property="og:title" content="花指令笔记">
-<meta property="og:url" content="https://24kblog.top/posts/1856646162/index.html">
+<meta property="og:title" content="Z3简单介绍">
+<meta property="og:url" content="https://24kblog.top/posts/173508956/index.html">
 <meta property="og:site_name" content="24k的小站">
-<meta property="og:description" content="花指令是什么 简单来说就是用来干扰反编译器进行分析的一些代码小技巧 要说专业一点的话就是：  花指令是企图隐藏掉不想被逆向工程的代码块(或其它功能)的一种方法, 在真实代码中插入一些垃圾代码的同时还保证原有程序的正确执行, 而程序无法很好地反编译, 难以理解程序内容, 达到混淆视听的效果。   花指令通常用于加大静态分析的难度。 [1]  常见花指令类别 抵消型花指令 这类花指令一般不会影响分析，">
+<meta property="og:description" content="Z3 是什么 Z3 是一个微软出品的开源约束求解器，能够解决很多种情况下的给定部分约束条件寻求一组满足条件的解的问题（可以简单理解为解方程的感觉，虽然这么比喻其实还差距甚远，请勿吐槽），功能强大且易于使用，本文以近期的 CTF 题为实例，向尚未接触过约束求解器的小伙伴们介绍 Z3 在 CTF 解题中的应用。 Z3 约束求解器是针对 Satisfiability modulo theories Pr">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-01-23T19:59:21.000Z">
-<meta property="article:modified_time" content="2025-01-23T20:48:53.405Z">
+<meta property="article:published_time" content="2025-05-18T06:02:46.000Z">
+<meta property="article:modified_time" content="2025-05-18T06:09:31.077Z">
 <meta property="article:author" content="24kcsplus">
 <meta property="article:tag" content="网安">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="CTF">
 <meta property="article:tag" content="逆向">
-<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="Z3">
 <meta name="twitter:card" content="summary">
     
 <link rel="stylesheet" href="/lib/fancybox/fancybox.css">
@@ -46,9 +46,9 @@
 <link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
 
 
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1747549263628">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1747549263573">
     
-    <link rel="stylesheet" href="/css/style.css?v=1747549263628">
+    <link rel="stylesheet" href="/css/style.css?v=1747549263573">
     
 <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
 </head>
@@ -230,77 +230,240 @@
   <article>
       
           <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
-              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="花指令笔记" loading="lazy">
-              <h1>花指令笔记</h1>
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="Z3简单介绍" loading="lazy">
+              <h1>Z3简单介绍</h1>
           </div>
       
       
       <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2025年01月24日</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2025年05月18日</a>
 </div>
 
       <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
     
-        <a><i class="nexmoefont icon-areachart"></i>约572字</a>
-        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要2分钟</a>
+        <a><i class="nexmoefont icon-areachart"></i>约2.1k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要10分钟</a>
     
 </div>
 
-      <h3 id="花指令是什么">花指令是什么</h3>
-<p>简单来说就是用来干扰反编译器进行分析的一些代码小技巧</p>
-<p>要说专业一点的话就是：</p>
-<blockquote>
-<p>花指令是企图隐藏掉不想被逆向工程的代码块(或其它功能)的一种方法, 在真实代码中插入一些垃圾代码的同时还保证原有程序的正确执行, 而程序无法很好地反编译, 难以理解程序内容, 达到混淆视听的效果。</p>
-</blockquote>
-<blockquote>
-<p>花指令通常用于加大静态分析的难度。 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
-</blockquote>
-<h3 id="常见花指令类别">常见花指令类别</h3>
-<h4 id="抵消型花指令">抵消型花指令</h4>
-<p>这类花指令一般不会影响分析，但是可能会影响栈平衡</p>
-<p>这类花指令通常要注意两个方面，逆运算与栈平衡</p>
-<p>常见的逆运算：</p>
-<pre><code class="language-asm">push-pop（压栈-出栈）
-add-sub adc-sbb （加法-减法 进位加法-借位减法）
-mul-div imul-idiv （乘法-除法 整数乘法-整数除法）
-inc-dec （加1-减1）
-shl-shr （左移-右移）
-xor-xor (异或)
-not-not (取反)
+      <h2 id="Z3-是什么">Z3 是什么</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/Z3Prover/z3">Z3</a> 是一个微软出品的开源约束求解器，能够解决很多种情况下的给定部分约束条件寻求一组满足条件的解的问题（可以简单理解为解方程的感觉，虽然这么比喻其实还差距甚远，请勿吐槽），功能强大且易于使用，本文以近期的 CTF 题为实例，向尚未接触过约束求解器的小伙伴们介绍 Z3 在 CTF 解题中的应用。</p>
+<p>Z3 约束求解器是针对 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Satisfiability_modulo_theories">Satisfiability modulo theories Problem</a> 的一种通用求解器。所谓 SMT 问题，在 Z3 环境下是指关于算术、位运算、数组等背景理论的一阶逻辑组合决定性问题。虽然 Z3 功能强大，但是从理论上来说，大部分 SMT 问题的时间复杂度都过高，根本不可能在有限时间内解决。所以千万不要把 Z3 想象得过于万能。</p>
+<p>Z3 在工业应用中实际上常见于软件验证、程序分析等。然而由于功能实在强大，也被用于很多其他领域。CTF 领域来说，能够用约束求解器搞定的问题常见于密码题、二进制逆向、符号执行、Fuzzing 模糊测试等。此外，著名的二进制分析框架 <a target="_blank" rel="noopener" href="https://angr.io/">angr</a> 也内置了一个修改版的 Z3。</p>
+<p>Z3 本身提供一个类似于 Lisp 的内置语言，但是实际使用中，一般使用 Python Binding 操作会比较方便。</p>
+<ul>
+<li><a href="https://link.zhihu.com/?target=http%3A//z3prover.github.io/api/html/namespacez3py.html">http://z3prover.github.io/api/html/namespacez3py.html</a></li>
+<li><a href="https://link.zhihu.com/?target=https%3A//pypi.python.org/pypi/z3-solver/4.5.1.0">https://pypi.python.org/pypi/z3-solver/4.5.1.0</a></li>
+<li><a href="https://link.zhihu.com/?target=https%3A//ericpony.github.io/z3py-tutorial/guide-examples.htm">https://ericpony.github.io/z3py</a></li>
+</ul>
+<h2 id="Z3-入门">Z3 入门</h2>
+<p>Z3 内置了多种变量类型，基本能覆盖常见计算机数据结构。包括整数、浮点数、<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=4408061&amp;content_type=Article&amp;match_order=1&amp;q=BitVector&amp;zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3NDc2Mzk5MzcsInEiOiJCaXRWZWN0b3IiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjo0NDA4MDYxLCJjb250ZW50X3R5cGUiOiJBcnRpY2xlIiwibWF0Y2hfb3JkZXIiOjEsInpkX3Rva2VuIjpudWxsfQ.BYA1bjGLHgIoVJKoy_KdcAoKG9pWRNFLoGFh7IygSGE&amp;zhida_source=entity">BitVector</a>、数组等。</p>
+<p>先来一个简单的例子看一下 Z3 能做什么：</p>
+<pre><code class="language-python">from z3 import *
+
+x = Int('x')
+y = Int('y')
+solve(x &gt; 2, y &lt; 10, x + 2*y == 7) 
 </code></pre>
-<h4 id="jmp-db型花指令">jmp db型花指令</h4>
-<p>这类花指令可能不太会影响到 IDA 的分析，但有可能会影响到其它逆向分析软件，尤其是使用线性扫描算法的软件</p>
-<p>这类花指令分为无条件跳转、条件跳转和干扰分析型</p>
-<p>比较需要注意的是干扰分析型</p>
-<p>一个栗子：</p>
-<pre><code class="language-asm">start:
-    xor eax,eax;
-    test eax,eax;
-    jz label0;
-    jnz label1;
-label 0:
-    db 0E8h
-label 1:
-    xor eax,3;
-    add eax,3;
-    ...........
+<p>上面的例子中，定义了两个变量：x 和 y。类型为 Int（注意这里的 Int 可不是 C/C++ 里面包含上下界的 int，Z3 中的 Int 对应的就是数学中的整数，Z3 中的 BitVector 才对应到 C/C++ 中的 int）。</p>
+<p>然后就调用了 <code>solve</code> 函数求解三个条件下的满足模型，这三个条件分别是 x 大于 2，y 小于 10，并且 x 加 2 个 y 等于 7。</p>
+<p>运行一下结果：</p>
+<pre><code class="language-shell">$ python example.py 
+[y = 0, x = 7] 
 </code></pre>
-<h3 id="花指令去除步骤">花指令去除步骤</h3>
-<h4 id="手动去除">手动去除</h4>
-<p>找到花指令 nop 掉，然后选择先前为分析成功的部分，先按 <code>P</code> 转换为函数，再尝试将重新分析后的程序转换为伪代码</p>
-<p>具体可参考<a target="_blank" rel="noopener" href="https://anjio-fighting.github.io/2024/03/11/Reverse/Reverse-%E8%8A%B1%E6%8C%87%E4%BB%A4/">这篇文章</a></p>
-<h4 id="脚本去除">脚本去除</h4>
-<p>有时候遇到工作量比较大时可以使用脚本去除，如果是比较简单的花指令使用脚本也可以提高效率</p>
-<p>要使用脚本需要先将对应的脚本拷到 IDA 对应的文件夹里</p>
-<p>然后在 <code>Edit -&gt; Plugins -&gt; 插件名</code> 使用</p>
-<p>我使用了 <a target="_blank" rel="noopener" href="https://github.com/x1aon1ng/NoMoreFlower">NoMoreFlower</a> ，这个可以去除一些基本的花指令</p>
-<hr class="footnotes-sep" />
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>如想更详细的了解请阅读这篇文章：<a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-279604.htm">https://bbs.kanxue.com/thread-279604.htm</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
+<p>可以看出，Z3 找到了 y=0，x=7 这组解。但是 x=5,y=1 也符合条件，却没有显示，原因是 Z3 在默认情况下，只寻找满足所有条件的一组解，而不是找出所有解。</p>
+<p>如果想要找出多组解，则需排除之前求得的解：</p>
+<pre><code class="language-python">from z3 import *
+
+x = Int('x')
+y = Int('y')
+
+# 定义约束条件
+constraints = [x &gt; 2, y &lt; 10, x + 2*y == 7]
+
+# 创建 solver
+s = Solver()
+s.add(constraints)
+
+# 循环查找所有解
+while s.check() == sat:
+    m = s.model()
+    print(m)
+    
+    # 构造一个新的约束，排除当前的解
+    block = []
+    for var in [x, y]:
+        block.append(var != m[var])
+    
+    # 添加新约束到 solver 中
+    s.add(Or(block))
+</code></pre>
+<p>关于 Z3 的更多使用细节，可以看这两篇文章：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/myx-myx/articles/17009330.html">Z3求解器基础学习 （一） 从例子入门</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/myx-myx/articles/17009332.html">Z3基础学习 (二) 基础语法</a></li>
+</ul>
+<h2 id="例题">例题</h2>
+<h3 id="BYUCTF-2025-Rev-LLIR">BYUCTF 2025 Rev LLIR</h3>
+<p>下载附件发现是 .ll 文件，主函数如下</p>
+<pre><code class="language-plaintext">; Function Attrs: noinline nounwind optnone uwtable
+define dso_local i32 @main() #0 &#123;
+  %1 = alloca i32, align 4
+  %2 = alloca [64 x i8], align 16
+  store i32 0, ptr %1, align 4
+  %3 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
+  %4 = call i32 (ptr, ...) @printf(ptr noundef @.str.2)
+  %5 = call i32 (ptr, ...) @printf(ptr noundef @.str.3)
+  %6 = getelementptr inbounds [64 x i8], ptr %2, i64 0, i64 0
+  %7 = load ptr, ptr @stdin, align 8
+  %8 = call ptr @fgets(ptr noundef %6, i32 noundef 64, ptr noundef %7)
+  %9 = getelementptr inbounds [64 x i8], ptr %2, i64 0, i64 0
+  %10 = call i32 @checker_i_hardly_know_her(ptr noundef %9)
+  %11 = icmp ne i32 %10, 0
+  br i1 %11, label %12, label %14
+
+12:                                               ; preds = %0
+  %13 = call i32 (ptr, ...) @printf(ptr noundef @.str.4)
+  store i32 0, ptr %1, align 4
+  br label %16
+
+14:                                               ; preds = %0
+  %15 = call i32 (ptr, ...) @printf(ptr noundef @.str.5)
+  store i32 1, ptr %1, align 4
+  br label %16
+
+16:                                               ; preds = %14, %12
+  %17 = load i32, ptr %1, align 4
+  ret i32 %17
+&#125;
+</code></pre>
+<p>简单分析，可以发现主函数调用了 <code>@checker_i_hardly_know_her</code> 函数</p>
+<p>这个函数有三四百行，但是分析的话就可以发现这是一系列约束条件，用 C 语言表示的话就像下面：</p>
+<pre><code class="language-c">// 核心校验函数（对应 LLVM 中的 @checker_i_hardly_know_her 函数）
+int checker_i_hardly_know_her(char *input) &#123;
+    // 1. 前缀检查（对应 LLVM IR 中的 %166-%168 调用）
+    if(strncmp(input, flag_prefix, 6) != 0) return 0; // call i32 @strncmp(...)
+
+    // 2. 固定字符检查（对应 %143-%147 和 %149-%153）
+    if(input[6] != '&#123;') return 0;  // %151 = load i8, ptr %150 (position 6)
+    if(input[36] != '&#125;') return 0; // %145 = load i8, ptr %144 (position 36)
+
+    // 3. 字符关联检查（对应 LLVM IR 中的 %3-%340 分支逻辑）
+    // 每个条件对应一组 ICMP EQ 指令和分支判断
+    // 这里 AI 漏了 %12 的部分，后面解密脚本我添加回来了
+    if(input[4]  != input[14]) return 0;  // %5 vs %9 (position 4 vs 14)
+    if(input[17] != input[23]) return 0;  // %19 vs %29 (position 17 vs 23)
+    if(input[23] != input[25]) return 0;  // %29 vs %39 (position 23 vs 25)
+    if(input[9]  != input[20]) return 0;  // %45 vs %49 (position 9 vs 20)
+    if(input[10] != input[18]) return 0;  // %55 vs %59 (position 10 vs 18)
+    if(input[11] != input[15]) return 0;  // %65 vs %69 (position 11 vs 15)
+    if(input[15] != input[24]) return 0;  // %69 vs %79 (position 15 vs 24)
+    if(input[24] != input[31]) return 0;  // %79 vs %89 (position 24 vs 31)
+    if(input[31] != input[27]) return 0;  // %89 vs %99 (position 31 vs 27)
+    if(input[13] != input[26]) return 0;  // %105 vs %109 (position 13 vs 26)
+    if(input[16] != input[29]) return 0;  // %115 vs %119 (position 16 vs 29)
+    if(input[19] != input[28]) return 0;  // %125 vs %130 (position 19 vs 28)
+    if(input[28] != input[32]) return 0;  // %135 vs %140 (position 28 vs 32)
+
+    // 4. 数值关系检查（对应 LLVM IR 中的数学运算逻辑）
+    // 包含符号扩展(sext)和算术运算
+    if(input[8]  != input[7] - 32) return 0; // %157 vs %162-32 (ASCII大小写转换)
+    if(input[9] + input[20] != input[31] + 3) return 0; // %173+%177 vs %182+3
+    if(input[0] - 3 != input[31] + 3) return 0; // %194 = %189+3 的逆向计算
+    if(input[7] + 6 != input[10]) return 0;   // %204+6 vs %200
+    if(input[9] + 27 != input[8]) return 0;   // %215+27 vs %211
+    if(input[12] != input[13] - 1) return 0;  // %221 vs %225-1
+    if(input[13] != input[10] - 3) return 0;  // %225 vs %236-3
+    if(input[10] != input[16] - 1) return 0;  // %236 vs %247-1
+    if(input[16] != input[14] - 1) return 0;  // %247 vs %258-1
+
+    // 5. 多级依赖检查（对应 %263-%339 的复杂链式依赖）
+    if(input[35] != input[5] + 2) return 0;   // %265 vs %270-2
+    if(input[5]  != input[21] - 2) return 0;  // %269 vs %280-2
+    if(input[21] != input[22] - 1) return 0;  // %279 vs %290-1
+    if(input[22] != input[28] * 2) return 0;  // %289 vs %302*2
+    if(input[33] != input[32] + 1) return 0;  // %308 vs %312+1
+    if(input[34] != input[32] + 4) return 0;  // %324 vs %319+4+3
+    if(input[30] != input[7] + 1) return 0;   // %331 vs %336+1
+
+    return 1;
+&#125;
+</code></pre>
+<p>这些约束条件就像方程一样，虽然人脑也可以算，但是速度不行，而且会累死人</p>
+<p>根据上面的内容写出的解密脚本如下：</p>
+<pre><code class="language-python">from z3 import *  
+  
+  
+def solve_flag():  
+    s = Solver()  
+   
+    flag_len = 37  
+    ch = [BitVec(f'c&#123;i&#125;', 8) for i in range(flag_len)]  
+
+	# 确保都是可打印字符
+    for c in ch:  
+        s.add(c &gt;= 32, c &lt;= 126)  
+  
+    # 固定前缀 &quot;byuctf&quot;    
+    prefix = b'byuctf'  
+    for i, val in enumerate(prefix):  
+        s.add(ch[i] == val)  
+  
+    # 固定特殊字符  
+    s.add(ch[6] == ord('&#123;'))  # '&#123;'  
+    s.add(ch[36] == ord('&#125;'))  # '&#125;'  
+  
+    # 字符相等性约束  
+    s.add(ch[4] == ch[14])  
+    s.add(ch[14] == ch[17])  # 这个就是漏掉的条件
+    s.add(ch[17] == ch[23])  
+    s.add(ch[23] == ch[25])  
+    s.add(ch[9] == ch[20])  
+    s.add(ch[10] == ch[18])  
+    s.add(ch[11] == ch[15])  
+    s.add(ch[15] == ch[24])  
+    s.add(ch[24] == ch[31])  
+    s.add(ch[31] == ch[27])  
+    s.add(ch[13] == ch[26])  
+    s.add(ch[16] == ch[29])  
+    s.add(ch[19] == ch[28])  
+    s.add(ch[28] == ch[32])  
+  
+    # 数值关系约束  
+    s.add(ch[0] == ch[31] + 3)  
+    s.add(ch[8] == ch[7] - 32)  
+    s.add(ch[9] + ch[20] == ch[31] + 3)  
+    s.add(ch[7] + 6 == ch[10])  
+    s.add(ch[8] == ch[9] + 27)  
+    s.add(ch[12] == ch[13] - 1)  
+    s.add(ch[13] == ch[10] - 3)  
+    s.add(ch[10] == ch[16] - 1)  
+    s.add(ch[16] == ch[14] - 1)  
+    s.add(ch[35] == ch[5] - 2)  
+    s.add(ch[5] == ch[21] - 1)  
+    s.add(ch[21] == ch[22] - 1)  
+    s.add(ch[22] == ch[28] * 2)  
+    s.add(ch[33] == ch[32] + 1)  
+    s.add(ch[34] == ch[32] + 4)  
+    s.add(ch[30] == ch[7] + 1)  
+  
+    # 求解  
+    if s.check() == sat:  
+        model = s.model()  
+        flag = ''.join([chr(model.eval(c).as_long()) for c in ch])  
+        print(f&quot;Flag found: &#123;flag&#125;&quot;)  
+        return flag  
+    else:  
+        print(&quot;No solution found!&quot;)  
+        return None  
+  
+  
+if __name__ == &quot;__main__&quot;:  
+    solve_flag()
+</code></pre>
+<p>解得 flag：</p>
+<pre><code>Flag found: byuctf&#123;lL1r_not_str41ght_to_4sm_458d&#125;
+</code></pre>
 
   </article>
 
@@ -308,7 +471,7 @@ label 1:
       
     <div class="nexmoe-post-copyright">
         <strong>本文作者：</strong>24kcsplus<br>
-        <strong>本文链接：</strong><a href="https://24kblog.top/posts/1856646162/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;1856646162&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;1856646162&#x2F;</a><br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/173508956/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;173508956&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;173508956&#x2F;</a><br>
         
             <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
         
@@ -320,7 +483,7 @@ label 1:
   <div class="nexmoe-post-meta nexmoe-rainbow">
     
     
-        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CTF/" rel="tag">CTF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%B1%87%E7%BC%96/" rel="tag">汇编</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%BD%91%E5%AE%89/" rel="tag">网安</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E9%80%86%E5%90%91/" rel="tag">逆向</a>
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CTF/" rel="tag">CTF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Z3/" rel="tag">Z3</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%BD%91%E5%AE%89/" rel="tag">网安</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E9%80%86%E5%90%91/" rel="tag">逆向</a>
     
 </div>
 
@@ -357,7 +520,7 @@ label 1:
                               <button class="mdui-fab catalog" style="overflow:unset;">
                                   <i class="nexmoefont icon-i-catalog"></i>
                                   <div class="nexmoe-toc">
-                                      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%B1%E6%8C%87%E4%BB%A4%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">花指令是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E8%8A%B1%E6%8C%87%E4%BB%A4%E7%B1%BB%E5%88%AB"><span class="toc-number">2.</span> <span class="toc-text">常见花指令类别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%B5%E6%B6%88%E5%9E%8B%E8%8A%B1%E6%8C%87%E4%BB%A4"><span class="toc-number">2.1.</span> <span class="toc-text">抵消型花指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jmp-db%E5%9E%8B%E8%8A%B1%E6%8C%87%E4%BB%A4"><span class="toc-number">2.2.</span> <span class="toc-text">jmp db型花指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%B1%E6%8C%87%E4%BB%A4%E5%8E%BB%E9%99%A4%E6%AD%A5%E9%AA%A4"><span class="toc-number">3.</span> <span class="toc-text">花指令去除步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E5%8E%BB%E9%99%A4"><span class="toc-number">3.1.</span> <span class="toc-text">手动去除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC%E5%8E%BB%E9%99%A4"><span class="toc-number">3.2.</span> <span class="toc-text">脚本去除</span></a></li></ol></li></ol>
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Z3-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">Z3 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Z3-%E5%85%A5%E9%97%A8"><span class="toc-number">2.</span> <span class="toc-text">Z3 入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">例题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BYUCTF-2025-Rev-LLIR"><span class="toc-number">3.1.</span> <span class="toc-text">BYUCTF 2025 Rev LLIR</span></a></li></ol></li></ol>
                                   </div>
                               </button>
                           
@@ -392,10 +555,10 @@ label 1:
 
  
 
-<script async src="/js/app.js?v=1747549263632"></script>
+<script async src="/js/app.js?v=1747549263587"></script>
 
 
-	<script async src="/js/search.js?v=1747549263632"></script>
+	<script async src="/js/search.js?v=1747549263587"></script>
 
 
 <script>
