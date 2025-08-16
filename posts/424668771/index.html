@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/vs2015.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+        hljs.addPlugin(new CopyButtonPlugin());
+    </script>
+    
+    <title>暑假运维考核总结 - 24k的小站</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="感觉这几天折腾 K8s 够我这个知识库以后可能会用到的很多内容了，虽然熟练之后可能就不怎么会用到了，但是如果以后生了需要重新熟悉这个东西还是需要的。  部署 K8s 部署 K8s 挺简单的，只需要 Sealos 一把梭就行了 （不过如果要手动部署的话还是有点要命的 安装 Sealos echo &quot;deb [trusted&#x3D;yes] https:&#x2F;&#x2F;apt.fury.io&#x2F;labring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="暑假运维考核总结">
+<meta property="og:url" content="https://24kblog.top/posts/424668771/index.html">
+<meta property="og:site_name" content="24k的小站">
+<meta property="og:description" content="感觉这几天折腾 K8s 够我这个知识库以后可能会用到的很多内容了，虽然熟练之后可能就不怎么会用到了，但是如果以后生了需要重新熟悉这个东西还是需要的。  部署 K8s 部署 K8s 挺简单的，只需要 Sealos 一把梭就行了 （不过如果要手动部署的话还是有点要命的 安装 Sealos echo &quot;deb [trusted&#x3D;yes] https:&#x2F;&#x2F;apt.fury.io&#x2F;labring">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-30T12:24:19.000Z">
+<meta property="article:modified_time" content="2025-08-16T17:01:03.006Z">
+<meta property="article:author" content="24kcsplus">
+<meta property="article:tag" content="K8s">
+<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="CI&#x2F;CD">
+<meta property="article:tag" content="总结">
+<meta name="twitter:card" content="summary">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1755364418117">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1755364418117">
+    
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+</head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="24kcsplus" class="mdui-btn mdui-btn-icon"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="24kcsplus">
+            <img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus" alt="24kcsplus">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>21</div>
+        <div><span>标签</span>35</div>
+        <div><span>分类</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://net.24kblog.top" title="DN42">
+            <i class="mdui-list-item-icon nexmoefont icon-dribbble"></i>
+            <div class="mdui-list-item-content">
+                DN42
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://qd.24kblog.top" title="贴吧云签到">
+            <i class="mdui-list-item-icon nexmoefont icon-appstore-fill"></i>
+            <div class="mdui-list-item-content">
+                贴吧云签到
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://gaokao.24kblog.top" title="高考倒计时">
+            <i class="mdui-list-item-icon nexmoefont icon-calendar-fill"></i>
+            <div class="mdui-list-item-content">
+                高考倒计时
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://space.bilibili.com/225319411" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/24kcsplus/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a><a class="mdui-ripple" href="https://twitter.com/24k_ghost_acc" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(59, 151, 239);background-color: rgba(59, 151, 239, .1);">
+            <i class="nexmoefont icon-twitter"></i>
+        </a>
+    </div>
+</div>
+    
+    
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Kubernetes/" style="font-size: 10px;">Kubernetes</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/RCE/" style="font-size: 10px;">RCE</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Z3/" style="font-size: 10px;">Z3</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E4%BF%A1%E5%AE%89/" style="font-size: 10px;">信安</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 10px;">原型链污染</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 12.5px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">文件上传</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 12.5px;">每日播报</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 10px;">汇编</a> <a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 10px;">渗透</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BD%91%E5%AE%89/" style="font-size: 17.5px;">网安</a> <a href="/tags/%E8%80%83%E8%AF%95/" style="font-size: 10px;">考试</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">运维</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 15px;">逆向</a>
+    </div>
+    
+  </div>
+
+    
+    <!-- 一言 -->
+
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">
+      一言
+    </h3>
+    <div class="nexmoe-widget">
+      <ul class="hitokoto-box">
+        <li id="hitokoto_text_parent" class="hitokoto-text" hitokotoCategory="a">
+          <a href="#" id="hitokoto_text">
+            
+          </a>
+          <a href="#" id="hitokoto_error_text" style="display: none;">
+            
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let hitokotoText = document.getElementById('hitokoto_text')
+    let hitokotoErroText = document.getElementById('hitokoto_error_text')
+    let hitokotoCategory = document.getElementById('hitokoto_text_parent').getAttribute('hitokotoCategory')
+    window.onload = function () {
+      let url = 'https://v1.hitokoto.cn'
+      if (hitokotoCategory) {
+        url += '?c=' + hitokotoCategory
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          hitokotoText.innerText = "「 " + data.hitokoto + " 」 from " + data.from
+          hitokotoText.href = 'https://hitokoto.cn/?uuid=' + data.uuid
+        })
+        .catch((reason) => {
+          console.error(11, reason)
+          hitokotoText.style.display = 'none'
+          hitokotoErroText.style.display = 'block'
+        })
+    }
+  </script>
+  
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2025 24kcsplus <br />
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+         <br /><a href="https://icp.gov.moe/?keyword=20241969" target="_blank">萌ICP备20241969号</a> <br /><a href="https://beian.miit.gov.cn/" target="_blank">琼ICP备2022012208号</a> <br /><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=46010602001577"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/beian.png" style="float:left;width:12px;height:12px"/>琼公网安备46010602001577号</a> <!--<br /><a target="_blank" rel="noopener" href="https://cdnnb.cn" class="active"><img style="float:right" src="https://img.shields.io/badge/本站由失控的防御系统提供加速防御支持-green"></a>-->
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="暑假运维考核总结" loading="lazy">
+              <h1>暑假运维考核总结</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2025年07月30日</a>
+</div>
+
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约1.6k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要6分钟</a>
+    
+</div>
+
+      <blockquote>
+<p>感觉这几天折腾 K8s 够我这个知识库以后可能会用到的很多内容了，虽然熟练之后可能就不怎么会用到了，但是如果以后生了需要重新熟悉这个东西还是需要的。</p>
+</blockquote>
+<h2 id="部署-K8s">部署 K8s</h2>
+<p>部署 K8s 挺简单的，只需要 Sealos 一把梭就行了</p>
+<p>（不过如果要手动部署的话还是有点要命的</p>
+<h3 id="安装-Sealos">安装 Sealos</h3>
+<pre><code class="language-shell">echo &quot;deb [trusted=yes] https://apt.fury.io/labring/ /&quot; | sudo tee /etc/apt/sources.list.d/labring.list
+sudo apt update
+sudo apt install sealos
+</code></pre>
+<p>上面是通过包管理器来安装 Sealos，其它的安装方法可以参考<a target="_blank" rel="noopener" href="https://sealos.run/docs/k8s/quick-start/install-cli">官方文档</a></p>
+<h3 id="安装集群">安装集群</h3>
+<p>要注意选择合适的版本，K8s 的<a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/releases/release/#the-release-cycle">生命周期</a>感觉不怎么长，所以更新比较频繁，可以在轩辕镜像中查镜像的版本，下面的镜像我也换成了轩辕镜像。</p>
+<p>注意 Sealos 如果是 5.0.0 版本及以上的，下面的镜像要找带 <code>-5.0.1</code> 这样的字眼的。</p>
+<pre><code class="language-shell">sealos run docker.xuanyuan.me/labring/kubernetes:v1.29.9 docker.xuanyuan.me/labring/helm:v3.9.4 docker.xuanyuan.me/labring/cilium:v1.13.4 --single
+</code></pre>
+<h2 id="K8s-一些常见命令">K8s 一些常见命令</h2>
+<pre><code class="language-shell"># 获取资源
+kubectl get [资源类型] [资源名称] [选项]
+</code></pre>
+<ul>
+<li>资源类型：常见的资源有 node、deployment、pod、namespace（ns）、service（svc），资源详解将在后文提出</li>
+<li>选项：
+<ul>
+<li><code>-n</code> 指定命名空间</li>
+<li><code>-o</code> 指定输出格式</li>
+<li><code>-A</code> 输出上述全部资源，其它资源如 ingress 可能不会列出</li>
+<li><code>-l</code> 获取指定标签资源</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-shell"># 获取特定资源详细信息
+kubectl describe [资源类型] [资源名称] [选项]
+</code></pre>
+<p>参数内容和上述基本一致</p>
+<pre><code class="language-shell"># 查看指定 pod 的日志
+kubectl logs [pod 名称] [选项]
+</code></pre>
+<ul>
+<li>选项：
+<ul>
+<li><code>--tail</code> 指定输出最后几行</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-shell"># 获取特定资源详细信息
+kubectl delete [资源类型] [资源名称]
+</code></pre>
+<p>参数内容和上述基本一致</p>
+<p>注：k8s pod 中没有重启一说，只能通过删除 pod 来达到重启的目的</p>
+<pre><code class="language-shell"># 配置应用资源
+kubectl apply -f [CRD 资源文件] [选项]
+</code></pre>
+<ul>
+<li>CRD 资源文件：通过 YAML 文件定义的资源结构</li>
+</ul>
+<pre><code class="language-shell"># 基于文件或标准输入创建一个资源。
+
+# 接受 JSON 和 YAML 格式。
+
+kubectl create -f [CRD 资源文件]
+</code></pre>
+<p>参数内容和上述基本一致</p>
+<pre><code class="language-shell"># 进入指定 pod 内部
+kubectl exec -it [pod 名称] /bin/bash
+</code></pre>
+<p>如有需要，可使用 <code>-n</code> 指定 pod 所在命名空间</p>
+<pre><code class="language-shell"># 使用策略合并补丁、JSON 合并补丁或 JSON 补丁来更新某资源的字段。
+
+# 接受 JSON 和 YAML 格式。
+
+kubectl patch (-f FILENAME | TYPE NAME) [-p PATCH|--patch-file FILE]
+</code></pre>
+<p>官方示例：</p>
+<pre><code class="language-shell"># 使用策略合并补丁部分更新节点，指定补丁为 JSON 格式
+kubectl patch node k8s-node-1 -p '&#123;&quot;spec&quot;:&#123;&quot;unschedulable&quot;:true&#125;&#125;'
+  
+# 使用策略合并补丁部分更新节点，指定补丁为 YAML 格式
+kubectl patch node k8s-node-1 -p $'spec:\n unschedulable: true'
+  
+# 使用策略合并补丁部分更新以在 &quot;node.json&quot; 中所指定类别和名称标识的节点
+kubectl patch -f node.json -p '&#123;&quot;spec&quot;:&#123;&quot;unschedulable&quot;:true&#125;&#125;'
+  
+# 更新容器的镜像；spec.containers[*].name 是必需的，因为它是合并键
+kubectl patch pod valid-pod -p '&#123;&quot;spec&quot;:&#123;&quot;containers&quot;:[&#123;&quot;name&quot;:&quot;kubernetes-serve-hostname&quot;,&quot;image&quot;:&quot;new image&quot;&#125;]&#125;&#125;'
+
+# 使用带有位置数组的 JSON 补丁更新容器的镜像
+kubectl patch pod valid-pod --type='json' -p='[&#123;&quot;op&quot;: &quot;replace&quot;, &quot;path&quot;: &quot;/spec/containers/0/image&quot;, &quot;value&quot;:&quot;new image&quot;&#125;]'
+  
+# 使用合并补丁通过 “scale” 子资源更新 Deployment 的副本
+kubectl patch deployment nginx-deployment --subresource='scale' --type='merge' -p '&#123;&quot;spec&quot;:&#123;&quot;replicas&quot;:2&#125;&#125;'
+</code></pre>
+<blockquote>
+<p>具体指令使用方法请参考官方文档：<a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/">https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/</a></p>
+</blockquote>
+<h2 id="资源类型">资源类型</h2>
+<h3 id="1-工作负载类">1. 工作负载类</h3>
+<p>此类资源决定了你的应用程序如何运行和扩展：</p>
+<ul>
+<li>
+<p>Pod（po）<br />
+K8S最小的可调度单元，是容器的载体。实际生产中很少直接运维裸Pod，通常用在Job等场景。</p>
+</li>
+<li>
+<p>ReplicaSet（rs）<br />
+保证指定副本数的Pod持续运行。多由Deployment控制间接管理，不直接编写。</p>
+</li>
+<li>
+<p>Deployment（deploy）<br />
+最常用的部署资源，支持回滚、滚动升级。日常生产用的最多，如Web应用、API服务等。</p>
+</li>
+<li>
+<p>StatefulSet（sts）<br />
+有状态服务（如MySQL、Redis集群）专用，Pod有固定标识符和持久存储。</p>
+</li>
+<li>
+<p>DaemonSet（ds）<br />
+用于每个（或指定）Node上自动运行一个Pod，例如日志收集、监控agent。</p>
+</li>
+<li>
+<p>Job / CronJob<br />
+Job用于一次性任务，CronJob实现定时调度（可类比Linux的crontab）。</p>
+</li>
+</ul>
+<h3 id="2-服务发现与负载均衡">2. 服务发现与负载均衡</h3>
+<ul>
+<li>
+<p>Service（svc）<br />
+集群内持久服务入口，实现Pod间或外部服务访问负载均衡。</p>
+</li>
+<li>
+<p>Endpoints / EndpointSlice<br />
+Service关联的实际Pod IP存储对象，自动管理，无需手动变更。</p>
+</li>
+<li>
+<p>Ingress<br />
+七层路由，支持HTTP/S流量的准入、反向代理、SSL。</p>
+</li>
+</ul>
+<h3 id="3-存储管理">3. 存储管理</h3>
+<ul>
+<li>
+<p>PersistentVolume（pv）、PersistentVolumeClaim（pvc）<br />
+PV是系统管理员提供的物理存储，PVC是用户申请的逻辑存储，两者绑定让Pod能持久存储。</p>
+</li>
+<li>
+<p>StorageClass（sc）<br />
+提供动态存储卷选项，简化PVC自动分配。</p>
+</li>
+</ul>
+<h3 id="4-配置与密钥">4. 配置与密钥</h3>
+<ul>
+<li>
+<p>ConfigMap（cm）<br />
+存储配置数据，诸如环境变量、配置文件。明文存储，非敏感信息。</p>
+</li>
+<li>
+<p>Secret<br />
+存储敏感数据，例如密码、密钥、token，默认base64编码（需注意不是加密，生产需结合KMS等方案）。</p>
+</li>
+</ul>
+<h3 id="5-集群级管理">5. 集群级管理</h3>
+<ul>
+<li>
+<p>Namespace（ns）<br />
+多租户/隔离环境的实现基础，推荐每个业务系统独占一个namespace。</p>
+</li>
+<li>
+<p>Node（no）<br />
+集群中的物理机/虚拟机。不可随意操作，部分命令需集群管理员权限。</p>
+</li>
+</ul>
+<h3 id="7-其他高阶与扩展">7. 其他高阶与扩展</h3>
+<ul>
+<li>CRD（CustomResourceDefinition）<br />
+用户自定义资源类型。实现Operator、Service Mesh、云原生数据库等扩展生态的基石。</li>
+</ul>
+<blockquote>
+<p>更多详见：<a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/reference/kubernetes-api/">https://kubernetes.io/zh-cn/docs/reference/kubernetes-api/</a></p>
+</blockquote>
+<h2 id="其它补充">其它补充</h2>
+<h3 id="更换-containerd-镜像">更换 containerd 镜像</h3>
+<p>有的时候创建 pod 会卡在 Pull Image 的阶段，这可能是因为国内特殊的网络国情，这时候就需要使用镜像</p>
+<p>配置镜像只需要修改 <code>/etc/containerd/certs.d/docker.io/hosts.toml</code> 这个文件就可以了</p>
+<p>下面是一个文件示例：</p>
+<pre><code class="language-toml">server = &quot;https://docker.io&quot;
+
+[host.&quot;https://dockerproxy.com&quot;]
+capabilities = [&quot;pull&quot;, &quot;resolve&quot;]
+</code></pre>
+<p>修改完这个文件之后需要重启一下 containerd 服务：</p>
+<pre><code class="language-shell">systemctl restart containerd.service
+</code></pre>
+<p>测试效果：</p>
+<pre><code class="language-shell">sudo crictl pull docker.io/library/nginx:alpine
+</code></pre>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>24kcsplus<br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/424668771/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;424668771&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;424668771&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CI-CD/" rel="tag">CI/CD</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Docker/" rel="tag">Docker</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/K8s/" rel="tag">K8s</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+<div id="gitalk"></div>
+<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'e33bbc7053e81da42425',
+        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
+        id: md5(window.location.pathname),
+        repo: 'home_gitalk',
+        owner: '24kcsplus',
+        admin: '24kcsplus'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2-K8s"><span class="toc-number">1.</span> <span class="toc-text">部署 K8s</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Sealos"><span class="toc-number">1.1.</span> <span class="toc-text">安装 Sealos</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%9B%86%E7%BE%A4"><span class="toc-number">1.2.</span> <span class="toc-text">安装集群</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#K8s-%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">K8s 一些常见命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.</span> <span class="toc-text">资源类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E7%B1%BB"><span class="toc-number">3.1.</span> <span class="toc-text">1. 工作负载类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-number">3.2.</span> <span class="toc-text">2. 服务发现与负载均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86"><span class="toc-number">3.3.</span> <span class="toc-text">3. 存储管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%AF%86%E9%92%A5"><span class="toc-number">3.4.</span> <span class="toc-text">4. 配置与密钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%9B%86%E7%BE%A4%E7%BA%A7%E7%AE%A1%E7%90%86"><span class="toc-number">3.5.</span> <span class="toc-text">5. 集群级管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%85%B6%E4%BB%96%E9%AB%98%E9%98%B6%E4%B8%8E%E6%89%A9%E5%B1%95"><span class="toc-number">3.6.</span> <span class="toc-text">7. 其他高阶与扩展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E5%AE%83%E8%A1%A5%E5%85%85"><span class="toc-number">4.</span> <span class="toc-text">其它补充</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%8D%A2-containerd-%E9%95%9C%E5%83%8F"><span class="toc-number">4.1.</span> <span class="toc-text">更换 containerd 镜像</span></a></li></ol></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    
+<script src="/lib/mdui_043tiny/mdui.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/justifiedGallery/jquery.justifiedGallery.min.js"></script>
+<script src="/lib/fancybox/fancybox.umd.js"></script>
+
+
+ 
+
+<script async src="/js/app.js?v=1755364418121"></script>
+
+
+	<script async src="/js/search.js?v=1755364418121"></script>
+
+
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+    <!-- baidu Analytics -->
+<script>
+    var _hmt = _hmt || [];
+    (function() {var hm = document.createElement('script');
+    hm.src = 'https://hm.baidu.com/hm.js?3d735f78ee82156c8945803fe0b5d46c';
+    var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <script src="https://gcore.jsdelivr.net/gh/bobcn/hexo_resize_image.js@latest/hexo_resize_image.js"></script>
+</body>
+
+</html>
