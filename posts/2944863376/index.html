@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/vs2015.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+        hljs.addPlugin(new CopyButtonPlugin());
+    </script>
+    
+    <title>Newstar CTF 2025 Week 1 Re方向 Write Up - 24k的小站</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Puzzle 这个题目有很多引导，这里就简单讲讲怎么做的 使用 IDA 打开这个程序，然后按 F5 将汇编转换为伪代码，可以看到主函数的逻辑，以及启动程序时打印在屏幕上的字符串  双击 Puzzle_Challenge 可以进入查看这个函数的逻辑  这里可以得到 part1 了 然后按 Esc 返回上一个查看的函数，即主函数 根据提示按 Shift + F12 查看程序中的字符串  双击第一个字符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Newstar CTF 2025 Week 1 Re方向 Write Up">
+<meta property="og:url" content="https://24kblog.top/posts/2944863376/index.html">
+<meta property="og:site_name" content="24k的小站">
+<meta property="og:description" content="Puzzle 这个题目有很多引导，这里就简单讲讲怎么做的 使用 IDA 打开这个程序，然后按 F5 将汇编转换为伪代码，可以看到主函数的逻辑，以及启动程序时打印在屏幕上的字符串  双击 Puzzle_Challenge 可以进入查看这个函数的逻辑  这里可以得到 part1 了 然后按 Esc 返回上一个查看的函数，即主函数 根据提示按 Shift + F12 查看程序中的字符串  双击第一个字符">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=bGJuQ1ZSMGZoN0oxOXRrZXNEcHp6d3RtV3NOU2tLdXlsQnc9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=a2tad24yN1gwQ3Nld3dLK2tLbk4vd21RWWhlc3ZLNC94TFE9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=Q1dYSVJuT3FFTFBuT2RXRndPdXVtVU5jSHlqb2tVb3RPcEE9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=b2FWUXlHU2Q3dWl2V0RyWkVhUmNzMmgzY0dRaDM4cFJrQUE9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=TFczSDhCNC9PSHJGSG1tWjlNQ2RpV2FyYkxKTXd5Y3JnMEU9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MUVjd09pQkcwODNmVmRjNGljVEhKdUlrSnZrRUo3MU1qbDQ9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=dHltOFQvYVZ2VGRndGk1TWtxaDFXK0lrSnZrRUo3MU1qbDQ9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=clpXVEhRZW9vWVN4eHJ1RjdTNmo3TC9GdmUvblMwU1hnajg9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=VG5id29xWlhPV0tBNzdrMVgrZ0d1REF6V1BSUWU1dmVIMFk9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=VUVMR1FQekVjcnh4Q1phL0c1SGpXVEF6V1BSUWU1dmVIMFk9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MFBNekFsbFc0RW5JYjdya0REWnRsblBva3ZaUk54UHVmRkk9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=a2lzVS8rZXQzTCs1bDYvSjE4NklBOXBDNEZuUnZlbHdhVnc9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=Sm5YdWJXSFpBWlhDMm1xZDgwbm80emsvYVN3UkdXb092SWc9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=c0FMMWorVHh2VmNPcUJRcFRtR2ZPd3NGODMycmk1ek5XSG89">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ZVdvRG1Cb2I4S2tBTVRMRHhwelZFQXNGODMycmk1ek5XSG89">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cm9mU3dkYlFwY25HZDA4Q2RmSFd3ZUMvaWxYRWlQV3ZhRlU9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=S0paUlNyNEF3NUllOC81Sm5DZ25RQTFxOUlkeVF4c25FNjg9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=Y2tlKzdBMjFQeERXdE9MZlQzWVhwZWxZOTMrTU4vam53b1U9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ZmhiSXc1RmMyTURYcGY2bG12ZEh2Y29wc1BrbERXRnZVTjg9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=NmVrTWgxSXZuTUxKam5ndXRCRW5oMnl5TkpMUWFVdGhodjg9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=M1oyUUZjU2hqeGgzZXI5UGV6ZDRSV2swR3R3bjZJV1cyclE9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=WTFHS2h6alpvbUErSVFiK2NZOHR0NlhDN1JUTFZ4eHZjV0k9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=aTJ0cjJoZ25rYmtOU3J2aVJScW5wYUhlcHdla2cyNUoydjA9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=UlhkRmRPZ1hUR3hnYVg5c2gzUEd4QWZ0dHJ3SGJlNjdaL2M9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=VUNLMFJPVFM2OWNCZldtNklZWjE4MHdiNmRxR1RzSHJHM2s9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=QjdMZDZsU3FmV1hPNTN0dTUyUEMzNDlGeWc1ZTdtSW5QZjg9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=WTB1Z2I4U05YY1MyMHB6a21NMGZuRmR3cVJGTjZiUW1jRWs9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=Q1FFK09hTWVvZUJVOTNpUVo5NEZyTXVmb2JIVkZiUjh1YWc9">
+<meta property="article:published_time" content="2025-11-02T09:47:41.000Z">
+<meta property="article:modified_time" content="2025-11-02T09:50:19.000Z">
+<meta property="article:author" content="24kcsplus">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="逆向">
+<meta property="article:tag" content="WP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.24kblog.top/app/hide.php?key=bGJuQ1ZSMGZoN0oxOXRrZXNEcHp6d3RtV3NOU2tLdXlsQnc9">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1762077109353">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1762077109353">
+    
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+</head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="24kcsplus" class="mdui-btn mdui-btn-icon"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="24kcsplus">
+            <img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus" alt="24kcsplus">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>23</div>
+        <div><span>标签</span>36</div>
+        <div><span>分类</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://net.24kblog.top" title="DN42">
+            <i class="mdui-list-item-icon nexmoefont icon-dribbble"></i>
+            <div class="mdui-list-item-content">
+                DN42
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://qd.24kblog.top" title="贴吧云签到">
+            <i class="mdui-list-item-icon nexmoefont icon-appstore-fill"></i>
+            <div class="mdui-list-item-content">
+                贴吧云签到
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://gaokao.24kblog.top" title="高考倒计时">
+            <i class="mdui-list-item-icon nexmoefont icon-calendar-fill"></i>
+            <div class="mdui-list-item-content">
+                高考倒计时
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://space.bilibili.com/225319411" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/24kcsplus/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a><a class="mdui-ripple" href="https://twitter.com/24k_ghost_acc" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(59, 151, 239);background-color: rgba(59, 151, 239, .1);">
+            <i class="nexmoefont icon-twitter"></i>
+        </a>
+    </div>
+</div>
+    
+    
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Kubernetes/" style="font-size: 10px;">Kubernetes</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/RCE/" style="font-size: 10px;">RCE</a> <a href="/tags/WP/" style="font-size: 12px;">WP</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Z3/" style="font-size: 10px;">Z3</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E4%BF%A1%E5%AE%89/" style="font-size: 10px;">信安</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 10px;">原型链污染</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 12px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">文件上传</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 12px;">每日播报</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 10px;">汇编</a> <a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 10px;">渗透</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 18px;">笔记</a> <a href="/tags/%E7%BD%91%E5%AE%89/" style="font-size: 16px;">网安</a> <a href="/tags/%E8%80%83%E8%AF%95/" style="font-size: 10px;">考试</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">运维</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 14px;">逆向</a>
+    </div>
+    
+  </div>
+
+    
+    <!-- 一言 -->
+
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">
+      一言
+    </h3>
+    <div class="nexmoe-widget">
+      <ul class="hitokoto-box">
+        <li id="hitokoto_text_parent" class="hitokoto-text" hitokotoCategory="a">
+          <a href="#" id="hitokoto_text">
+            
+          </a>
+          <a href="#" id="hitokoto_error_text" style="display: none;">
+            
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let hitokotoText = document.getElementById('hitokoto_text')
+    let hitokotoErroText = document.getElementById('hitokoto_error_text')
+    let hitokotoCategory = document.getElementById('hitokoto_text_parent').getAttribute('hitokotoCategory')
+    window.onload = function () {
+      let url = 'https://v1.hitokoto.cn'
+      if (hitokotoCategory) {
+        url += '?c=' + hitokotoCategory
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          hitokotoText.innerText = "「 " + data.hitokoto + " 」 from " + data.from
+          hitokotoText.href = 'https://hitokoto.cn/?uuid=' + data.uuid
+        })
+        .catch((reason) => {
+          console.error(11, reason)
+          hitokotoText.style.display = 'none'
+          hitokotoErroText.style.display = 'block'
+        })
+    }
+  </script>
+  
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2025 24kcsplus <br />
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+         <br /><a href="https://icp.gov.moe/?keyword=20241969" target="_blank">萌ICP备20241969号</a> <br /><a href="https://beian.miit.gov.cn/" target="_blank">琼ICP备2022012208号</a> <br /><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=46010602001577"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/beian.png" style="float:left;width:12px;height:12px"/>琼公网安备46010602001577号</a> <!--<br /><a target="_blank" rel="noopener" href="https://cdnnb.cn" class="active"><img style="float:right" src="https://img.shields.io/badge/本站由失控的防御系统提供加速防御支持-green"></a>-->
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="Newstar CTF 2025 Week 1 Re方向 Write Up" loading="lazy">
+              <h1>Newstar CTF 2025 Week 1 Re方向 Write Up</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2025年11月02日</a>
+</div>
+
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约991字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要3分钟</a>
+    
+</div>
+
+      <h2 id="Puzzle">Puzzle</h2>
+<p>这个题目有很多引导，这里就简单讲讲怎么做的</p>
+<p>使用 IDA 打开这个程序，然后按 F5 将汇编转换为伪代码，可以看到主函数的逻辑，以及启动程序时打印在屏幕上的字符串</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=bGJuQ1ZSMGZoN0oxOXRrZXNEcHp6d3RtV3NOU2tLdXlsQnc9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>双击 Puzzle_Challenge 可以进入查看这个函数的逻辑</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=a2tad24yN1gwQ3Nld3dLK2tLbk4vd21RWWhlc3ZLNC94TFE9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>这里可以得到 part1 了</p>
+<p>然后按 Esc 返回上一个查看的函数，即主函数</p>
+<p>根据提示按 Shift + F12 查看程序中的字符串</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=Q1dYSVJuT3FFTFBuT2RXRndPdXVtVU5jSHlqb2tVb3RPcEE9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>双击第一个字符串即可得到 part4</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=b2FWUXlHU2Q3dWl2V0RyWkVhUmNzMmgzY0dRaDM4cFJrQUE9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>可以看到下面的 Buffer 中提到了 part2，单击变量名，然后按 X，可以查看引用此变量的函数</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=TFczSDhCNC9PSHJGSG1tWjlNQ2RpV2FyYkxKTXd5Y3JnMEU9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>选择想要查看的函数，然后按 Enter 或者点击 OK 即可查看函数</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MUVjd09pQkcwODNmVmRjNGljVEhKdUlrSnZrRUo3MU1qbDQ9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>进入后可能是汇编界面，依旧是按 F5 将其转为伪代码</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=dHltOFQvYVZ2VGRndGk1TWtxaDFXK0lrSnZrRUo3MU1qbDQ9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>这里打印的字符串提到函数名就是 part2</p>
+<p>返回刚刚查看变量的标签页，可以看到之前函数里没见到过的变量</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=clpXVEhRZW9vWVN4eHJ1RjdTNmo3TC9GdmUvblMwU1hnajg9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>就是上图中黄色高亮的部分，按 X 查看交叉引用</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=VG5id29xWlhPV0tBNzdrMVgrZ0d1REF6V1BSUWU1dmVIMFk9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>按回车进入</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=VUVMR1FQekVjcnh4Q1phL0c1SGpXVEF6V1BSUWU1dmVIMFk9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>这里的逻辑是一个简单的异或加密，双击查看 encrypted_array 数组内容</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=MFBNekFsbFc0RW5JYjdya0REWnRsblBva3ZaUk54UHVmRkk9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>然后根据提示，按下 Shift + E 可提取数据</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=a2lzVS8rZXQzTCs1bDYvSjE4NklBOXBDNEZuUnZlbHdhVnc9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>选好合适的导出选项，然后编写解密脚本：</p>
+<pre><code class="language-python">a=&quot;\xDE\xED\xDA\xF2\xDD\xD8\xD7\xD7&quot;  
+for i in a:  
+    print(chr(ord(i) ^ 0xAD), end='')
+</code></pre>
+<p>运行即可得到 part3</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=Sm5YdWJXSFpBWlhDMm1xZDgwbm80emsvYVN3UkdXb092SWc9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<h2 id="Strange-Base">Strange Base</h2>
+<p>先使用 IDA 打开，可以看到一个 Base64 加密</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=c0FMMWorVHh2VmNPcUJRcFRtR2ZPd3NGODMycmk1ek5XSG89" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>尝试解密发现无法解出有效结果</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=ZVdvRG1Cb2I4S2tBTVRMRHhwelZFQXNGODMycmk1ek5XSG89" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>查看加密函数</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cm9mU3dkYlFwY25HZDA4Q2RmSFd3ZUMvaWxYRWlQV3ZhRlU9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>发现使用了自定义映射字符</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=S0paUlNyNEF3NUllOC81Sm5DZ25RQTFxOUlkeVF4c25FNjg9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>将自定义字符提取出来，即可解出 flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=Y2tlKzdBMjFQeERXdE9MZlQzWVhwZWxZOTMrTU4vam53b1U9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<blockquote>
+<p>注意：使用 Cyberchef 解码时，其有可能会将自定义映射字符识别为正则表达式，需要将其中的 <code>-</code> 转义为 <code>\-</code> 才可正常解码</p>
+</blockquote>
+<p>有关 Base64 可查阅：<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/base64/8545775#1-1">Base64</a></p>
+<h2 id="X0r">X0r</h2>
+<p>使用 IDA 打开，main 函数即此程序的加密逻辑</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=ZmhiSXc1RmMyTURYcGY2bG12ZEh2Y29wc1BrbERXRnZVTjg9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>程序对输入的字符串先进行长度判断，然后三个一组，每组第一个字符与 <code>0x11</code> 进行异或，第二个与 <code>0x45</code> 异或，第三个与 <code>0x14</code> 异或</p>
+<p>运算完成后还有一次异或的运算，根据这样的逻辑，可以写出解密脚本：</p>
+<pre><code class="language-python">a = 'anu`ym7wKLl$P]v3q%D]lHpi'  
+  
+for i in range(len(a)):  
+    if i % 3 == 0:  
+        print(chr(ord(a[i]) ^ 0x14 ^ 19), end='')  
+    elif i % 3 == 1:  
+        print(chr(ord(a[i]) ^ 0x11 ^ 19), end='')  
+    else:  
+        print(chr(ord(a[i]) ^ 0x45 ^ 81), end='')
+</code></pre>
+<p>运行即可得到 flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=NmVrTWgxSXZuTUxKam5ndXRCRW5oMnl5TkpMUWFVdGhodjg9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>有关异或运算可以看《深入理解计算机系统》中的 2.1.6，这道题是利用了异或运算中这样的规律：</p>
+<pre><code>a^b=c a^c=b b^c=a
+</code></pre>
+<h2 id="EzMyDroid">EzMyDroid</h2>
+<p>这是一道安卓逆向题，需要使用 JADX 来进行逆向</p>
+<p>使用 JADX 打开可以看到程序逻辑</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=M1oyUUZjU2hqeGgzZXI5UGV6ZDRSV2swR3R3bjZJV1cyclE9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>这里的没有 flag 处理的相关逻辑，可以看看 FirstFragment 类</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=WTFHS2h6alpvbUErSVFiK2NZOHR0NlhDN1JUTFZ4eHZjV0k9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>这里可以发现，按下按钮后，会将输入框中的内容使用 AES 加密，双击 encrypt 方法，可以看到 AES 的模式为 ECB 模式，填充方式为 PKCS5Padding，加密后会将加密内容使用 Base64 编码</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=aTJ0cjJoZ25rYmtOU3J2aVJScW5wYUhlcHdla2cyNUoydjA9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>由此可知，从 FirstFragment 类中传入 encrypt 方法的是明文与密钥，密钥为 1145141919810000，加密后结果赋值给 strEncrypt 变量，然后与一个 Base64字符串比较</p>
+<p>根据以上分析，可以解密得到 flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=UlhkRmRPZ1hUR3hnYVg5c2gzUEd4QWZ0dHJ3SGJlNjdaL2M9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<h2 id="debug">debug</h2>
+<h3 id="动态调试">动态调试</h3>
+<p>使用 IDA 打开</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=VUNLMFJPVFM2OWNCZldtNklZWjE4MHdiNmRxR1RzSHJHM2s9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>可以看到程序的逻辑比较负责，这个时候可以进行动态调试</p>
+<p>可能需要配置远程调试器，可以查阅<a target="_blank" rel="noopener" href="https://blog.potatowo.top/2025/04/04/%E4%BD%BF%E7%94%A8IDA%E8%B0%83%E8%AF%95%E7%9A%84%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/">这篇文章</a></p>
+<p>题目提示在 x0r 函数下断点</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=QjdMZDZsU3FmV1hPNTN0dTUyUEMzNDlGeWc1ZTdtSW5QZjg9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>找到 x0r 函数，然后在最后一行下断点，可以按下 F2 或者点击行号前的小点来下断点</p>
+<p>然后按下 F9，程序会运行到断点处暂停</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=WTB1Z2I4U05YY1MyMHB6a21NMGZuRmR3cVJGTjZiUW1jRWs9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>双击 flag 数组，然后提取数据，即可获得 flag</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=Q1FFK09hTWVvZUJVOTNpUVo5NEZyTXVmb2JIVkZiUjh1YWc9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>24kcsplus<br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/2944863376/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;2944863376&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;2944863376&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CTF/" rel="tag">CTF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/WP/" rel="tag">WP</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E9%80%86%E5%90%91/" rel="tag">逆向</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+<div id="gitalk"></div>
+<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'e33bbc7053e81da42425',
+        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
+        id: md5(window.location.pathname),
+        repo: 'home_gitalk',
+        owner: '24kcsplus',
+        admin: '24kcsplus'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Puzzle"><span class="toc-number">1.</span> <span class="toc-text">Puzzle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Strange-Base"><span class="toc-number">2.</span> <span class="toc-text">Strange Base</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#X0r"><span class="toc-number">3.</span> <span class="toc-text">X0r</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EzMyDroid"><span class="toc-number">4.</span> <span class="toc-text">EzMyDroid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#debug"><span class="toc-number">5.</span> <span class="toc-text">debug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95"><span class="toc-number">5.1.</span> <span class="toc-text">动态调试</span></a></li></ol></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    
+<script src="/lib/mdui_043tiny/mdui.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/justifiedGallery/jquery.justifiedGallery.min.js"></script>
+<script src="/lib/fancybox/fancybox.umd.js"></script>
+
+
+ 
+
+<script async src="/js/app.js?v=1762077109361"></script>
+
+
+	<script async src="/js/search.js?v=1762077109361"></script>
+
+
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+    <!-- baidu Analytics -->
+<script>
+    var _hmt = _hmt || [];
+    (function() {var hm = document.createElement('script');
+    hm.src = 'https://hm.baidu.com/hm.js?3d735f78ee82156c8945803fe0b5d46c';
+    var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <script src="https://gcore.jsdelivr.net/gh/bobcn/hexo_resize_image.js@latest/hexo_resize_image.js"></script>
+</body>
+
+</html>

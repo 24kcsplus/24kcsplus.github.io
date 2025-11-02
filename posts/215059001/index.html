@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/vs2015.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+        hljs.addPlugin(new CopyButtonPlugin());
+    </script>
+    
+    <title>Newstar CTF 2025 Week 2 Re方向 Write Up - 24k的小站</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="采一朵花，送给艾达（1） 打开可以发现 IDA 无法将程序反编译为伪代码了  查看字符串和汇编可以发现程序添加了花指令   花指令是企图隐藏掉不想被逆向工程的代码块 (或其它功能) 的一种方法, 在真实代码中插入一些垃圾代码的同时还保证原有程序的正确执行, 而程序无法很好地反编译, 难以理解程序内容, 达到混淆视听的效果。 花指令通常用于加大静态分析的难度。 有关花指令可以看这几篇文章：  花指令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Newstar CTF 2025 Week 2 Re方向 Write Up">
+<meta property="og:url" content="https://24kblog.top/posts/215059001/index.html">
+<meta property="og:site_name" content="24k的小站">
+<meta property="og:description" content="采一朵花，送给艾达（1） 打开可以发现 IDA 无法将程序反编译为伪代码了  查看字符串和汇编可以发现程序添加了花指令   花指令是企图隐藏掉不想被逆向工程的代码块 (或其它功能) 的一种方法, 在真实代码中插入一些垃圾代码的同时还保证原有程序的正确执行, 而程序无法很好地反编译, 难以理解程序内容, 达到混淆视听的效果。 花指令通常用于加大静态分析的难度。 有关花指令可以看这几篇文章：  花指令">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cUhMTjdXWmhMVEJTUzRMdllEQ0srNEVxbHVUQ09hd3g4TzA9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=VUp3OHVudUJ1TFUxbW04TDQ5d1E0YnpRdk03T0tVMkQzQVk9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=V0hpRlhmb2RYZVpHZEJmT1VGMEFTbER5SFh5VHRsSkQyQms9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=RVN2M3YrVHBWTUVVYU1lV21Va290RkxKK3RWNk9mS0Q1SUU9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=aHB6RDZUd211d3pjWlU0Y3p0VjlwOXlWbEZFa3J0VUpES009">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=aUd0NE9UdkJEN2ovL2pneHhGNVd1NFJGTTYzN1Y0SjUyZlE9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=REtGbkFNUGJJTmo4U05iNE1XamhiWVJGTTYzN1Y0SjUyZlE9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=QjVncHVWOVhaSVVBUmtMR2dkd3Y3U3JDaVE1NmovODgvSm89">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=UXVPdi94bWhBMklRR0ppQkcwaEt1QTdRV2VPSUs4RTZzY2s9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=a1lPWWEvVTIyWStQdXJYQ0owK0JTbnJVNkJUaGx2V0ZpYUE9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=OUlHemVGNGVZK3ZZSEM0VlpyR2o5VTNoQWVPN2pxS0J6alk9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=VGhpd2dSLzJsNjEvZHRRM3lFU0tSM3Nnbk1IcDViWjU2MmM9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=UC90emt2RkVpRldlN0xPVVgzSVRLcEI2aFVjOVVRSmpHV1E9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=S1VMaVdJV2JvbDdvSndQL1JxT01IbnMxZ2I2T2hFMUZTdkk9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=akRTNklwYWlVUEZQUUdxdUJTTWNnSzhJeVR5VlpDVFdLZ009">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=OGJMY1U4T3h2SVFHR1NuY2tsSWxoWUlPeityQkxHa1BQK3M9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=aXlRZncvWEZYWm4zckEwZkVxTHRTWU9xU1FhSUlETW5EVm89">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=SVpWenIxZGJLbHdUck9uUUZYUTF4S3oxeG8vczU2ZHRHKzg9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=c29PdExyS25yeTR6ckJTeWhLQXZhZEM5ckFIazM2SjkxUFhy">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=YWRzcTJVS0MzdnlISlJRNjFxak1NTkM5ckFIazM2SjkxUFhy">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=RTNBeDNRczRINUducjBJTEJPRUp3TkM5ckFIazM2SjkxUFhy">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=a0xSMGRlUWpOblhLZ0FibFhtSmhJZEM5ckFIazM2SjkxUFhy">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=dDhNRWR2V2g5bWJmdXNOMnNoUlhKZEM5ckFIazM2SjkxUFhy">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=aXhpTGRFUHdrZ28raElWd2g2OGdWS09lb2pidTdmY1BwaXc9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=SFRPSDBxdUNoVys2aGhkZk96bm5ORnVackNrOFdJM3hQVGs9">
+<meta property="article:published_time" content="2025-11-02T09:50:55.000Z">
+<meta property="article:modified_time" content="2025-11-02T09:51:28.121Z">
+<meta property="article:author" content="24kcsplus">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="逆向">
+<meta property="article:tag" content="WP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.24kblog.top/app/hide.php?key=cUhMTjdXWmhMVEJTUzRMdllEQ0srNEVxbHVUQ09hd3g4TzA9">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1762077109326">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1762077109326">
+    
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+</head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="24kcsplus" class="mdui-btn mdui-btn-icon"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="24kcsplus">
+            <img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus" alt="24kcsplus">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>23</div>
+        <div><span>标签</span>36</div>
+        <div><span>分类</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://net.24kblog.top" title="DN42">
+            <i class="mdui-list-item-icon nexmoefont icon-dribbble"></i>
+            <div class="mdui-list-item-content">
+                DN42
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://qd.24kblog.top" title="贴吧云签到">
+            <i class="mdui-list-item-icon nexmoefont icon-appstore-fill"></i>
+            <div class="mdui-list-item-content">
+                贴吧云签到
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://gaokao.24kblog.top" title="高考倒计时">
+            <i class="mdui-list-item-icon nexmoefont icon-calendar-fill"></i>
+            <div class="mdui-list-item-content">
+                高考倒计时
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://space.bilibili.com/225319411" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/24kcsplus/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a><a class="mdui-ripple" href="https://twitter.com/24k_ghost_acc" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(59, 151, 239);background-color: rgba(59, 151, 239, .1);">
+            <i class="nexmoefont icon-twitter"></i>
+        </a>
+    </div>
+</div>
+    
+    
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Kubernetes/" style="font-size: 10px;">Kubernetes</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/RCE/" style="font-size: 10px;">RCE</a> <a href="/tags/WP/" style="font-size: 12px;">WP</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Z3/" style="font-size: 10px;">Z3</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E4%BF%A1%E5%AE%89/" style="font-size: 10px;">信安</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 10px;">原型链污染</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 12px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">文件上传</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 12px;">每日播报</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 10px;">汇编</a> <a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 10px;">渗透</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 18px;">笔记</a> <a href="/tags/%E7%BD%91%E5%AE%89/" style="font-size: 16px;">网安</a> <a href="/tags/%E8%80%83%E8%AF%95/" style="font-size: 10px;">考试</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">运维</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 14px;">逆向</a>
+    </div>
+    
+  </div>
+
+    
+    <!-- 一言 -->
+
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">
+      一言
+    </h3>
+    <div class="nexmoe-widget">
+      <ul class="hitokoto-box">
+        <li id="hitokoto_text_parent" class="hitokoto-text" hitokotoCategory="a">
+          <a href="#" id="hitokoto_text">
+            
+          </a>
+          <a href="#" id="hitokoto_error_text" style="display: none;">
+            
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let hitokotoText = document.getElementById('hitokoto_text')
+    let hitokotoErroText = document.getElementById('hitokoto_error_text')
+    let hitokotoCategory = document.getElementById('hitokoto_text_parent').getAttribute('hitokotoCategory')
+    window.onload = function () {
+      let url = 'https://v1.hitokoto.cn'
+      if (hitokotoCategory) {
+        url += '?c=' + hitokotoCategory
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          hitokotoText.innerText = "「 " + data.hitokoto + " 」 from " + data.from
+          hitokotoText.href = 'https://hitokoto.cn/?uuid=' + data.uuid
+        })
+        .catch((reason) => {
+          console.error(11, reason)
+          hitokotoText.style.display = 'none'
+          hitokotoErroText.style.display = 'block'
+        })
+    }
+  </script>
+  
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2025 24kcsplus <br />
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+         <br /><a href="https://icp.gov.moe/?keyword=20241969" target="_blank">萌ICP备20241969号</a> <br /><a href="https://beian.miit.gov.cn/" target="_blank">琼ICP备2022012208号</a> <br /><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=46010602001577"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/beian.png" style="float:left;width:12px;height:12px"/>琼公网安备46010602001577号</a> <!--<br /><a target="_blank" rel="noopener" href="https://cdnnb.cn" class="active"><img style="float:right" src="https://img.shields.io/badge/本站由失控的防御系统提供加速防御支持-green"></a>-->
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="Newstar CTF 2025 Week 2 Re方向 Write Up" loading="lazy">
+              <h1>Newstar CTF 2025 Week 2 Re方向 Write Up</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2025年11月02日</a>
+</div>
+
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约2.3k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要10分钟</a>
+    
+</div>
+
+      <h2 id="采一朵花，送给艾达（1）">采一朵花，送给艾达（1）</h2>
+<p>打开可以发现 IDA 无法将程序反编译为伪代码了</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=cUhMTjdXWmhMVEJTUzRMdllEQ0srNEVxbHVUQ09hd3g4TzA9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>查看字符串和汇编可以发现程序添加了花指令</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=VUp3OHVudUJ1TFUxbW04TDQ5d1E0YnpRdk03T0tVMkQzQVk9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=V0hpRlhmb2RYZVpHZEJmT1VGMEFTbER5SFh5VHRsSkQyQms9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>花指令是企图隐藏掉不想被逆向工程的代码块 (或其它功能) 的一种方法, 在真实代码中插入一些垃圾代码的同时还保证原有程序的正确执行, 而程序无法很好地反编译, 难以理解程序内容, 达到混淆视听的效果。</p>
+<p>花指令通常用于加大静态分析的难度。</p>
+<p>有关花指令可以看这几篇文章：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://ctf-wiki.org/reverse/platform/windows/anti-debug/junk-code/#:~:text=%E4%BE%8B%E9%A2%98-,%E8%8A%B1%E6%8C%87%E4%BB%A4,-%C2%B6">花指令</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-279604.htm">由易到难全面解析CTF中的花指令</a></li>
+</ul>
+<p>如果对汇编不熟悉，手动去花可能会有点麻烦，这里我们可以使用动调来去花</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=RVN2M3YrVHBWTUVVYU1lV21Va290RkxKK3RWNk9mS0Q1SUU9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>着重看这几个函数，在汇编处的类似的地方下断点：</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=aHB6RDZUd211d3pjWlU0Y3p0VjlwOXlWbEZFa3J0VUpES009" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>按 F7 步入，IDA 会提示“是否要在RIP处直接创建指令？”</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=aUd0NE9UdkJEN2ovL2pneHhGNVd1NFJGTTYzN1Y0SjUyZlE9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>点击是，再按 F5 会发现有一些汇编能够被反编译了</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=REtGbkFNUGJJTmo4U05iNE1XamhiWVJGTTYzN1Y0SjUyZlE9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>继续按 F7 步入，IDA 会一步步重建，最后就可以看到正常反编译的情况了</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=QjVncHVWOVhaSVVBUmtMR2dkd3Y3U3JDaVE1NmovODgvSm89" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>这里使用了 RC4 加密，有密文和密钥，但是直接使用 Cyberchef 无法解出正常的 flag，可以猜测这是非标准的 RC4 加密</p>
+<p>点击 rc4_init 查看，可以发现 IDA 也无法反编译</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=UXVPdi94bWhBMklRR0ppQkcwaEt1QTdRV2VPSUs4RTZzY2s9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>用同样的手法，在汇编中那几句类似的语句下断点，然后用动调一步步让 IDA 重建</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=a1lPWWEvVTIyWStQdXJYQ0owK0JTbnJVNkJUaGx2V0ZpYUE9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>rc4_crypt 也是一样的手法</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=OUlHemVGNGVZK3ZZSEM0VlpyR2o5VTNoQWVPN2pxS0J6alk9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>这两个函数都是魔改了 RC4 算法，有关 RC4 的部分，可以问问 AI 或者 B站上有视频讲解，这里不再赘述。</p>
+<p>魔改的部分如下：</p>
+<ul>
+<li>
+<p>在 rc4_init 的 S 盒生成中，将标准 RC4 中的 <code>S[i] = i</code> 改为了 <code>S[i] = -i</code></p>
+</li>
+<li>
+<p>而在 rc4_crypt 中，将标准 RC4 中使用的异或改成了加法，这也使得用同一个函数无法进行解密（RC4 的特性是加密函数同时是解密函数，这个特性是使用异或带来的可逆性，感兴趣的同学可以自行搜索位运算，了解他们的特性）</p>
+</li>
+</ul>
+<p>根据上面的内容，写出解密脚本：</p>
+<pre><code class="language-python"># 这些是 16 进制的密文
+CIPHER = [
+    0x1175640343C17FC7,
+    0xDF23C0F6558CB888,
+    0xF2F082F69E2E0F4D,
+    0xE1278329086B51BC,
+    0x4E4F80B188C6BDCB
+]
+
+KEY = b&quot;EasyJunkCodes&quot;
+
+def signed8(x):
+    # 伪代码中将数强制转换为 8 位的 char 类型了，所以这里需要将数映射为 8 位
+    return x - 256 if x &gt;= 128 else x
+
+def init_S_variant(key_bytes):
+    S = [0]*256
+    for i in range(256):
+        S[i] = (-signed8(i)) &amp; 0xFF # &amp; 0xFF 是取低八位的操作
+    i = 0
+    keylen = len(key_bytes)
+    for j in range(256):
+        i = (S[j] + i + key_bytes[j % keylen]) % 256
+        S[j], S[i] = S[i], S[j]
+    return S
+
+def prga_variant(S, length):
+    # 生成密钥流，RC4 的一步
+    i = j = 0
+    ks = []
+    for _ in range(length):
+        i = (i + 1) % 256
+        j = (S[i] + j) % 256
+        S[i], S[j] = S[j], S[i]
+        ks_byte = S[(S[i] + S[j]) &amp; 0xFF]
+        ks.append(ks_byte)
+    return ks
+
+def build_ciphertext():
+    # 用小端序拼接密文，有关端序可以在《深入理解计算机系统》（CS:APP）的 2.1.3 中了解
+    b = bytearray()
+    for q in CIPHER:
+        b += int(q).to_bytes(8, byteorder='little')
+    return bytes(b)
+
+def decrypt():
+    cipher = build_ciphertext()
+    S = init_S_variant(list(KEY))
+    ks = prga_variant(S, len(cipher))
+    # 题目程序是加法，所以要使用加法的逆运算减法才能解密
+    plain = bytes((c - k) &amp; 0xFF for c, k in zip(cipher, ks))
+    try:
+        print(plain.decode('ascii'))
+    except Exception:
+        print('error decoding as ascii')
+
+if __name__ == &quot;__main__&quot;:
+    decrypt()
+</code></pre>
+<h2 id="OhNativeEnc">OhNativeEnc</h2>
+<p>使用 JADX 打开，在 FirstFragment 类中可以发现使用了 Native 层的函数</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=VGhpd2dSLzJsNjEvZHRRM3lFU0tSM3Nnbk1IcDViWjU2MmM9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>在资源文件 -&gt; lib -&gt; x86_64 -&gt; <a target="_blank" rel="noopener" href="http://libohnativeenc.so">libohnativeenc.so</a>，右键导出，然后使用 IDA 打开</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=UC90emt2RkVpRldlN0xPVVgzSVRLcEI2aFVjOVVRSmpHV1E9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>找到对应的函数，可以看到小改了 XXTEA 的 delta，将轮数固定为 12 轮</p>
+<p>根据以上内容，可以写出解密代码：</p>
+<pre><code class="language-python">from struct import pack, unpack
+
+# 小端序转换
+def bytes_to_words_le(b):
+    return list(unpack('&lt;' + 'I'*(len(b)//4), b))
+
+def words_to_bytes_le(w):
+    return pack('&lt;' + 'I'*len(w), *[x &amp; 0xFFFFFFFF for x in w])
+
+def decrypt(v, k):
+    delta = 114514       # 魔改的 Delta
+    rounds = 12          # 固定轮数
+    mask = 0xFFFFFFFF
+    sum_ = (delta * rounds) &amp; mask
+    while sum_ != 0:
+        e = (sum_ &gt;&gt; 2) &amp; 3
+        for p in range(len(v) - 1, -1, -1):  # 反向循环，XXTEA解密流程
+            z = v[(p - 1) % len(v)]
+            y = v[(p + 1) % len(v)]
+            mx = (((z &gt;&gt; 5) ^ (y &lt;&lt; 2)) +
+                  ((y &gt;&gt; 3) ^ (z &lt;&lt; 4))) ^ ((sum_ ^ y) + (k[(p &amp; 3) ^ e] ^ z))
+            v[p] = (v[p] - mx) &amp; mask
+        sum_ = (sum_ - delta) &amp; mask
+    return v
+
+# 密钥与密文的 16 进制
+key_hex = &quot;54 68 69 73 49 73 41 58 58 74 65 61 4B 65 79 00&quot;
+data_hex = &quot;B6 53 6E 4D 77 5D 08 D2 FB 2C 63 1E BB 7B 01 9B F5 04 6A F4 0E 84 27 47 64 A1 E4 D9 EF 12 44 37&quot;
+
+k = bytes_to_words_le(bytes(int(x, 16) for x in key_hex.split()))
+v = bytes_to_words_le(bytes(int(x, 16) for x in data_hex.split()))
+
+plain = words_to_bytes_le(decrypt(v, k)).rstrip(b'\x00')
+
+print(plain.decode('utf-8'))
+</code></pre>
+<h2 id="Look-at-me-carefully">Look at me carefully</h2>
+<p>先用 IDA 打开，可以发现重复调用了很多遍一样的函数</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=S1VMaVdJV2JvbDdvSndQL1JxT01IbnMxZ2I2T2hFMUZTdkk9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>查看这个函数的内部</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=akRTNklwYWlVUEZQUUdxdUJTTWNnSzhJeVR5VlpDVFdLZ009" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>其中，sub_401300 函数并没有对两个字符串做出任何更改</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=OGJMY1U4T3h2SVFHR1NuY2tsSWxoWUlPeityQkxHa1BQK3M9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>v4 变更后选择的 switch 的分支总是 case 4 ，而 case 4 里没有对两个字符串做出任何更改</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=aXlRZncvWEZYWm4zckEwZkVxTHRTWU9xU1FhSUlETW5EVm89" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>sub_401100 函数中，因为 0x55 &amp; 0xAA = 0，而任何数和 0 按位和总是等于零，所以 v5 为零，这样就只会进入 case 0 分支了，v5 变为 3，进入 case 3 分支，v5 变为 4，进入 case 4 分支，v5 变为 7，进入 default 分支，v5 变为 6，进入 case 6 分支，早前 v4 的最低位因最后与 1 按位或，所以最后一位为 1，现在与 0xFE 按位与，而 0xFE 最后一位为 0，所以 v4 最后一位也为 0 ，与只有一位的 1 按位和肯定为 0 ，所以这个分支执行完循环就会终止，而最终 v5 会变为 7，函数的返回值则为 170</p>
+<p>静态分析很复杂，有非常多的位运算，但其实只需要动调就可以看最后 v5 是什么值了</p>
+<p>在返回处下断点，运行到此处会暂停</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=SVpWenIxZGJLbHdUck9uUUZYUTF4S3oxeG8vczU2ZHRHKzg9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>光标放在变量上就可以查看变量值了</p>
+<p>回到 sub_1A16E0 可以发现，程序的逻辑不过是将对应第 a3 位的字符分别与170、0xEF、0x45异或后，按顺序依次放在密文中</p>
+<p>而 170 ^ 0xEF ^ 0x45 = 0，任何数和 0 异或都为其本身，所以程序的逻辑就是将对应第 a3 位的字符按顺序依次放在密文中</p>
+<p>由此可以写出解密脚本：</p>
+<pre><code class="language-python">ciphertext = 'cH4_1elo&#123;ookte?0dv_&#125;alafle___5yygume'
+plaintext = [None] * 38
+index_list = [27, 5, 6, 9, 28, 18, 32, 29, 4, 11, 15, 17, 22, 8, 34, 16, 19, 7, 26, 35, 2, 14, 21, 0, 1, 25, 13, 23, 20, 30, 33, 10, 3, 12, 24, 31]
+
+for i in range(36):
+    plaintext[index_list[i]] = ciphertext[i]
+
+for i in range(36):
+    print(plaintext[i], end='')
+</code></pre>
+<h2 id="尤皮·埃克斯历险记（1）">尤皮·埃克斯历险记（1）</h2>
+<p>这题需要用到除了 IDA 以外的东西了</p>
+<p>使用 DIE(Detect It Easy) 来打开，查看程序属性，这步也叫查壳</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=c29PdExyS25yeTR6ckJTeWhLQXZhZEM5ckFIazM2SjkxUFhy" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>可以发现使用了 UPX 壳</p>
+<p>有关壳和 UPX 壳看下面的文章：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://hello-ctf.com/hc-reverse/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E5%A3%B3/">从零开始的壳</a></li>
+</ul>
+<p>加了 UPX 壳的程序直接使用 IDA 打开函数会特别少，这是 UPX 壳的特征之一</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=YWRzcTJVS0MzdnlISlJRNjFxak1NTkM5ckFIazM2SjkxUFhy" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>UPX 壳去除也相对简单，使用工具即可</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=RTNBeDNRczRINUducjBJTEJPRUp3TkM5ckFIazM2SjkxUFhy" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>再用 IDA 打开就是正常的程序逻辑了</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=a0xSMGRlUWpOblhLZ0FibFhtSmhJZEM5ckFIazM2SjkxUFhy" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>encrypt 函数如下：</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=dDhNRWR2V2g5bWJmdXNOMnNoUlhKZEM5ckFIazM2SjkxUFhy" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>根据 main 函数和 encrypt 函数的逻辑，可以写出解密脚本：</p>
+<pre><code class="language-python">a = &quot;isfhGJ\tt~cU\ny\nuTjcj\tT~cjQdu~w&#123;\x04\x05qA&quot;
+for i in a:
+    ii = ord(i) ^ 0x3c
+    if 65 &lt;= 187 - ii &lt;= 90 or 97 &lt;= 187 - ii &lt;= 122:
+        print(chr(187 - ii), end=&quot;&quot;)
+    elif 48 &lt;= 105 - ii &lt;= 57:
+        print(chr(105 - ii), end=&quot;&quot;)
+    else:
+        print(chr(ii), end=&quot;&quot;)
+</code></pre>
+<h2 id="Forgotten-Code">Forgotten_Code</h2>
+<p>附件是一个 .s 文件，是编译的一个中间阶段：由源代码生成汇编</p>
+<p>关于编译的过程可以上网了解，此处不再赘述</p>
+<p>Windows 环境下，安装 MinGW-w64，用以下指令生成最终的二进制可执行文件：</p>
+<pre><code class="language-shell">x86_64-w64-mingw32-gcc chal.s -o chal.exe
+</code></pre>
+<p>将二进制文件使用 IDA 打开</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=aXhpTGRFUHdrZ28raElWd2g2OGdWS09lb2pidTdmY1BwaXc9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>这个程序先判断 flag 是否符合格式，然后检查长度，使用 fn 函数加密，最后与 ezgm 数组对比</p>
+<p>查看 fn 函数内容</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=SFRPSDBxdUNoVys2aGhkZk96bm5ORnVackNrOFdJM3hQVGs9" alt="image.png" data-caption="image.png" loading="lazy"></p>
+<p>题目稍微魔改了 TEA ，将左移改为了加上 16 倍的两部分，还有密钥硬编码</p>
+<p>由此可以写出解密脚本：</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+import struct
+def u32(x): return x &amp; 0xFFFFFFFF
+def bytes_to_u32_le(b): return struct.unpack(&quot;&lt;I&quot;, b)[0]
+def u32_to_bytes_le(x): return struct.pack(&quot;&lt;I&quot;, u32(x))
+
+ezgm = [
+    1210405119,
+    710975774,
+    -90350153,
+    -1958008304,
+    -745722482,
+    67707510,
+    -86515270,
+    -1728462407
+]
+ezgm_u32 = [x &amp; 0xFFFFFFFF for x in ezgm]
+ng_bytes = b&quot;sp\x7fvuctp|xeb|hv~&quot;
+
+# 分块，八字节一组
+blocks = []
+for i in range(0, 8, 2):
+    lo = ezgm_u32[i]
+    hi = ezgm_u32[i+1]
+    blocks.append(u32_to_bytes_le(lo) + u32_to_bytes_le(hi))
+
+# 密钥先异或 0x11
+ng_words = [bytes_to_u32_le(ng_bytes[i*4:(i+1)*4]) for i in range(4)]
+ng_xor = bytes([b ^ 0x11 for b in ng_bytes])
+ng_xor_words = [bytes_to_u32_le(ng_xor[i*4:(i+1)*4]) for i in range(4)]
+keys = [ng_xor_words, ng_words, ng_xor_words, ng_words]
+
+def tea_decrypt_block(block8, key_words):
+    v0 = bytes_to_u32_le(block8[:4])
+    v1 = bytes_to_u32_le(block8[4:])
+    k0, k1, k2, k3 = key_words
+    delta = 0x9E3779B9
+    sum_ = u32(delta * 32)
+    for _ in range(32):
+        v1 = u32(v1 - ( ((v0&lt;&lt;4) + k2) ^ (v0 + sum_) ^ ((v0&gt;&gt;5) + k3) ))
+        v0 = u32(v0 - ( ((v1&lt;&lt;4) + k0) ^ (v1 + sum_) ^ ((v1&gt;&gt;5) + k1) ))
+        sum_ = u32(sum_ - delta)
+    return u32_to_bytes_le(v0) + u32_to_bytes_le(v1)
+
+plaintext_blocks = [tea_decrypt_block(blocks[i], keys[i]) for i in range(4)]
+flag_inner = b&quot;&quot;.join(plaintext_blocks)
+flag = b&quot;flag&#123;&quot; + flag_inner + b&quot;&#125;&quot;
+print(flag.decode('ascii'))
+
+</code></pre>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>24kcsplus<br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/215059001/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;215059001&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;215059001&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CTF/" rel="tag">CTF</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/WP/" rel="tag">WP</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E9%80%86%E5%90%91/" rel="tag">逆向</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+<div id="gitalk"></div>
+<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'e33bbc7053e81da42425',
+        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
+        id: md5(window.location.pathname),
+        repo: 'home_gitalk',
+        owner: '24kcsplus',
+        admin: '24kcsplus'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%87%E4%B8%80%E6%9C%B5%E8%8A%B1%EF%BC%8C%E9%80%81%E7%BB%99%E8%89%BE%E8%BE%BE%EF%BC%881%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">采一朵花，送给艾达（1）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OhNativeEnc"><span class="toc-number">2.</span> <span class="toc-text">OhNativeEnc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Look-at-me-carefully"><span class="toc-number">3.</span> <span class="toc-text">Look at me carefully</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%A4%E7%9A%AE%C2%B7%E5%9F%83%E5%85%8B%E6%96%AF%E5%8E%86%E9%99%A9%E8%AE%B0%EF%BC%881%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">尤皮·埃克斯历险记（1）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Forgotten-Code"><span class="toc-number">5.</span> <span class="toc-text">Forgotten_Code</span></a></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    
+<script src="/lib/mdui_043tiny/mdui.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/justifiedGallery/jquery.justifiedGallery.min.js"></script>
+<script src="/lib/fancybox/fancybox.umd.js"></script>
+
+
+ 
+
+<script async src="/js/app.js?v=1762077109344"></script>
+
+
+	<script async src="/js/search.js?v=1762077109344"></script>
+
+
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+    <!-- baidu Analytics -->
+<script>
+    var _hmt = _hmt || [];
+    (function() {var hm = document.createElement('script');
+    hm.src = 'https://hm.baidu.com/hm.js?3d735f78ee82156c8945803fe0b5d46c';
+    var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <script src="https://gcore.jsdelivr.net/gh/bobcn/hexo_resize_image.js@latest/hexo_resize_image.js"></script>
+</body>
+
+</html>
