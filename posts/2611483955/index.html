@@ -24,12 +24,12 @@
     
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <meta name="description" content="前言 最近想着随便逆点东西，来练练手，刚好最近有个梗曲的游戏，就直接拿来练手了，刚好这个游戏没怎么加壳，对于我这个没怎么逆过 Unity 的人来说是个挺好的样本。 本项目的初衷是研究Hook技术与游戏引擎的交互逻辑，请勿将其用于非法盈利等任何商业用途，所有获取的附件请在的24小时内自行删除。 准备  Il2CppDumper frida-il2cpp-bridge Frida (本文使用版本为17">
+    <meta name="description" content="本文详细介绍了安卓Unity游戏逆向的完整流程，从准备工具如Il2CppDumper、Frida、IDA Pro，到提取关键文件global-metadata.dat和libil2cpp.so，再到使用Il2CppDumper恢复符号表进行逆向分析。专注于Hook技术与游戏引擎交互逻辑的研究，适合逆向工程初学者和爱好者学习实践。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="某 Unity 游戏 Firda Hook 实战">
 <meta property="og:url" content="https://24kblog.top/posts/2611483955/index.html">
 <meta property="og:site_name" content="24k的小站">
-<meta property="og:description" content="前言 最近想着随便逆点东西，来练练手，刚好最近有个梗曲的游戏，就直接拿来练手了，刚好这个游戏没怎么加壳，对于我这个没怎么逆过 Unity 的人来说是个挺好的样本。 本项目的初衷是研究Hook技术与游戏引擎的交互逻辑，请勿将其用于非法盈利等任何商业用途，所有获取的附件请在的24小时内自行删除。 准备  Il2CppDumper frida-il2cpp-bridge Frida (本文使用版本为17">
+<meta property="og:description" content="本文详细介绍了安卓Unity游戏逆向的完整流程，从准备工具如Il2CppDumper、Frida、IDA Pro，到提取关键文件global-metadata.dat和libil2cpp.so，再到使用Il2CppDumper恢复符号表进行逆向分析。专注于Hook技术与游戏引擎交互逻辑的研究，适合逆向工程初学者和爱好者学习实践。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=V3dCTU5iQ0tVOG5vRHhWcVBzenFSY0FobDBpTDBzVHI0WDg9">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=VWZPSSt3RkdRbmZ0SEFqZnUyUFNPU3FKZ2t4R3E1QTgrSXM9">
@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cmV2dWtxbVZuMlRlVGtvUzVJWDdwaCtoSHp1bUJkRDJZZEk9">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ZlF6U09aRllFRW1zRUZGMkxOMFVGQitoSHp1bUJkRDJZZEk9">
 <meta property="article:published_time" content="2026-02-23T04:08:01.000Z">
-<meta property="article:modified_time" content="2026-02-24T07:23:47.226Z">
+<meta property="article:modified_time" content="2026-03-04T04:27:57.637Z">
 <meta property="article:author" content="24kcsplus">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="信安">
@@ -57,9 +57,9 @@
 <link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
 
 
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1772024046763">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1772598682405">
     
-    <link rel="stylesheet" href="/css/style.css?v=1772024046763">
+    <link rel="stylesheet" href="/css/style.css?v=1772598682405">
     
 <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
 </head>
@@ -85,8 +85,8 @@
         </a>
     </div>
     <div class="nexmoe-count">
-        <div><span>文章</span>25</div>
-        <div><span>标签</span>41</div>
+        <div><span>文章</span>22</div>
+        <div><span>标签</span>39</div>
         <div><span>分类</span>0</div>
     </div>
     <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
@@ -175,7 +175,7 @@
     
   <div class="nexmoe-widget-wrap">
     <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
-      <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Frida/" style="font-size: 12px;">Frida</a> <a href="/tags/Hook/" style="font-size: 12px;">Hook</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Kubernetes/" style="font-size: 10px;">Kubernetes</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/RCE/" style="font-size: 10px;">RCE</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/WP/" style="font-size: 12px;">WP</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Z3/" style="font-size: 10px;">Z3</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E4%BF%A1%E5%AE%89/" style="font-size: 14px;">信安</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 10px;">原型链污染</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95/" style="font-size: 10px;">反调试</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 12px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">文件上传</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E6%92%AD%E6%8A%A5/" style="font-size: 12px;">每日播报</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 10px;">汇编</a> <a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 10px;">渗透</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BD%91%E5%AE%89/" style="font-size: 16px;">网安</a> <a href="/tags/%E8%80%83%E8%AF%95/" style="font-size: 10px;">考试</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">运维</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 18px;">逆向</a>
+      <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Frida/" style="font-size: 12px;">Frida</a> <a href="/tags/Hook/" style="font-size: 12px;">Hook</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Kubernetes/" style="font-size: 10px;">Kubernetes</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/RCE/" style="font-size: 10px;">RCE</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/WP/" style="font-size: 12px;">WP</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Z3/" style="font-size: 10px;">Z3</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E4%BF%A1%E5%AE%89/" style="font-size: 14px;">信安</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 10px;">原型链污染</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95/" style="font-size: 10px;">反调试</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 12px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">文件上传</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 10px;">汇编</a> <a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 10px;">渗透</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BD%91%E5%AE%89/" style="font-size: 16px;">网安</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">运维</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 18px;">逆向</a>
     </div>
     
   </div>
@@ -521,7 +521,7 @@ Il2Cpp.perform(() =&gt; &#123;
 
 &#125;);
 </code></pre>
-<p>参考文章：</p>
+<h2 id="参考文章：">参考文章：</h2>
 <p>1.<a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1891741-1-1.html">[Android 原创] 使用Frida Il2Cpp Bridge 方便地进行Il2Cpp实例Hook</a></p>
 
   </article>
@@ -579,7 +579,7 @@ Il2Cpp.perform(() =&gt; &#123;
                               <button class="mdui-fab catalog" style="overflow:unset;">
                                   <i class="nexmoefont icon-i-catalog"></i>
                                   <div class="nexmoe-toc">
-                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87"><span class="toc-number">2.</span> <span class="toc-text">准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E5%85%B3%E9%94%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">提取关键文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dump-%E5%B9%B6%E6%81%A2%E5%A4%8D%E7%AC%A6%E5%8F%B7%E8%A1%A8"><span class="toc-number">4.</span> <span class="toc-text">Dump 并恢复符号表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dump"><span class="toc-number">4.1.</span> <span class="toc-text">Dump</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%81%A2%E5%A4%8D%E7%AC%A6%E5%8F%B7%E8%A1%A8"><span class="toc-number">4.2.</span> <span class="toc-text">恢复符号表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frida-il2cpp-bridge-%E7%9A%84%E9%83%A8%E7%BD%B2%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">frida-il2cpp-bridge 的部署与使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">5.1.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%B8%B8%E6%88%8F-Unity-%E7%89%88%E6%9C%AC"><span class="toc-number">5.2.1.</span> <span class="toc-text">查看游戏 Unity 版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%BD%E8%B8%AA%E7%B1%BB"><span class="toc-number">5.2.2.</span> <span class="toc-text">追踪类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%AE%9E%E5%8F%82%E6%88%96%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">5.2.3.</span> <span class="toc-text">修改实参或返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95-%E6%9F%A5%E7%9C%8B%E5%AE%9E%E5%8F%82"><span class="toc-number">5.2.4.</span> <span class="toc-text">调用方法&#x2F;查看实参</span></a></li></ol></li></ol></li></ol>
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87"><span class="toc-number">2.</span> <span class="toc-text">准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E5%85%B3%E9%94%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">提取关键文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dump-%E5%B9%B6%E6%81%A2%E5%A4%8D%E7%AC%A6%E5%8F%B7%E8%A1%A8"><span class="toc-number">4.</span> <span class="toc-text">Dump 并恢复符号表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dump"><span class="toc-number">4.1.</span> <span class="toc-text">Dump</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%81%A2%E5%A4%8D%E7%AC%A6%E5%8F%B7%E8%A1%A8"><span class="toc-number">4.2.</span> <span class="toc-text">恢复符号表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#frida-il2cpp-bridge-%E7%9A%84%E9%83%A8%E7%BD%B2%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">frida-il2cpp-bridge 的部署与使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">5.1.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%B8%B8%E6%88%8F-Unity-%E7%89%88%E6%9C%AC"><span class="toc-number">5.2.1.</span> <span class="toc-text">查看游戏 Unity 版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%BD%E8%B8%AA%E7%B1%BB"><span class="toc-number">5.2.2.</span> <span class="toc-text">追踪类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%AE%9E%E5%8F%82%E6%88%96%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">5.2.3.</span> <span class="toc-text">修改实参或返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95-%E6%9F%A5%E7%9C%8B%E5%AE%9E%E5%8F%82"><span class="toc-number">5.2.4.</span> <span class="toc-text">调用方法&#x2F;查看实参</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0%EF%BC%9A"><span class="toc-number">6.</span> <span class="toc-text">参考文章：</span></a></li></ol>
                                   </div>
                               </button>
                           
@@ -614,10 +614,10 @@ Il2Cpp.perform(() =&gt; &#123;
 
  
 
-<script async src="/js/app.js?v=1772024046767"></script>
+<script async src="/js/app.js?v=1772598682407"></script>
 
 
-	<script async src="/js/search.js?v=1772024046767"></script>
+	<script async src="/js/search.js?v=1772598682407"></script>
 
 
 <script>
