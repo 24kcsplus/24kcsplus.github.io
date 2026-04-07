@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>某游戏社区/商店Frida检测绕过实战</title>
+      <title>绕过某游戏社区/商店中 libmsaoaidsec.so 的 Frida 检测</title>
       <link href="/posts/2329580928/"/>
       <url>/posts/2329580928/</url>
       
@@ -33,7 +33,7 @@
     
     
     <entry>
-      <title>某 Unity 游戏 Firda Hook 实战</title>
+      <title>使用 firda-il2cpp-bridge 对 Unity 游戏进行 hook</title>
       <link href="/posts/2611483955/"/>
       <url>/posts/2611483955/</url>
       

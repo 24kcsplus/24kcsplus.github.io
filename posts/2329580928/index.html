@@ -16,7 +16,7 @@
         hljs.addPlugin(new CopyButtonPlugin());
     </script>
     
-    <title>某游戏社区/商店Frida检测绕过实战 - 24k的小站</title>
+    <title>绕过某游戏社区/商店中 libmsaoaidsec.so 的 Frida 检测 - 24k的小站</title>
     <meta charset="UTF-8">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <meta name="description" content="本文详细介绍了如何通过Hook技术绕过Android应用中的Frida检测机制。从使用IDA Pro和hrtng插件分析平坦化代码，到Hook dlopen函数定位检测模块，再到编写Frida脚本绕过检测，提供了完整的逆向工程实战教程。适合对移动安全、逆向工程和Hook技术感兴趣的开发者学习研究。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="某游戏社区&#x2F;商店Frida检测绕过实战">
+<meta property="og:title" content="绕过某游戏社区&#x2F;商店中 libmsaoaidsec.so 的 Frida 检测">
 <meta property="og:url" content="https://24kblog.top/posts/2329580928/index.html">
 <meta property="og:site_name" content="24k的小站">
 <meta property="og:description" content="本文详细介绍了如何通过Hook技术绕过Android应用中的Frida检测机制。从使用IDA Pro和hrtng插件分析平坦化代码，到Hook dlopen函数定位检测模块，再到编写Frida脚本绕过检测，提供了完整的逆向工程实战教程。适合对移动安全、逆向工程和Hook技术感兴趣的开发者学习研究。">
@@ -51,7 +51,7 @@
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=bVBzc0NzdnBaRXZ1V0IrREdCZDZIdEpwNXJiSlNSRkJNQlE9">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=MjVOVlVhQ1ZDR213N0Y0S1d2bzdUNkR1VVRNbnRibFFzV2s9">
 <meta property="article:published_time" content="2026-02-23T11:56:07.000Z">
-<meta property="article:modified_time" content="2026-03-04T04:28:04.452Z">
+<meta property="article:modified_time" content="2026-04-04T13:37:13.537Z">
 <meta property="article:author" content="24kcsplus">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="信安">
@@ -67,9 +67,9 @@
 <link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
 
 
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1774535706856">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1775537792416">
     
-    <link rel="stylesheet" href="/css/style.css?v=1774535706856">
+    <link rel="stylesheet" href="/css/style.css?v=1775537792416">
     
 <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
 </head>
@@ -251,8 +251,8 @@
   <article>
       
           <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
-              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="某游戏社区/商店Frida检测绕过实战" loading="lazy">
-              <h1>某游戏社区/商店Frida检测绕过实战</h1>
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="绕过某游戏社区/商店中 libmsaoaidsec.so 的 Frida 检测" loading="lazy">
+              <h1>绕过某游戏社区/商店中 libmsaoaidsec.so 的 Frida 检测</h1>
           </div>
       
       
@@ -734,10 +734,10 @@ function bypass_msa_full() &#123;
 
  
 
-<script async src="/js/app.js?v=1774535706859"></script>
+<script async src="/js/app.js?v=1775537792419"></script>
 
 
-	<script async src="/js/search.js?v=1774535706859"></script>
+	<script async src="/js/search.js?v=1775537792419"></script>
 
 
 <script>
