@@ -24,12 +24,12 @@
     
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <meta name="description" content="前言 距离上次逆向 Unity 游戏有些时间了，这次遇到个棘手的样本，所以文章更新的时间就完了很多。这篇文章主要讲怎么处理被加密的 libil2cpp.so 以使用 il2cppdumper 来恢复符号。 后面还会写一篇文章来讲讲怎么用 KPM 来绕过这个样本的 Frida 检测 本项目的初衷是研究 Unity 游戏加载流程与游戏安全，请勿将其用于非法盈利等任何商业用途，所有获取的附件请在的24小">
+    <meta name="description" content="本文详细介绍了如何通过动态内存Dump技术处理被加密的libil2cpp.so文件，以便使用il2cppdumper恢复符号。针对Unity游戏逆向中遇到的加密样本，文章提供了使用PADumper工具从内存中提取解密后的文件，并修复SO文件以进行IDA分析的实用方法。适合游戏安全研究人员和逆向工程爱好者参考学习。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次手机Unity游戏逆向：处理被加密的libil2cpp.so">
 <meta property="og:url" content="https://24kblog.top/posts/557806528/index.html">
 <meta property="og:site_name" content="24k的小站">
-<meta property="og:description" content="前言 距离上次逆向 Unity 游戏有些时间了，这次遇到个棘手的样本，所以文章更新的时间就完了很多。这篇文章主要讲怎么处理被加密的 libil2cpp.so 以使用 il2cppdumper 来恢复符号。 后面还会写一篇文章来讲讲怎么用 KPM 来绕过这个样本的 Frida 检测 本项目的初衷是研究 Unity 游戏加载流程与游戏安全，请勿将其用于非法盈利等任何商业用途，所有获取的附件请在的24小">
+<meta property="og:description" content="本文详细介绍了如何通过动态内存Dump技术处理被加密的libil2cpp.so文件，以便使用il2cppdumper恢复符号。针对Unity游戏逆向中遇到的加密样本，文章提供了使用PADumper工具从内存中提取解密后的文件，并修复SO文件以进行IDA分析的实用方法。适合游戏安全研究人员和逆向工程爱好者参考学习。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=YWk3bmZPYVhtb3pNWU9VWktPcitCOVllOUJJeGpLa1p5S2pn">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=S2JLdkhhTEF1QVVDQ2g2Z293WHYvNnpucUVXRTRyZ0lMWUdM">
@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=RDJFZWxlYmZGeSszZzlaakRZK09XamZWVWtyV2dNd0RYaXIx">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=bzJjaW1QaDgvUkQ5c1BjSWdudkY3amZWVWtyV2dNd0RYaXIx">
 <meta property="article:published_time" content="2026-04-03T10:19:36.000Z">
-<meta property="article:modified_time" content="2026-04-14T05:17:42.490Z">
+<meta property="article:modified_time" content="2026-04-14T05:27:02.836Z">
 <meta property="article:author" content="24kcsplus">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img.24kblog.top/app/hide.php?key=YWk3bmZPYVhtb3pNWU9VWktPcitCOVllOUJJeGpLa1p5S2pn">
@@ -53,9 +53,9 @@
 <link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
 
 
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1776144381044">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1776144432928">
     
-    <link rel="stylesheet" href="/css/style.css?v=1776144381044">
+    <link rel="stylesheet" href="/css/style.css?v=1776144432928">
     
 <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
 </head>
@@ -621,10 +621,10 @@ private static void WriteGlobalCodeRegistrationCalls(SourceWritingContext contex
 
  
 
-<script async src="/js/app.js?v=1776144381048"></script>
+<script async src="/js/app.js?v=1776144432931"></script>
 
 
-	<script async src="/js/search.js?v=1776144381048"></script>
+	<script async src="/js/search.js?v=1776144432931"></script>
 
 
 <script>
