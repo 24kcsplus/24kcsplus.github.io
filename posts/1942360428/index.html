@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/vs2015.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.css"/>
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-copy/dist/highlightjs-copy.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+        hljs.addPlugin(new CopyButtonPlugin());
+    </script>
+    
+    <title>使用KPM来伪造环境以绕过Frida检测 - 24k的小站</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="本文介绍如何通过KPM（内核补丁模块）伪造环境绕过Frida检测，重点讲解在内核态隐藏Frida特征，包括maps、内存、线程名和端口。通过hook内核函数show_map_vma，修改&#x2F;proc&#x2F;pid&#x2F;maps输出，实现用户态无法察觉Frida的存在。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用KPM来伪造环境以绕过Frida检测">
+<meta property="og:url" content="https://24kblog.top/posts/1942360428/index.html">
+<meta property="og:site_name" content="24k的小站">
+<meta property="og:description" content="本文介绍如何通过KPM（内核补丁模块）伪造环境绕过Frida检测，重点讲解在内核态隐藏Frida特征，包括maps、内存、线程名和端口。通过hook内核函数show_map_vma，修改&#x2F;proc&#x2F;pid&#x2F;maps输出，实现用户态无法察觉Frida的存在。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=dE1JNzlRV0RUZk41OTV0QmluTDVoMVlvMGp5VWJrM2l2Yzg9">
+<meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=dVpVTkliWGVsRXowcmMweGg3L2QxWGR6bjQ3aDFXMjVwRVE9">
+<meta property="article:published_time" content="2026-04-22T02:43:33.000Z">
+<meta property="article:modified_time" content="2026-04-24T07:05:06.917Z">
+<meta property="article:author" content="24kcsplus">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.24kblog.top/app/hide.php?key=dE1JNzlRV0RUZk41OTV0QmluTDVoMVlvMGp5VWJrM2l2Yzg9">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/justifiedGallery/justifiedGallery.min.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1777014317604">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1777014317604">
+    
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
+</head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="24kcsplus" class="mdui-btn mdui-btn-icon"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="24kcsplus">
+            <img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/avatar.png" alt="24kcsplus" alt="24kcsplus">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>24</div>
+        <div><span>标签</span>39</div>
+        <div><span>分类</span>0</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archives.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://net.24kblog.top" title="DN42">
+            <i class="mdui-list-item-icon nexmoefont icon-dribbble"></i>
+            <div class="mdui-list-item-content">
+                DN42
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://qd.24kblog.top" title="贴吧云签到">
+            <i class="mdui-list-item-icon nexmoefont icon-appstore-fill"></i>
+            <div class="mdui-list-item-content">
+                贴吧云签到
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" target="_blank" rel="noopener" href="https://gaokao.24kblog.top" title="高考倒计时">
+            <i class="mdui-list-item-icon nexmoefont icon-calendar-fill"></i>
+            <div class="mdui-list-item-content">
+                高考倒计时
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://space.bilibili.com/225319411" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/24kcsplus/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a><a class="mdui-ripple" href="https://twitter.com/24k_ghost_acc" target="_blank" mdui-tooltip="{content: 'Twitter'}" style="color: rgb(59, 151, 239);background-color: rgba(59, 151, 239, .1);">
+            <i class="nexmoefont icon-twitter"></i>
+        </a>
+    </div>
+</div>
+    
+    
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/CSP/" style="font-size: 10px;">CSP</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Frida/" style="font-size: 12px;">Frida</a> <a href="/tags/Hook/" style="font-size: 12px;">Hook</a> <a href="/tags/K8s/" style="font-size: 10px;">K8s</a> <a href="/tags/Kubernetes/" style="font-size: 10px;">Kubernetes</a> <a href="/tags/Node-js/" style="font-size: 10px;">Node.js</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/" style="font-size: 10px;">QQ机器人</a> <a href="/tags/QQ%E9%A2%91%E9%81%93/" style="font-size: 10px;">QQ频道</a> <a href="/tags/RCE/" style="font-size: 10px;">RCE</a> <a href="/tags/Unity/" style="font-size: 10px;">Unity</a> <a href="/tags/WP/" style="font-size: 12px;">WP</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Z3/" style="font-size: 10px;">Z3</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/npm/" style="font-size: 10px;">npm</a> <a href="/tags/%E4%BF%A1%E5%AE%89/" style="font-size: 14px;">信安</a> <a href="/tags/%E5%88%9D%E8%A7%81/" style="font-size: 10px;">初见</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;">博客</a> <a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 10px;">原型链污染</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95/" style="font-size: 10px;">反调试</a> <a href="/tags/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9/" style="font-size: 12px;">哔哩哔哩</a> <a href="/tags/%E5%93%94%E5%93%A9%E6%BC%AB%E6%B8%B8/" style="font-size: 10px;">哔哩漫游</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 10px;">总结</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" style="font-size: 10px;">文件上传</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">服务器</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 10px;">汇编</a> <a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 10px;">渗透</a> <a href="/tags/%E6%B8%B8%E6%88%8F/" style="font-size: 10px;">游戏</a> <a href="/tags/%E7%95%AA%E5%89%A7/" style="font-size: 10px;">番剧</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">笔记</a> <a href="/tags/%E7%BD%91%E5%AE%89/" style="font-size: 16px;">网安</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 10px;">运维</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 18px;">逆向</a>
+    </div>
+    
+  </div>
+
+    
+    <!-- 一言 -->
+
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">
+      一言
+    </h3>
+    <div class="nexmoe-widget">
+      <ul class="hitokoto-box">
+        <li id="hitokoto_text_parent" class="hitokoto-text" hitokotoCategory="a">
+          <a href="#" id="hitokoto_text">
+            
+          </a>
+          <a href="#" id="hitokoto_error_text" style="display: none;">
+            
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let hitokotoText = document.getElementById('hitokoto_text')
+    let hitokotoErroText = document.getElementById('hitokoto_error_text')
+    let hitokotoCategory = document.getElementById('hitokoto_text_parent').getAttribute('hitokotoCategory')
+    window.onload = function () {
+      let url = 'https://v1.hitokoto.cn'
+      if (hitokotoCategory) {
+        url += '?c=' + hitokotoCategory
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          hitokotoText.innerText = "「 " + data.hitokoto + " 」 from " + data.from
+          hitokotoText.href = 'https://hitokoto.cn/?uuid=' + data.uuid
+        })
+        .catch((reason) => {
+          console.error(11, reason)
+          hitokotoText.style.display = 'none'
+          hitokotoErroText.style.display = 'block'
+        })
+    }
+  </script>
+  
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2026 24kcsplus <br />
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+         <br /><a href="https://icp.gov.moe/?keyword=20241969" target="_blank">萌ICP备20241969号</a> <br /><a href="https://beian.miit.gov.cn/" target="_blank">琼ICP备2022012208号</a> <br /><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=46010602001577"><img src="https://gcore.jsdelivr.net/gh/24kcsplus/home_files@latest/beian.png" style="float:left;width:12px;height:12px"/>琼公网安备46010602001577号</a> <!--<br /><a target="_blank" rel="noopener" href="https://cdnnb.cn" class="active"><img style="float:right" src="https://img.shields.io/badge/本站由失控的防御系统提供加速防御支持-green"></a>-->
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="使用KPM来伪造环境以绕过Frida检测" loading="lazy">
+              <h1>使用KPM来伪造环境以绕过Frida检测</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2026年04月22日</a>
+</div>
+
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    
+        <a><i class="nexmoefont icon-areachart"></i>约2.8k字</a>
+        <a><i class="nexmoefont icon-time-circle-fill"></i>预计需要13分钟</a>
+    
+</div>
+
+      <h2 id="前言">前言</h2>
+<p>这篇文章是填上次遇到的坑接着讲的，主要内容就是绕过 Frida 检测，不过这次主要是伪造环境来绕过 Frida 检测，而且是在内核态的。</p>
+<p>KPM 是一种运行在内核空间内的模块，可以让代码运行在内核空间中，类似于 Loadable Kernel Modules（LKM），这是这篇文章主要要讲的东西，就是 KPM</p>
+<h2 id="初始化项目">初始化项目</h2>
+<pre><code class="language-shell">git clone https://github.com/bmax121/KernelPatch.git
+</code></pre>
+<p>将代码克隆下来后，需要配置交叉编译的编译器，这里我们可以从 <a target="_blank" rel="noopener" href="https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads">ARM 开发者官网</a> 找到并下载，然后配置好环境变量</p>
+<pre><code class="language-shell">cd KernelPatch/kpms/demo-hello
+make
+</code></pre>
+<p>如果编译没有什么问题，就差不多了</p>
+<h2 id="编写-KPM-模块">编写 KPM 模块</h2>
+<p>我们要伪造一个没有 Frida 的环境，主要要关注几个 Frida 特征，maps 及 内存、线程名和端口</p>
+<h3 id="maps-及-内存">maps 及 内存</h3>
+<p>使用 Frida 注入时，在 <code>/proc/[pid]/maps</code> 中会有一个内存映射信息，是 Frida 注入的 frida-agent 模块，以及内存中会有 frida 特征，比如 <code>frida-agent</code> <code>frida</code> <code>gum-js-loop</code> <code>GumJS</code> <code>gmain</code> 等</p>
+<p>我们需要 hook 一个内核函数叫 <code>show_map_vma</code>，这个函数是 Linux 系统下有程序读取 <code>/proc/[pid]/maps</code> 时，负责将相关信息写入这个文件的函数，只需要 hook 这个函数并改变它的行为，用户态的程序就无法察觉</p>
+<p>如何 hook 呢，参考 <a target="_blank" rel="noopener" href="https://github.com/bmax121/KernelPatch/blob/main/doc/zh-CN/module.md">KPM 开发文档</a> 就可以知道，要先使用 <code>kallsyms_lookup_name</code> 函数找到要 hook 的地址，然后使用内联 hook 的 <code>hook_wrap</code> 函数即可 hook</p>
+<p>同时，这个 <code>hook_wrap</code> 还有类型化便捷封装，即使用 <code>hook_wrap0</code> – <code>hook_wrap12</code> 这样的函数，就不用再传入 <code>argno</code> 即被 hook 函数参数数量这个参数，在 <code>hook.h</code> 中这些包装函数是这样的：</p>
+<pre><code class="language-c">static inline hook_err_t hook_wrap2(void *func, hook_chain2_callback before, hook_chain2_callback after, void *udata)
+&#123;
+    return hook_wrap(func, 2, before, after, udata);
+&#125;
+</code></pre>
+<p>根据上面的内容，我们可以写出相关安装 hook 的代码：</p>
+<pre><code class="language-c">show_map_vma = (void *) kallsyms_lookup_name(&quot;show_map_vma&quot;);
+if (show_map_vma) &#123;
+    hook_err_t err = hook_wrap2(show_map_vma, before_show_map_vma, after_show_map_vma, NULL);
+&#125;
+</code></pre>
+<p>在安装 hook 后就需要考虑怎么 hook，我们通过传入 <code>hook_wrap2</code> 的两个函数来修改这个内核函数调用前后的行为</p>
+<p><code>show_map_vma</code> 的源码是这样的：</p>
+<pre><code class="language-c">static void
+show_map_vma(struct seq_file *m, struct vm_area_struct *vma)
+&#123;
+	const struct path *path;
+	const char *name_fmt, *name;
+	vm_flags_t flags = vma-&gt;vm_flags;
+	unsigned long ino = 0;
+	unsigned long long pgoff = 0;
+	unsigned long start, end;
+	dev_t dev = 0;
+
+	if (vma-&gt;vm_file) &#123;
+		const struct inode *inode = file_user_inode(vma-&gt;vm_file);
+
+		dev = inode-&gt;i_sb-&gt;s_dev;
+		ino = inode-&gt;i_ino;
+		pgoff = ((loff_t)vma-&gt;vm_pgoff) &lt;&lt; PAGE_SHIFT;
+	&#125;
+
+	start = vma-&gt;vm_start;
+	end = vma-&gt;vm_end;
+    // 输出内存区间范围，标志等
+	show_vma_header_prefix(m, start, end, flags, pgoff, dev, ino);
+	get_vma_name(vma, &amp;path, &amp;name, &amp;name_fmt); // 获取内存区间 name
+    // 输出路径相关
+	if (path) &#123;
+		seq_pad(m, ' ');
+		seq_path(m, path, &quot;\n&quot;);
+	&#125; else if (name_fmt) &#123;
+		seq_pad(m, ' ');
+		seq_printf(m, name_fmt, name);
+	&#125; else if (name) &#123;
+		seq_pad(m, ' ');
+		seq_puts(m, name);
+	&#125;
+	seq_putc(m, '\n');
+&#125;
+</code></pre>
+<p>这个函数的第一个参数 <code>m</code> 就包含了这段内存中映射的所有文件，那么我们就需要把相关特征的对应行给去掉，这里我们采用的是调用前先记录这个参数中 <code>count</code> 的值，然后在返回前检测是否包含关键词，如果是，则将 <code>count</code> 改为原先记录的值，具体流程参考下图：</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=dE1JNzlRV0RUZk41OTV0QmluTDVoMVlvMGp5VWJrM2l2Yzg9" alt="" data-caption="" loading="lazy"></p>
+<p>具体源码如下，主要参考了 <a target="_blank" rel="noopener" href="https://www.zskkk.cn/posts/31406/#maps-%E6%96%87%E4%BB%B6%E7%89%B9%E5%BE%81%E4%B8%8E%E5%86%85%E5%AD%98%E7%89%B9%E5%BE%81">这篇文章</a></p>
+<pre><code class="language-c">// 内核环境下的 memmem 实现
+static void *memmem_local(const void *haystack, size_t haystacklen, const void *needle, size_t needlelen)
+&#123;
+    if (!haystack || !needle || haystacklen &lt; needlelen || needlelen == 0)
+        return NULL;
+    for (size_t i = 0; i &lt;= haystacklen - needlelen; ++i) &#123;
+        if (memcmp((const char *)haystack + i, needle, needlelen) == 0)
+            return (void *)((const char *)haystack + i);
+    &#125;
+    return NULL;
+&#125;
+
+// 检查 seq_file 缓冲区中是否包含敏感关键词
+static int is_hiden_module(struct seq_file *m)
+&#123;
+    if (!m || !m-&gt;buf || m-&gt;count == 0) return false;
+    // 需要隐藏的关键词列表
+    static const char *keywords[] = &#123;
+        &quot;frida-agent&quot;,
+        &quot;frida&quot;,
+        &quot;gum-js-loop&quot;,
+        &quot;GumJS&quot;,
+        &quot;gmain&quot;,
+        NULL
+    &#125;;
+
+    for (int i = 0; keywords[i] != NULL; ++i) &#123;
+        if (memmem_local(m-&gt;buf, m-&gt;count, keywords[i], strlen(keywords[i])))
+            return 1;
+    &#125;
+    return 0;
+&#125;
+
+void before_show_map_vma(hook_fargs2_t *args, void *udata)
+&#123;
+    struct seq_file *m = (struct seq_file *)args-&gt;arg0;
+    args-&gt;local.data0 = 0;
+    if (m &amp;&amp; m-&gt;buf) &#123;
+        // 记录 seq_file 中的count，在 after hook 中设置 count 为记录值
+        args-&gt;local.data0 = m-&gt;count;
+    &#125; 
+&#125;
+
+void after_show_map_vma(hook_fargs2_t *args, void *udata)
+&#123;
+    struct seq_file *m = (struct seq_file *)args-&gt;arg0;
+    if (m &amp;&amp; m-&gt;buf) &#123;
+        if (args-&gt;local.data0 &amp;&amp; is_hiden_module(m)) &#123;  // is_hiden_module 查找 frida-agent 等字符串
+            pr_info(&quot;inject-hide: maps hide -&gt; frida-agent \n&quot;);
+            m-&gt;count = args-&gt;local.data0;  // 恢复原来的 count 值，下一次写入缓冲区时将从此开始，覆盖此前写入的含frida的部分
+        &#125;
+    &#125;
+&#125;
+
+void frida_hide_install(void)
+&#123;
+    show_map_vma = (void *) kallsyms_lookup_name(&quot;show_map_vma&quot;);
+    if (show_map_vma) &#123;
+        hook_err_t err = hook_wrap2(show_map_vma, before_show_map_vma, after_show_map_vma, NULL);
+    &#125;
+&#125;
+
+void frida_hide_uninstall(void)
+&#123;
+    if (show_map_vma) &#123;
+        unhook(show_map_vma);
+        show_map_vma = 0;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="线程名">线程名</h3>
+<p>Frida 注入后，会在 <code>/proc/[pid]/task/*/status</code> 下有相关痕迹</p>
+<p>而这个文件通常是由 <code>proc_task_name</code> (4.18及以上)/<code>task_name</code> (4.18以下) 负责，里面会调用 <code>__get_task_comm</code> (4.18-6.12内核版本)/<code>get_task_comm</code> (其它内核版本)来获取线程信息，我们可以在它返回到 <code>proc_task_name</code> 之前来将关键词替换为空格</p>
+<p>内核源码如下（此处版本为 4.4.302）：</p>
+<pre><code class="language-c">static inline void task_name(struct seq_file *m, struct task_struct *p)
+&#123;
+	char *buf;
+	size_t size;
+	char tcomm[sizeof(p-&gt;comm)];
+	int ret;
+
+	get_task_comm(tcomm, p);
+
+	seq_puts(m, &quot;Name:\t&quot;);
+
+	size = seq_get_buf(m, &amp;buf);
+	ret = string_escape_str(tcomm, buf, size, ESCAPE_SPACE | ESCAPE_SPECIAL, &quot;\n\\&quot;);
+	seq_commit(m, ret &lt; size ? ret : -1);
+
+	seq_putc(m, '\n');
+&#125;
+
+extern char *__get_task_comm(char *to, size_t len, struct task_struct *tsk);
+#define get_task_comm(buf, tsk) (&#123;			\
+	BUILD_BUG_ON(sizeof(buf) != TASK_COMM_LEN);	\
+	__get_task_comm(buf, sizeof(buf), tsk);		\
+&#125;)
+
+char *__get_task_comm(char *buf, size_t buf_size, struct task_struct *tsk)
+&#123;
+	task_lock(tsk);
+	strncpy(buf, tsk-&gt;comm, buf_size);
+	task_unlock(tsk);
+	return buf;
+&#125;
+</code></pre>
+<p>KPM 代码如下：</p>
+<pre><code class="language-c">char *(*__get_task_comm)(char *buf, size_t buf_size, struct task_struct *tsk) = 0;  // 为了后续能够调用，定义成函数指针变量
+int __get_task_comm_hook_status = 0;
+
+int is_hiden_comm(const char *comm)
+&#123;
+    // 需要隐藏的线程名关键词列表
+    static const char *keywords[] = &#123;
+        &quot;gmain&quot;,
+        &quot;gum-js-loop&quot;,
+        &quot;gdbus&quot;,
+        &quot;pool-frida&quot;,
+        &quot;linjector&quot;,
+    &#125;;
+
+    for (int i = 0; i &lt; sizeof(keywords) / sizeof(keywords[0]); i++) &#123;
+        if (strstr(comm, keywords[i])) &#123;
+            return 1;
+        &#125;
+    &#125;
+    return 0;
+&#125;
+
+void __attribute__((optimize(&quot;O0&quot;))) after_get_task_comm(hook_fargs3_t *args, void *udata)
+&#123;
+    char *comm = (char *)args-&gt;arg0;
+    size_t comm_buf_len = (size_t)args-&gt;arg1;
+    if (comm &amp;&amp; comm_buf_len) &#123;
+        if (is_hiden_comm(comm))&#123;
+            pr_info(&quot;inject-hide: get_task_comm hide -&gt; %s\n&quot;, comm);
+            size_t hide_len = strlen(comm);
+            for(size_t i = 0; i &lt; hide_len; i++) &#123;
+                comm[i] = ' ';
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+void frida_hide_install(void)
+&#123;
+    show_map_vma = (void *) kallsyms_lookup_name(&quot;show_map_vma&quot;);
+    if (show_map_vma) &#123;
+        hook_err_t err = hook_wrap2(show_map_vma, before_show_map_vma, after_show_map_vma, NULL);
+    &#125;
+
+    __get_task_comm = (void *) kallsyms_lookup_name(&quot;__get_task_comm&quot;); // 注意这里需要按照自己的内核版本来修改
+    if (__get_task_comm) &#123;
+        hook_err_t err = hook_wrap3(__get_task_comm, 0, after_get_task_comm, 0);
+        __get_task_comm_hook_status = err ? 0 : 1;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="端口">端口</h3>
+<ul>
+<li>
+<p>frida 注入后在目标进程监听 27042 端口，等待外部工具（如 frida-server 或 frida-client）连接</p>
+</li>
+<li>
+<p>只有名为 adbd 的进程会主动连接这个 27042 端口。</p>
+</li>
+</ul>
+<p>adbd 是 Android 设备上的调试守护进程，只有它会通过 adb 端口转发机制连接 frida-agent 监听的 27042 端口，其他普通应用或进程不会主动连接 27042 端口。</p>
+<p>所以我们需要限制一下，只允许 adbd 连接这个端口，这样用户态的程序也无法检测到端口了</p>
+<p>KPM 代码如下</p>
+<pre><code class="language-c">struct sockaddr_in &#123;
+    short sin_family;
+    unsigned short sin_port;     
+    unsigned int sin_addr;     
+    char sin_zero[8];
+&#125;;
+unsigned long (*__arch_copy_from_user)(void *to, const void __user *from, unsigned long n) = 0;
+int connect_hook_status = 0;
+
+u16 ntohs(u16 port) &#123;
+    return port &gt;&gt; 8 | port &lt;&lt; 8;
+&#125;
+void before_connect(hook_fargs3_t *args, void *udata) &#123;
+    struct sockaddr_in addr_kernel;
+    const char __user *addr = (typeof(addr))syscall_argn(args, 1);
+    if (!addr) return;
+
+    __arch_copy_from_user(&amp;addr_kernel, addr, sizeof(struct sockaddr_in));
+
+    u16 port = ntohs(addr_kernel.sin_port);
+    if (port == 27042) &#123;
+        char comm[16];
+        __get_task_comm(comm, sizeof(comm), current);
+
+        pr_warn(&quot;inject-hide: connect to frida-agent, comm: %s, port: %d\n&quot;, comm, port);
+        if (!strstr(comm, &quot;adbd&quot;)) &#123;  // 只允许 adbd 连接 frida
+            pr_warn(&quot;inject-hide: connect to frida-agent blocked, comm: %s, port: %d\n&quot;, comm, port);
+            args-&gt;skip_origin = 1;  // 跳过原始的 connect 函数
+            args-&gt;ret = -1;  // 返回 -1 表示拒绝连接
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="完整性校验">完整性校验</h3>
+<p>这部分的代码我没有看过，使用的是 Yuuki 写的 <a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-288041-1.htm">mem_crc</a>，参考了他的 <a target="_blank" rel="noopener" href="https://yuuki.cool/posts/crccheck/">这篇文章</a></p>
+<p>我在前期逆向这个游戏的时候，拿 unidbg 来查看了 syscall 调用情况，发现会打开 <a target="_blank" rel="noopener" href="http://libc.so">libc.so</a>，且 Frida 只 attach 不会闪退，而 spawn 时 hook 会闪退，猜测是有完整性校验，所以参考了上面提到的文章</p>
+<p>Frida 进行 hook 时会修改一些函数入口处的值，程序可以通过 CRC 或其它方式来检测内存中对应 so 的 .text 段是否与磁盘中的 so 相同，以此校验内存中的指令是否被篡改</p>
+<p>不过如果将内存中的 so dump 下来，然后用某种方式让程序读取磁盘中的 so 为 dump 下来的 so，就可以让程序认为指令没有被修改，从而绕过检测</p>
+<p>使用 mem_crc 模块中通过 getcwd 函数控制模块的功能，我们可以很轻松的在合适时机进行重定向，来绕过检测</p>
+<pre><code class="language-typescript">function dumpModule(soName = '', output_path = '') &#123; // dump so
+    var module = Process.getModuleByName(soName);
+    if (module === null) &#123;
+        console.log(&quot;[!] Module not found: &quot; + soName);
+        return;
+    &#125;
+
+    console.log(&quot;[*] Found module: &quot; + module.name);
+    console.log(&quot;[*] Base address: &quot; + module.base);
+    console.log(&quot;[*] Size: &quot; + module.size);
+
+    // 读取内存内容
+    try &#123;
+        var buffer = module.base.readByteArray(module.size);
+        console.log(&quot;[*] Successfully read &quot; + module.size + &quot; bytes&quot;);
+
+        if (buffer === null) &#123;
+            console.log(&quot;[!] Failed to read memory&quot;);
+            return;
+        &#125;
+
+        // 保存到文件
+        var file = new File(output_path, &quot;wb&quot;);
+        file.write(buffer);
+        file.close();
+        console.log(&quot;[*] Dump saved to: &quot; + output_path);
+    &#125; catch (e) &#123;
+        console.log(&quot;[!] Error: &quot; + e);
+    &#125;
+&#125;
+
+function callGetcwd(buf = '') &#123; // write cmd
+    var getcwd = new NativeFunction(
+        Process.getModuleByName(&quot;libc.so&quot;).getExportByName('getcwd'),
+        'pointer',
+        ['pointer', 'int']
+    );
+    var buffer_size = 256;
+    var buffer;
+
+    if (buf !== '') &#123;
+        buffer = Memory.allocUtf8String(buf);
+        buffer_size = buf.length + 1;
+    &#125; else &#123;
+        buffer = Memory.alloc(buffer_size);
+    &#125;
+
+    try &#123;
+        getcwd(buffer, buffer_size);
+    &#125; catch (e) &#123;
+        console.log(&quot;[!] Error: &quot; + e);
+        return null;
+    &#125;
+&#125;
+
+function hook_dlopen(soName = '') &#123;
+    var linkerName = Process.pointerSize === 4 ? &quot;linker&quot; : &quot;linker64&quot;;
+    let linkerModule = Process.getModuleByName(linkerName);
+    let Address = linkerModule.base.add(0x51C5C) // 这里是 linker dlopen 的地址
+    Interceptor.attach(Address, &#123;
+        onEnter: function (args) &#123;
+            var libraryName = args[0].readCString();
+            // console.log(libraryName);
+            if (libraryName &amp;&amp; libraryName.indexOf(soName) !== -1) &#123;
+                console.log(&quot;[*] 检测到目标库 &quot; + soName);
+                dumpModule(&quot;libc.so&quot;, &quot;/storage/emulated/0/Documents/libc.so&quot;)
+                callGetcwd(&quot;MAP:10213:/apex/com.android.runtime/lib64/bionic/libc.so:/storage/emulated/0/Documents/libc.so&quot;)
+                // il();
+                // 用完用命令清 echo CMD:CLEAR:TYPE:1 &gt; /dev/yuuki_misc
+            &#125;
+        &#125;
+    &#125;);
+&#125;
+
+hook_dlopen(&quot;libFairGuard.so&quot;)
+</code></pre>
+<p>不过 Frida 部分与上面提到的文章中不同的是，由于此样本负责检测的 so 文件不是由 libc 的 dlopen 打开的，所以在 Frida 里 Hook 这个 dlopen会找不到加载时机，所以我这里改成了 hook linker 中的 dlopen，代码中的偏移可能会因为版本等原因不同，可能需要自己找地址</p>
+<p><img data-fancybox="gallery" src="https://img.24kblog.top/app/hide.php?key=dVpVTkliWGVsRXowcmMweGg3L2QxWGR6bjQ3aDFXMjVwRVE9" alt="" data-caption="" loading="lazy"></p>
+<h2 id="尾声">尾声</h2>
+<p>这篇文章写完，这个游戏的逆向也算是告一段落了，不过这个样本也确实是有待探索，比如说 FairGuard 是怎么加密解密 <a target="_blank" rel="noopener" href="http://libil2cpp.so">libil2cpp.so</a> 的，还有他们是怎么处理，来去除被保护的 so 的导入导出表，又怎么在运行时正常加载需要的函数</p>
+<p>绕过之后的 hook，主要还是使用 frida-il2cpp-bridge 来进行的</p>
+<p>KPM 的编写也有很大学问，我这篇文章主要还是参考 zsk 和 Yuuki 大佬的，给大佬跪了</p>
+<h2 id="参考文章">参考文章</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.zskkk.cn/posts/31406">Apatch内核模块搭建到隐藏Frida注入</a></li>
+<li><a target="_blank" rel="noopener" href="https://yuuki.cool/posts/crccheck/">绕过Inline hook的CRC校验</a></li>
+</ol>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>24kcsplus<br>
+        <strong>本文链接：</strong><a href="https://24kblog.top/posts/1942360428/" title="https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;1942360428&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;24kblog.top&#x2F;posts&#x2F;1942360428&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>除非特别声明，否则本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<script src="https://cdn.bootcdn.net/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+<div id="gitalk"></div>
+<script src="https://gcore.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'e33bbc7053e81da42425',
+        clientSecret: '947d44ea5a822012817f764e0a3d655a34995473',
+        id: md5(window.location.pathname),
+        repo: 'home_gitalk',
+        owner: '24kcsplus',
+        admin: '24kcsplus'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE"><span class="toc-number">2.</span> <span class="toc-text">初始化项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99-KPM-%E6%A8%A1%E5%9D%97"><span class="toc-number">3.</span> <span class="toc-text">编写 KPM 模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#maps-%E5%8F%8A-%E5%86%85%E5%AD%98"><span class="toc-number">3.1.</span> <span class="toc-text">maps 及 内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%90%8D"><span class="toc-number">3.2.</span> <span class="toc-text">线程名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3"><span class="toc-number">3.3.</span> <span class="toc-text">端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A0%A1%E9%AA%8C"><span class="toc-number">3.4.</span> <span class="toc-text">完整性校验</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BE%E5%A3%B0"><span class="toc-number">4.</span> <span class="toc-text">尾声</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-number">5.</span> <span class="toc-text">参考文章</span></a></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    
+<script src="/lib/mdui_043tiny/mdui.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/justifiedGallery/jquery.justifiedGallery.min.js"></script>
+<script src="/lib/fancybox/fancybox.umd.js"></script>
+
+
+ 
+
+<script async src="/js/app.js?v=1777014317607"></script>
+
+
+	<script async src="/js/search.js?v=1777014317607"></script>
+
+
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+    <!-- baidu Analytics -->
+<script>
+    var _hmt = _hmt || [];
+    (function() {var hm = document.createElement('script');
+    hm.src = 'https://hm.baidu.com/hm.js?3d735f78ee82156c8945803fe0b5d46c';
+    var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <script src="https://gcore.jsdelivr.net/gh/bobcn/hexo_resize_image.js@latest/hexo_resize_image.js"></script>
+</body>
+
+</html>

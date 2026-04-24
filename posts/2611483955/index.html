@@ -16,7 +16,7 @@
         hljs.addPlugin(new CopyButtonPlugin());
     </script>
     
-    <title>使用 firda-il2cpp-bridge 对 Unity 游戏进行 hook - 24k的小站</title>
+    <title>使用 frida-il2cpp-bridge 对 Unity 游戏进行 hook - 24k的小站</title>
     <meta charset="UTF-8">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <meta name="description" content="本文详细介绍了安卓Unity游戏逆向的完整流程，从准备工具如Il2CppDumper、Frida、IDA Pro，到提取关键文件global-metadata.dat和libil2cpp.so，再到使用Il2CppDumper恢复符号表进行逆向分析。专注于Hook技术与游戏引擎交互逻辑的研究，适合逆向工程初学者和爱好者学习实践。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用 firda-il2cpp-bridge 对 Unity 游戏进行 hook">
+<meta property="og:title" content="使用 frida-il2cpp-bridge 对 Unity 游戏进行 hook">
 <meta property="og:url" content="https://24kblog.top/posts/2611483955/index.html">
 <meta property="og:site_name" content="24k的小站">
 <meta property="og:description" content="本文详细介绍了安卓Unity游戏逆向的完整流程，从准备工具如Il2CppDumper、Frida、IDA Pro，到提取关键文件global-metadata.dat和libil2cpp.so，再到使用Il2CppDumper恢复符号表进行逆向分析。专注于Hook技术与游戏引擎交互逻辑的研究，适合逆向工程初学者和爱好者学习实践。">
@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=cmV2dWtxbVZuMlRlVGtvUzVJWDdwaCtoSHp1bUJkRDJZZEk9">
 <meta property="og:image" content="https://img.24kblog.top/app/hide.php?key=ZlF6U09aRllFRW1zRUZGMkxOMFVGQitoSHp1bUJkRDJZZEk9">
 <meta property="article:published_time" content="2026-02-23T04:08:01.000Z">
-<meta property="article:modified_time" content="2026-04-04T13:34:57.655Z">
+<meta property="article:modified_time" content="2026-04-15T13:29:36.828Z">
 <meta property="article:author" content="24kcsplus">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="信安">
@@ -57,9 +57,9 @@
 <link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
 
 
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1776144432934">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1777014317613">
     
-    <link rel="stylesheet" href="/css/style.css?v=1776144432934">
+    <link rel="stylesheet" href="/css/style.css?v=1777014317613">
     
 <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="24k的小站" type="application/atom+xml">
 </head>
@@ -85,7 +85,7 @@
         </a>
     </div>
     <div class="nexmoe-count">
-        <div><span>文章</span>23</div>
+        <div><span>文章</span>24</div>
         <div><span>标签</span>39</div>
         <div><span>分类</span>0</div>
     </div>
@@ -241,8 +241,8 @@
   <article>
       
           <div class="nexmoe-post-cover" style="padding-bottom: 66.66666666666666%;"> 
-              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="使用 firda-il2cpp-bridge 对 Unity 游戏进行 hook" loading="lazy">
-              <h1>使用 firda-il2cpp-bridge 对 Unity 游戏进行 hook</h1>
+              <img data-fancybox="gallery" src="https://gcore.jsdelivr.net/gh/nexmoe/nexmoe.github.io@latest/images/cover/5c3aec85a4343.jpg" alt="使用 frida-il2cpp-bridge 对 Unity 游戏进行 hook" loading="lazy">
+              <h1>使用 frida-il2cpp-bridge 对 Unity 游戏进行 hook</h1>
           </div>
       
       
@@ -614,10 +614,10 @@ Il2Cpp.perform(() =&gt; &#123;
 
  
 
-<script async src="/js/app.js?v=1776144432936"></script>
+<script async src="/js/app.js?v=1777014317616"></script>
 
 
-	<script async src="/js/search.js?v=1776144432936"></script>
+	<script async src="/js/search.js?v=1777014317616"></script>
 
 
 <script>
